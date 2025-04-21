@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foody - See it. Crave it. Cook it.</title>
+    <link rel="stylesheet" href="home.css"> </head>
+<body>
+    <div class="navigation_bar">
+        <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini">
+
+        <a href="adding_page.html" class="nav-link" data-target-modal="add-recipe-modal">
+            <img class="circle" src="source/Ellipse 3.png" alt=""> <img src="source/Add.png" alt="Add Recipe" class="plus nav-icon">
+        </a>
+
+        <a href="home.html" class="nav-link"> <div class="white_circle1 nav-icon">
+                <img src="source/Vector.png" alt="Home">
+            </div>
+        </a>
+        <a href="search.html" class="nav-link" data-target-action="search"> <div class="white_circle2 nav-icon">
+                <img src="source/png.png" alt="Search">
+            </div>
+        </a>
+         <a href="list.html" class="nav-link"> <div class="white_circle3 nav-icon">
+                <img src="source/book.png" alt="Recipes">
+            </div>
+        </a>
+         <a href="my_recipe.html" class="nav-link"> <div class="white_circle4 nav-icon">
+                <img src="source/heart.png" alt="Favorites">
+            </div>
+        </a>
+        <a href="#" class="nav-link" data-target-modal="settings-modal"> <div class="white_circle5 nav-icon">
+                 <img src="source/setting.png" alt="Settings">
+             </div>
+        </a>
+         <a href="profile_page.html" class="nav-link" data-target-modal="profile-modal"> <div class="white_circle6 nav-icon">
+                 <img src="source/profile.png" alt="Profile">
+             </div>
+         </a>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div class="logo-container">
+                <img src="full_logo.png" alt="Foody logo" class="logo-img">
+            </div>
+            <h2 class="tagline">See it. Crave it. Cook it.</h2>
+        </header>
+
+        <div class="categories-titles">
+             <div class="category" data-category-name="All">
+                <div class="category-title">All Recipes</div>
+            </div>
+            <div class="category" data-category-name="Baking Recipes">
+                <img src="main/Baking Recipes.jpg" alt="Baking Recipes" class="category-image">
+                <div class="category-title">Baking Recipes</div>
+            </div>
+            <div class="category" data-category-name="No-Bake Desserts">
+                <img src="main/no-bake-desserts.jpg" alt="No-Bake Desserts" class="category-image">
+                <div class="category-title">No-Bake Desserts</div>
+            </div>
+            <div class="category" data-category-name="5-min Recipes">
+                <img src="main/5-min Recipes.jpg" alt="5-min Recipes" class="category-image">
+                <div class="category-title">5-min Recipes</div>
+            </div>
+             <div class="category" data-category-name="5 Ingredients">
+                <img src="main/5 Ingredients.jpg" alt="5 Ingredients" class="category-image">
+                <div class="category-title">5 Ingredients</div>
+            </div>
+            <div class="category" data-category-name="Breakfast Recipes">
+                <img src="main/Breakfast Recipes.jpg" alt="Breakfast Recipes" class="category-image">
+                <div class="category-title">Breakfast Recipes</div>
+            </div>
+            <div class="category" data-category-name="Main Course">
+                <img src="main/Main Course.jpg" alt="Main Course" class="category-image">
+                <div class="category-title">Main Course</div>
+            </div>
+        </div>
+
+         <div id="filter-message" class="filter-message" style="display: none; text-align: center; margin-bottom: 20px; font-style: italic;"></div>
+
+
+        <div id="recipe-cards-container">
+            <div class="recipe-row">
+                <div class="recipe-card" data-recipe-id="cookie01" data-category="Baking Recipes">
+                    <div class="recipe-img">
+                        <img src="main/chocolate-chip-cookies.png" alt="Chocolate Chip Cookies">
+                    </div>
+                    <div class="recipe-info">
+                        <h3>Chewy Chocolate Chip Cookies</h3>
+                        <button class="favorite-button">♡</button>
+                    </div>
+                </div>
+                <div class="recipe-card" data-recipe-id="cake01" data-category="Baking Recipes">
+                    <div class="recipe-img">
+                        <img src="main/chocolate-cake.png" alt="Chocolate Cake">
+                    </div>
+                    <div class="recipe-info">
+                        <h3>Tasty Chocolate Cake</h3>
+                        <button class="favorite-button">♡</button>
+                    </div>
+                </div>
+                <div class="recipe-card" data-recipe-id="rolls01" data-category="Baking Recipes">
+                    <div class="recipe-img">
+                        <img src="main/cinnamon-rolls.png" alt="Cinnamon Rolls">
+                    </div>
+                    <div class="recipe-info">
+                        <h3>Easy Cinnamon Rolls From Scratch</h3>
+                         <button class="favorite-button">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-row">
+                <div class="recipe-card" data-recipe-id="pizza01" data-category="Main Course">
+                    <div class="recipe-img">
+                        <img src="main/homemade-pizza.png" alt="Homemade Pizza">
+                    </div>
+                    <div class="recipe-info">
+                        <h3>Homemade Pizza Recipe</h3>
+                        <button class="favorite-button">♡</button>
+                    </div>
+                </div>
+                <div class="recipe-card" data-recipe-id="bread01" data-category="Baking Recipes">
+                    <div class="recipe-img">
+                        <img src="main/sandwich-bread.png" alt="Sandwich Bread">
+                    </div>
+                    <div class="recipe-info">
+                        <h3>Simply Sandwich Bread</h3>
+                        <button class="favorite-button">♡</button>
+                    </div>
+                </div>
+                <div class="recipe-card" data-recipe-id="fish01" data-category="Main Course">
+                    <div class="recipe-img">
+                        <img src="main/baked-fish.png" alt="Baked Fish">
+                    </div>
+                    <div class="recipe-info">
+                        <h3>Quick and Easy Baked Fish Fillet</h3>
+                        <button class="favorite-button">♡</button>
+                    </div>
+                </div>
+            </div>
+        </div> <div style="text-align: center; margin-top: 20px;">
+            <button id="load-more-btn">Load More Recipes</button>
+        </div>
+
+    </div> <div id="modal-overlay" class="modal-overlay hidden"></div>
+
+    <div id="add-recipe-modal" class="modal hidden">
+        <button class="modal-close-button">&times;</button>
+        <h2>Add New Recipe</h2>
+        <p>(Form elements would go here...)</p>
+        <label for="recipe-name">Recipe Name:</label>
+        <input type="text" id="recipe-name" name="recipe-name"><br><br>
+        <button>Submit Recipe</button>
+    </div>
+
+    <div id="recipe-details-modal" class="modal hidden">
+        <button class="modal-close-button">&times;</button>
+        <h2 id="modal-recipe-title">Recipe Title</h2>
+        <p>(Full recipe details, ingredients, instructions would be loaded here...)</p>
+        <p>Recipe ID: <span id="modal-recipe-id"></span></p>
+    </div>
+
+    <div id="settings-modal" class="modal hidden">
+        <button class="modal-close-button">&times;</button>
+        <h2>Settings</h2>
+        <p>(Settings options would go here...)</p>
+    </div>
+
+    <div id="profile-modal" class="modal hidden">
+        <button class="modal-close-button">&times;</button>
+        <h2>User Profile</h2>
+        <p>(User profile details would go here...)</p>
+    </div>
+
+
+    <script src="home.js"></script>
+
+</body>
+</html>

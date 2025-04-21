@@ -1,0 +1,107 @@
+body {
+
+    background: #FDF9EE;
+
+}
+
+h1 {
+    top: 1%;
+    left: 12%;
+    font-size: 400%;
+    position: absolute;
+    color: #000;
+    font-family: Poppins;
+    
+    font-style: normal;
+    
+    line-height: normal;
+}
+
+h2 {
+
+    top: 20%;
+    left: 12%;
+    font-size: 200%;
+    position: absolute;
+    color: #000;
+    font-family: Poppins;
+    
+    font-style: normal;
+    
+    line-height: normal;
+}
+
+table {
+    position: absolute;
+    top: 27%;
+    left: 12%;
+    table-layout: auto;
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 2px solid #0077cc;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: white;
+}
+
+th, td {
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 1px solid #c8d6e5;
+  }
+
+  th {
+    background-color: #e0e0e0;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  .tag {
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9em;
+    display: inline-block;
+  }
+
+  .dessert {
+    background-color: #e57373;
+  }
+
+  .appetizer {
+    background-color: #fdd835;
+    color: black;
+  }
+
+  .main-course {
+    background-color: #4caf50;
+  }
+
+  .action-btn {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .view-btn {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+  }
+
+  .edit-btn {
+    background-color: #ffcdd2;
+    color: #b71c1c;
+  }
+
+  .delete-btn {
+    background-color: #ef5350;
+    color: white;
+  }

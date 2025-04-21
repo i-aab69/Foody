@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Foody - Add Recipe</title>
+        <link rel="stylesheet" href="home.css" />
+        <link rel="stylesheet" href="adding_page.css" />
+      </head>
+      <body>
+        <div class="navigation_bar">
+            <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini">
+            <a href="adding_page.html" class="nav-link" data-target-modal="add-recipe-modal">
+                <img src="source/Add.png" alt="Add Recipe" class="plus nav-icon">
+            </a>
+            <a href="home.html" class="nav-link"> <div class="white_circle1 nav-icon">
+                    <img src="source/Vector.png" alt="Home">
+                </div>
+            </a>
+            <a href="search.html" class="nav-link" data-target-action="search">
+                <div class="white_circle2 nav-icon">
+                    <img src="source/png.png" alt="Search">
+                </div>
+            </a>
+             <a href="my_recipe.html" class="nav-link"> <div class="white_circle3 nav-icon">
+                    <img src="source/book.png" alt="Recipes">
+                </div>
+            </a>
+             <a href="#" class="nav-link"> <div class="white_circle4 nav-icon">
+                    <img src="source/heart.png" alt="Favorites">
+                </div>
+            </a>
+            <a href="#" class="nav-link" data-target-modal="settings-modal">
+                 <div class="white_circle5 nav-icon">
+                     <img src="source/setting.png" alt="Settings">
+                 </div>
+            </a>
+             <a href="profile_page.html" class="nav-link" data-target-modal="profile-modal">
+                 <div class="white_circle6 nav-icon">
+                     <img src="source/profile.png" alt="Profile">
+                 </div>
+             </a>
+        </div>
+
+        <h1>Adding recipe</h1>
+        <div class="gray_img">
+            <div class="over-gray"></div>
+            <img src="source/gray_image.png" alt="Placeholder for recipe image upload">
+            <div class="cir_add">
+                <img class="add_2" src="source/Add2.png" alt="Add photo icon">
+            </div>
+            <p class="p1">Add photo</p>
+        </div>
+        <div class="int">
+            <div class="int1">
+                ingredient 1
+            </div>
+            <div class="int2">
+                </div>
+            <div class="int3">
+                </div>
+            <div class="int4">
+                </div>
+            <div class="int5">
+                </div>
+            <div class="c_add">
+                <img src="source/Add2.png" alt="Add ingredient icon">
+            </div>
+            <div class="name-tag">
+                <img src="source/Bookmark.png" alt="Tag icon">
+                Name Tag 1
+            </div>
+            <div class="c_add1">
+                <img src="source/Add2.png" alt="Add tag icon">
+            </div>
+        </div>
+        <div class="save">Save</div>
+        <div class="add">Add</div>
+        <h3>instructions:</h3>
+        <div class="instructions">
+            <textarea class="text_area" placeholder="Add instructions"></textarea>
+            <div class="save2">save</div>
+        </div>
+        <div id="modal-overlay" class="modal-overlay hidden"></div>
+        <div id="add-recipe-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2>Add New Recipe</h2> <p>(Form elements would go here...)</p> <label for="recipe-name">Recipe Name:</label> <input type="text" id="recipe-name" name="recipe-name"><br><br> <button>Submit Recipe</button> </div>
+        <div id="recipe-details-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2 id="modal-recipe-title">Recipe Title</h2> <p>(Full recipe details...)</p> <p>Recipe ID: <span id="modal-recipe-id"></span></p> </div>
+        <div id="settings-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2>Settings</h2> <p>(Settings options...)</p> </div>
+        <div id="profile-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2>User Profile</h2> <p>(User profile details...)</p> </div>
+
+        <script src="home.js"></script>
+      </body>
+</html>

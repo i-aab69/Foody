@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foody - My Recipes</title> <link rel="stylesheet" href="home.css" />
+    <link rel="stylesheet" href="my_recipe.css">
+</head>
+<body>
+    <div class="navigation_bar">
+        <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini">
+        <a href="adding_page.html" class="nav-link" data-target-modal="add-recipe-modal">
+            <img src="source/Add.png" alt="Add Recipe" class="plus nav-icon">
+        </a>
+        <a href="home.html" class="nav-link"> <div class="white_circle1 nav-icon">
+                <img src="source/Vector.png" alt="Home">
+            </div>
+        </a>
+        <a href="search.html" class="nav-link" data-target-action="search">
+            <div class="white_circle2 nav-icon">
+                <img src="source/png.png" alt="Search">
+            </div>
+        </a>
+         <a href="my_recipe.html" class="nav-link"> <div class="white_circle3 nav-icon">
+                <img src="source/book.png" alt="Recipes">
+            </div>
+        </a>
+         <a href="#" class="nav-link"> <div class="white_circle4 nav-icon">
+                <img src="source/heart.png" alt="Favorites">
+            </div>
+        </a>
+        <a href="#" class="nav-link" data-target-modal="settings-modal">
+             <div class="white_circle5 nav-icon">
+                 <img src="source/setting.png" alt="Settings">
+             </div>
+        </a>
+         <a href="profile_page.html" class="nav-link" data-target-modal="profile-modal">
+             <div class="white_circle6 nav-icon">
+                 <img src="source/profile.png" alt="Profile">
+             </div>
+         </a>
+    </div>
+
+    <div style="margin-left: 9%; padding: 20px;"> <h1>List of Recipes</h1>
+        <h2>Manage Recipes</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Recipe Name</th>
+                <th>Course Type</th>
+                <th>Ingredients</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+             <tr>
+                <td>1</td>
+                <td>Pancake</td>
+                <td><span class="tag dessert">Dessert</span></td>
+                <td>8 Ingredients</td>
+                <td>
+                  <button class="action-btn view-btn" data-recipe-id="pancake01">View</button>
+                  <button class="action-btn edit-btn">Edit</button>
+                  <button class="action-btn delete-btn">Delete</button>
+                </td>
+            </tr>
+             <tr>
+                <td>2</td>
+                <td>Cinnamon Rolls</td>
+                <td><span class="tag dessert">Dessert</span></td>
+                <td>9 Ingredients</td>
+                 <td>
+                  <button class="action-btn view-btn" data-recipe-id="rolls01">View</button>
+                  <button class="action-btn edit-btn">Edit</button>
+                  <button class="action-btn delete-btn">Delete</button>
+                </td>
+            </tr>
+              <tr>
+                <td>3</td>
+                <td>French Fries</td>
+                <td><span class="tag appetizer">Appetizer</span></td>
+                <td>2 Ingredients</td>
+                 <td>
+                  <button class="action-btn view-btn" data-recipe-id="fries01">View</button>
+                  <button class="action-btn edit-btn">Edit</button>
+                  <button class="action-btn delete-btn">Delete</button>
+                </td>
+            </tr>
+              <tr>
+                <td>4</td>
+                <td>Chocolate Cake</td>
+                <td><span class="tag dessert">Dessert</span></td>
+                <td>6 Ingredients</td>
+                 <td>
+                  <button class="action-btn view-btn" data-recipe-id="cake01">View</button>
+                  <button class="action-btn edit-btn">Edit</button>
+                  <button class="action-btn delete-btn">Delete</button>
+                </td>
+            </tr>
+              <tr>
+                <td>5</td>
+                <td>Pizza</td>
+                <td><span class="tag main-course">Main Course</span></td>
+                <td>7 Ingredients</td>
+                 <td>
+                  <button class="action-btn view-btn" data-recipe-id="pizza01">View</button>
+                  <button class="action-btn edit-btn">Edit</button>
+                  <button class="action-btn delete-btn">Delete</button>
+                </td>
+            </tr>
+              <tr>
+                <td>6</td>
+                <td>Adas Soup</td>
+                <td><span class="tag main-course">Main Course</span></td>
+                <td>5 Ingredients</td>
+                 <td>
+                  <button class="action-btn view-btn" data-recipe-id="adas01">View</button>
+                  <button class="action-btn edit-btn">Edit</button>
+                  <button class="action-btn delete-btn">Delete</button>
+                </td>
+            </tr>
+              <tr>
+                <td>7</td>
+                <td>Shakshuka</td>
+                <td><span class="tag main-course">Main Course</span></td>
+                <td>7 Ingredients</td>
+                 <td>
+                  <button class="action-btn view-btn" data-recipe-id="shakshuka01">View</button>
+                  <button class="action-btn edit-btn">Edit</button>
+                  <button class="action-btn delete-btn">Delete</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+     </div> <div id="modal-overlay" class="modal-overlay hidden"></div>
+     <div id="add-recipe-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2>Add New Recipe</h2> <p>(Form elements would go here...)</p> <label for="recipe-name">Recipe Name:</label> <input type="text" id="recipe-name" name="recipe-name"><br><br> <button>Submit Recipe</button> </div>
+     <div id="recipe-details-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2 id="modal-recipe-title">Recipe Title</h2> <p>(Full recipe details...)</p> <p>Recipe ID: <span id="modal-recipe-id"></span></p> </div>
+     <div id="settings-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2>Settings</h2> <p>(Settings options...)</p> </div>
+     <div id="profile-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2>User Profile</h2> <p>(User profile details...)</p> </div>
+
+    <script src="home.js"></script>
+</body>
+</html>

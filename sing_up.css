@@ -1,0 +1,211 @@
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+}
+
+.background {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("back.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  width: 820px;
+  height: 500px;
+  background: white;
+  display: flex;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.form-box {
+  width: 410px;
+  height: 500px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  position: relative;
+}
+
+.form-box h2 {
+  position: absolute;
+  left: 103px;
+  top: 27px;
+  color: black;
+  font-size: 32px;
+  font-family: Poppins;
+  font-weight: 400;
+  text-align: center;
+}
+
+.role-toggle {
+  width: 158px;
+  height: 40px;
+  background: #D9D9D9;
+  border-radius: 40px;
+  position: absolute;
+  left: 89px;
+  top: 92px;
+  display: flex;
+  align-items: center;
+}
+
+.role.user {
+  position: absolute;
+  left: 22px;
+  top: 8px;
+  color: black;
+  font-size: 16px;
+  font-family: Poppins;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.role.admin {
+  width: 79px;
+  height: 40px;
+  position: absolute;
+  left: 78px;
+  top: 0px;
+  background: #E68A4A;
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-size: 16px;
+  font-family: Poppins;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+form {
+  position: absolute;
+  top: 155px;
+  left: 0;
+  width: 100%;
+}
+
+form label.username,
+form label.password,
+form label.confirm-password,
+form label.email {
+  position: absolute;
+  left: 17px;
+  color: black;
+  font-size: 16px;
+  font-family: Poppins;
+  font-weight: 400;
+}
+
+form label.username {
+  top: 0px;
+}
+
+form label.password {
+  top: 70px;
+}
+
+form label.confirm-password {
+  top: 135px;
+}
+
+form label.email {
+  top: 200px;
+}
+
+form input.username,
+form input.password,
+form input.confirm-password,
+form input.email {
+  width: 333px;
+  height: 35px;
+  position: absolute;
+  left: 0px;
+  background: #D9D9D9;
+  border: none;
+  border-radius: 20px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  margin-left: 17px;
+}
+
+form input.username {
+  top: 24px;
+}
+
+form input.password {
+  top: 94px;
+}
+
+form input.confirm-password {
+  top: 159px;
+}
+
+form input.email {
+  top: 224px;
+}
+
+.signup-btn {
+  width: 98px;
+  height: 34px;
+  position: absolute;
+  left: 119px;
+  top: 281px;
+  background: #E68A4A;
+  border-radius: 30px;
+  border: none;
+  color: black;
+  font-size: 16px;
+  font-family: Poppins;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 17px;
+}
+
+.side-panel {
+  width: 410px;
+  height: 500px;
+  position: absolute;
+  left: 410px;
+  top: 0px;
+  background: #E68A4A;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-btn {
+  width: 164px;
+  height: 70px;
+  position: relative;
+  background: #F6B88D;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-size: 36px;
+  font-family: Poppins;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

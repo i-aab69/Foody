@@ -1,0 +1,104 @@
+body {
+
+    background: #FDF9EE;
+
+}
+
+h1 {
+    top: 1%;
+    left: 12%;
+    font-size: 500%;
+    position: absolute;
+    color: #000;
+    font-family: Poppins;
+    
+    font-style: normal;
+    
+    line-height: normal;
+}
+
+.cir-pro {
+
+    width: 24%;
+    height: 39%;
+    position: absolute;
+    left: 12%;
+    top: 25%;
+    background-color: #FFF;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 15%;
+    border: 2px solid black;
+    aspect-ratio: 1/1;
+
+}
+
+.cir-pro * {
+    
+    width: 50%;
+    height: 50%;
+}
+
+p {
+    position: absolute;
+    font-family: 'Poppins', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-size: 150%;
+    
+}
+
+.gray_div {
+
+    position: absolute;
+    width: 24%;
+    height: 3%;
+    background-color: #D9D9D9;
+    font-weight: bold;
+    font-size: 150%;
+    display: flex;
+    justify-content:start;
+    align-items: end;
+}
+
+.orange_div {
+
+    position: absolute;
+    border-radius: 15px;
+    background: #F0A56D;
+    width: 15%;
+    height: 10%;
+    right: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.orange_div div {
+    border-radius: 10px;
+    width: 17%;
+    height: 48%;
+    position: absolute;
+    left: 20%;
+    background-color: #FFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.integer {
+    font-size: 220%;
+    bottom: 2%;
+    position: absolute;
+    font-family: 'Poppins', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    left: 44%;
+}
+
+.dis {
+    left: 44%;
+    position: absolute;
+    bottom: 8%;
+    font-size: 100%;
+}
