@@ -157,3 +157,6 @@
 .navigation_bar div.nav-icon.active-nav-icon {
     background-color: #e88e4d;
 }
+.hidden {
+    display: none !important;
+}
