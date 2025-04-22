@@ -2,20 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Foody - Sign Up</title> <link rel="stylesheet" href="sing_up.css" />
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login & Signup System</title>
+  <link rel="stylesheet" href="sing_up.css">
 </head>
-<body>
-    <div class="background">
-        <div class="wrapper">
+<body >
+  <div class="background">
+    <div class="container" id="main">
+      <!-- Login Container -->
+      <div class="login-container">
         <div class="form-box">
-            <h2>Sign-up</h2>
-            <div class="role-toggle">
-            <span class="role user">User</span>
+          <h2>Log-In</h2>
+          <div class="role-toggle">
+            <span class="role user active">User</span>
             <span class="role admin">Admin</span>
+          </div>
+          <form id="login-form">
+            <label class="username">Username:</label>
+            <input type="text" class="username" />
+            <label class="password">Password:</label>
+            <input type="password" class="password" />
+            <div class="remember-forgot">
+              <label><input type="checkbox"> Remember me</label>
+              <a href="#">Forgot Password?</a>
             </div>
-            <form>
+            <button class="login-btn-form">Log-In</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Sign-up Container -->
+      <div class="signup-container">
+        <div class="form-box">
+          <h2>Sign-up</h2>
+          <div class="role-toggle">
+            <span class="role user active">User</span>
+            <span class="role admin">Admin</span>
+          </div>
+          <form id="signup-form">
             <label class="username">Username:</label>
             <input type="text" class="username" />
             <label class="password">Password:</label>
@@ -25,11 +49,28 @@
             <label class="email">Email:</label>
             <input type="email" class="email" />
             <button class="signup-btn">Sign-up</button>
-            </form>
+          </form>
         </div>
-        <div class="side-panel">
-            <button class="login-btn">Log-In</button> </div>
+      </div>
+      
+      <!-- Overlay Container -->
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Welcome Back!</h1>
+            <p>Login back into your Account</p>
+            <button id="go-to-login">Login</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Welcome to Foody!</h1>
+            <p>Create your Account</p>
+            <button id="go-to-signup">Sign Up</button>
+          </div>
         </div>
+      </div>
     </div>
-    </body>
+  </div>
+  
+  <script src="sing_up.js"></script>
+</body>
 </html>

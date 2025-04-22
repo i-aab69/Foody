@@ -1,42 +1,18 @@
 // Wait for the HTML document to be fully loaded before running scripts
 document.addEventListener('DOMContentLoaded', () => {
 
-    console.log("Foody Website Script Loaded! (main.js - cleaned)");
+    console.log("Foody Website Script Loaded! (home.js)");
 
-    // --- Elements Selection (Keep elements needed for this page's logic) ---
+    // --- Elements Selection ---
     const categoryElements = document.querySelectorAll('.categories-titles .category');
     const recipeCardContainer = document.getElementById('recipe-cards-container');
     const loadMoreBtn = document.getElementById('load-more-btn');
-    const modalOverlay = document.getElementById('modal-overlay'); // Keep for recipe details modal
-    const allModals = document.querySelectorAll('.modal'); // Keep for recipe details modal
-    const allCloseButtons = document.querySelectorAll('.modal-close-button'); // Keep for recipe details modal
     const filterMessageElement = document.getElementById('filter-message');
 
     // Find all recipe cards within the container (if container exists)
     const allRecipeCards = recipeCardContainer ? recipeCardContainer.querySelectorAll('.recipe-card') : [];
 
-
-    // --- Modal Helper Functions (Keep - needed for recipe details) ---
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal && modalOverlay) {
-            modalOverlay.classList.remove('hidden');
-            modal.classList.remove('hidden');
-             console.log(`Modal opened via home.js: ${modalId}`);
-        } else {
-            console.error(`Modal with ID ${modalId} or overlay not found (called from home.js).`);
-        }
-    }
-
-    function closeModal() {
-        if (modalOverlay) {
-            modalOverlay.classList.add('hidden');
-        }
-        allModals.forEach(modal => modal.classList.add('hidden'));
-         console.log("Modal closed via home.js.");
-    }
-
-    // --- Core Feature Functions (Keep - specific to home.html content) ---
+    // --- Core Feature Functions ---
 
     /**
      * Filters recipes displayed on the page based on the selected category.
@@ -55,17 +31,21 @@ document.addEventListener('DOMContentLoaded', () => {
         allRecipeCards.forEach(card => {
             const cardCategory = card.dataset.category;
             const shouldBeVisible = (categoryName === 'All' || !cardCategory || cardCategory === categoryName);
-            card.style.display = shouldBeVisible ? '' : 'none';
-            if (shouldBeVisible) visibleCount++;
+            // Make sure card exists before trying to access style
+            if (card) {
+                card.style.display = shouldBeVisible ? '' : 'none';
+                if (shouldBeVisible) visibleCount++;
+            }
         });
 
         // Show/hide recipe rows based on whether they contain visible cards
         // Note: Assumes recipe cards are wrapped in '.recipe-row' divs
-        document.querySelectorAll('#recipe-cards-container .recipe-row').forEach(row => {
-            const hasVisibleCard = Array.from(row.querySelectorAll('.recipe-card')).some(card => card.style.display !== 'none');
-            row.style.display = hasVisibleCard ? '' : 'none';
-        });
-
+        if (recipeCardContainer) {
+            recipeCardContainer.querySelectorAll('.recipe-row').forEach(row => {
+                const hasVisibleCard = Array.from(row.querySelectorAll('.recipe-card')).some(card => card.style.display !== 'none');
+                row.style.display = hasVisibleCard ? '' : 'none';
+            });
+        }
 
         // Display a message if no recipes match the filter
         if (filterMessageElement) {
@@ -76,29 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 filterMessageElement.style.display = 'none';
             }
         }
-    }
-
-    /**
-     * Shows detailed information for a specific recipe in a modal.
-     * Uses the openModal function defined above.
-     * @param {string} recipeId - The unique identifier for the recipe.
-     */
-    function showRecipeDetails(recipeId) {
-        console.log(`Showing details for recipe: ${recipeId}`);
-        // Find the card to potentially extract more info if needed later
-        const card = document.querySelector(`.recipe-card[data-recipe-id="${recipeId}"]`);
-        const title = card ? card.querySelector('h3')?.textContent : 'Recipe Details'; // Get title from card
-
-        // Get elements within the recipe details modal
-        const titleElement = document.getElementById('modal-recipe-title');
-        const idElement = document.getElementById('modal-recipe-id');
-
-        // Populate modal elements
-        if (titleElement) titleElement.textContent = title;
-        if (idElement) idElement.textContent = recipeId;
-
-        // Open the specific modal for recipe details
-        openModal('recipe-details-modal');
     }
 
     /**
@@ -146,27 +103,21 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Simulating Load more recipes...");
         alert("Simulating: Load more recipes.\n(Actual implementation requires a backend server)");
         // Disable button after simulated load
-        if(loadMoreBtn) {
+        if (loadMoreBtn) {
             loadMoreBtn.textContent = "No More Recipes";
             loadMoreBtn.disabled = true;
         }
     }
 
-    // --- Event Listeners (Keep listeners relevant to home.html content) ---
-
-    // Modals: Close buttons and overlay click (Keep for recipe details modal)
-    allCloseButtons.forEach(button => button.addEventListener('click', closeModal));
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', closeModal);
-    }
+    // --- Event Listeners ---
 
     // Category Filters
     categoryElements.forEach(category => {
         category.addEventListener('click', () => {
-             const categoryName = category.dataset.categoryName;
-             if(categoryName) {
-                 filterRecipesByCategory(categoryName);
-             }
+            const categoryName = category.dataset.categoryName;
+            if (categoryName) {
+                filterRecipesByCategory(categoryName);
+            }
         });
     });
 
@@ -177,12 +128,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const favButton = event.target.closest('.favorite-button');
 
             if (favButton && card && card.dataset.recipeId) { // Favorite button clicked
-                 event.stopPropagation(); // Prevent card click from firing too
-                 toggleFavorite(card.dataset.recipeId, favButton);
+                event.stopPropagation(); // Prevent card click from firing too
+                toggleFavorite(card.dataset.recipeId, favButton);
             } else if (card && card.dataset.recipeId) { // Card area clicked (but not favorite button)
-                 showRecipeDetails(card.dataset.recipeId);
-            } else if (card && !card.dataset.recipeId){
-                 console.warn("Card clicked, but 'data-recipe-id' is missing.");
+                const recipeId = card.dataset.recipeId;
+                console.log(`Navigating to details for recipe: ${recipeId}`);
+                // Navigate to the description page with ID as a query parameter
+                window.location.href = `Discription_page.html?id=${recipeId}`;
+            } else if (card && !card.dataset.recipeId) {
+                console.warn("Card clicked, but 'data-recipe-id' is missing.");
             }
         });
     }

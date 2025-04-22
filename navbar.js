@@ -1,15 +1,12 @@
 // Wait for the HTML document to be fully loaded before running scripts
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("navbar.js loaded!");
 
-    console.log("navbar.js loaded!"); // Updated log message
-
-    // --- Elements Selection for Navbar and Modals ---
     const navLinks = document.querySelectorAll('.navigation_bar .nav-link');
     const modalOverlay = document.getElementById('modal-overlay');
     const allModals = document.querySelectorAll('.modal');
     const allCloseButtons = document.querySelectorAll('.modal-close-button');
 
-    // --- Modal Helper Functions ---
     function openModal(modalId) {
         const modal = document.getElementById(modalId);
         if (modal && modalOverlay) {
@@ -29,53 +26,78 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("All modals closed.");
     }
 
-    // --- Core Navbar Click Handling ---
     function handleNavClick(event) {
-        const clickedLink = event.target.closest('.nav-link'); // Find the parent <a> tag
+        const clickedLink = event.target.closest('.nav-link');
         if (!clickedLink) return;
 
         const targetModal = clickedLink.dataset.targetModal;
         const targetAction = clickedLink.dataset.targetAction;
+        const hrefValue = clickedLink.getAttribute('href');
 
-        // Check if the link is intended to open a modal
+        if (hrefValue && hrefValue !== '#' && !targetModal && !targetAction) {
+            console.log(`Allowing default navigation to: ${hrefValue}`);
+            return;
+        }
+
+        event.preventDefault();
+
         if (targetModal) {
-             event.preventDefault(); // Prevent the default '#' link behavior
-             openModal(targetModal);
+            openModal(targetModal);
+        } else if (targetAction === 'search') {
+            console.log(`Simulating action: ${targetAction}`);
+            window.location.href = 'search.html';
+        } else if (hrefValue === '#') {
+            console.log("Placeholder navigation link clicked:", clickedLink);
         }
-        // Check if the link has a specific action (like search simulation)
-        else if (targetAction === 'search') {
-             event.preventDefault(); // Prevent the default '#' link behavior
-             console.log(`Simulating action: ${targetAction}`);
-             // Replace alert with actual navigation if search.html is ready
-             // window.location.href = 'search.html';
-             // alert(`Simulating action: Open Search interface (navbar.js)`); // Keep or remove alert
-             // Let's navigate directly now:
-             window.location.href = 'search.html';
-        }
-        // Handle other '#' links if needed, or just let them be (or prevent default)
-        else if (clickedLink.getAttribute('href') === '#') {
-            // Optionally prevent default for all '#' links if they shouldn't jump to top
-             event.preventDefault();
-             console.log("Placeholder navigation link clicked:", clickedLink);
-             // You could add alerts here for Favorites etc. if desired
-             // alert("Simulating navigation to [Page Name]");
-        }
-        // Allow regular navigation for links with actual URLs (like home.html, etc.)
-        // No else block needed here, default browser behavior handles it.
     }
 
-    // --- Event Listeners ---
+    function setActiveNavLink() {
+        const currentPath = window.location.pathname;
+        console.log(`Current path: ${currentPath}`);
 
-    // Modals: Close buttons and overlay click
+        const allNavLinks = document.querySelectorAll('.navigation_bar .nav-link');
+
+        allNavLinks.forEach(link => {
+            if (link.href) {
+                try {
+                    const linkUrl = new URL(link.href);
+                    const linkPath = linkUrl.pathname;
+                    const navIcon = link.querySelector('.nav-icon');
+
+                    if (navIcon) {
+                        navIcon.classList.remove('active-nav-icon');
+                        if (linkPath === currentPath) {
+                            navIcon.classList.add('active-nav-icon');
+                        }
+                    }
+                } catch (e) {
+                    console.warn(`Could not parse URL for link: ${link.href}`, e);
+                }
+            }
+        });
+
+        if (currentPath === '/' || currentPath.endsWith('/index.html') || currentPath.endsWith('/home_page1.html')) {
+            const homeLinkIcon = document.querySelector('.navigation_bar a[href="home_page1.html"] .nav-icon');
+            const altHomeLinkIcon = document.querySelector('.navigation_bar a[href="home.html"] .nav-icon');
+
+            if (currentPath.endsWith('/home.html') && altHomeLinkIcon) {
+                altHomeLinkIcon.classList.add('active-nav-icon');
+            } else if (homeLinkIcon) {
+                homeLinkIcon.classList.add('active-nav-icon');
+            } else if (altHomeLinkIcon) {
+                altHomeLinkIcon.classList.add('active-nav-icon');
+            }
+        }
+    }
+
     allCloseButtons.forEach(button => button.addEventListener('click', closeModal));
     if (modalOverlay) {
         modalOverlay.addEventListener('click', closeModal);
     } else {
-        console.error("Modal overlay element not found for event listener.")
+        console.warn("Modal overlay element not found for event listener.");
     }
 
-
-    // Navigation Links
     navLinks.forEach(link => link.addEventListener('click', handleNavClick));
 
-}); // End of DOMContentLoaded
+    setActiveNavLink();
+});

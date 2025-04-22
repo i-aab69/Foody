@@ -1,80 +1,68 @@
-/* Navbar styles - save as navbar.ss */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-/* === Navigation Bar Styles (Using .add-link class) === */
-
 .navigation_bar {
     position: fixed;
     height: 100%;
-    width: 8%; /* Original width */
-    min-width: 70px; /* Original min-width */
-    background: #F0A56D; /* Nav bar background color */
-    z-index: 1000; /* Ensure it's above other content */
+    width: 8%;
+    min-width: 70px;
+    background: #F0A56D;
+    z-index: 1000;
     top: 0;
     left: 0;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* Optional shadow */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Revert Logo styles closer to original home.css */
 .navigation_bar .logo_img {
     position: absolute;
-    width: 50%; /* Original width */
+    width: 50%;
     height: auto;
-    top: 3%; /* Original top */
-    left: 25%; /* <<< Original left value */
-    transform: none; /* <<< Remove centering transform */
-    max-height: 7%; /* Original max-height */
+    top: 3%;
+    left: 25%;
+    max-height: 7%;
     aspect-ratio: 1 / 1;
-    border-radius: 15px; /* Original radius */
+    border-radius: 15px;
     z-index: 1;
-    display: block; /* Ensure block behavior */
+    display: block;
 }
 
-/* General nav-link positioning (Centered Horizontally - same as original) */
 .navigation_bar .nav-link {
     display: block;
     position: absolute;
-    width: 45px; /* Original size */
-    height: 45px; /* Original size */
+    width: 45px;
+    height: 45px;
     left: 50%;
     transform: translateX(-50%);
     text-decoration: none;
 }
 
-/* --- Add Icon Styling - Using the .add-link class --- */
-/* Style the Add link itself to be the circle background */
-.navigation_bar a.nav-link.add-link { /* <<< UPDATED SELECTOR */
-    top: 15%; /* Position the link */
-    background-color: #D9D9D9; /* Background on the link */
-    border-radius: 50%; /* Make link circular */
-    display: flex; /* Use flex to center image inside link */
+.navigation_bar a.nav-link.add-link {
+    top: 15%;
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: background-color 0.2s ease, transform 0.2s ease;
     overflow: hidden;
 }
-/* Hover rule for Add link */
-.navigation_bar a.nav-link.add-link:hover { /* <<< UPDATED SELECTOR */
-     background-color: #c0c0c0;
-     transform: scale(1.05) translateX(-50%); /* Adjust transform on hover */
+
+.navigation_bar a.nav-link.add-link:hover {
+    background-color: #c0c0c0;
+    transform: scale(1.05) translateX(-50%);
 }
 
-/* Style the image inside the Add link */
-.navigation_bar a.nav-link.add-link img.plus { /* <<< UPDATED SELECTOR */
-    width: 60%; /* Size relative to link container */
+.navigation_bar a.nav-link.add-link img.plus {
+    width: 60%;
     height: 60%;
     object-fit: contain;
     display: block;
 }
 
-
-/* --- Regular Icon Styling (using inner div) --- */
-/* Target the inner div for other icons */
 .navigation_bar div.nav-icon {
     width: 100%;
     height: 100%;
@@ -86,11 +74,13 @@
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
+
 .navigation_bar div.nav-icon:hover {
     background-color: #c0c0c0;
 }
+
 .navigation_bar div.nav-icon img {
     width: 55%;
     height: 55%;
@@ -98,18 +88,13 @@
     object-fit: contain;
 }
 
-
-/* --- Positioning for regular icons --- */
-/* These position the containing <a> tag */
 .nav-link:has(.white_circle1) { top: 30%; }
 .nav-link:has(.white_circle2) { top: 40%; }
 .nav-link:has(.white_circle3) { top: 50%; }
 .nav-link:has(.white_circle4) { top: 60%; }
-.nav-link:has(.white_circle5) { top: auto; bottom: 15%; }
-.nav-link:has(.white_circle6) { top: auto; bottom: 5%; }
+.nav-link:has(.white_circle5) { bottom: 15%; }
+.nav-link:has(.white_circle6) { bottom: 5%; }
 
-
-/* --- Responsive Styles --- */
 @media (max-width: 768px) {
     .navigation_bar {
         width: 100%;
@@ -120,17 +105,16 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         min-width: unset;
         position: fixed;
     }
 
     .navigation_bar .logo_img {
-         display: none;
+        display: none;
     }
 
-    /* Hide Add icon link on mobile */
-    .navigation_bar a.nav-link.add-link { /* <<< UPDATED SELECTOR */
+    .navigation_bar a.nav-link.add-link {
         display: none;
     }
 
@@ -148,26 +132,28 @@
         align-items: center;
     }
 
-    /* Style the inner div for regular icons on mobile */
     .navigation_bar div.nav-icon {
         width: 40px;
         height: 40px;
-        background-color: transparent; /* No background circle */
+        background-color: transparent;
         box-shadow: none;
     }
-     .navigation_bar div.nav-icon:hover {
-        background-color: rgba(0,0,0,0.05);
-        transform: none;
-     }
 
-    .navigation_bar div.nav-icon img { /* Target image inside the inner div */
+    .navigation_bar div.nav-icon:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        transform: none;
+    }
+
+    .navigation_bar div.nav-icon img {
         width: 24px;
         height: 24px;
     }
 
-    /* Adjust body padding for fixed bottom navbar */
     body {
         padding-bottom: 75px;
     }
 }
-/* === End of Navigation Bar Styles === */
+
+.navigation_bar div.nav-icon.active-nav-icon {
+    background-color: #e88e4d;
+}
