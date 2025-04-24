@@ -1,162 +1,276 @@
-* {
+/* Foody-main/navbar.css */
+
+/* === Basic Reset & Box Sizing === */
+/* Apply border-box sizing to all elements for easier layout math,
+   and remove default browser margins/padding. */
+   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* === Main Navigation Bar Styling === */
 .navigation_bar {
+    /* Positioning: Stick it to the left side, full height */
     position: fixed;
     height: 100%;
-    width: 8%;
-    min-width: 70px;
-    background: #F0A56D;
-    z-index: 1000;
     top: 0;
     left: 0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Keep it above other page content */
+
+    /* Sizing */
+    width: 8%;      /* Adjust width as needed */
+    min-width: 70px; /* Ensure it's usable even if 8% is very small */
+
+    /* Appearance */
+    background: #F0A56D; /* Main navbar color */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow on the right edge */
 }
 
+/* === Top Logo Styling === */
 .navigation_bar .logo_img {
+    /* Position logo near the top, centered horizontally */
     position: absolute;
-    width: 50%;
-    height: auto;
     top: 3%;
-    left: 25%;
+    left: 50%;
+    transform: translateX(-50%); /* Precise horizontal centering */
+
+    /* Sizing relative to navbar width */
+    width: 50%;
     max-height: 7%;
-    aspect-ratio: 1 / 1;
-    border-radius: 15px;
-    z-index: 1;
-    display: block;
+    height: auto;       /* Maintain aspect ratio */
+    aspect-ratio: 1 / 1; /* Keep it square */
+
+    /* Appearance */
+    border-radius: 15px; /* Slightly rounded corners */
+    display: block;     /* Standard for images */
+    z-index: 1;         /* Ensure it's clickable above other potential elements */
 }
 
-.navigation_bar .nav-link {
-    display: block;
+/* === Container for Icon Links === */
+/* This holds all the icon links below the logo */
+.navbar-icon-links {
+    /* Position it absolutely within the main navbar, below the logo */
     position: absolute;
+    top: 90px;      /* Start below the logo area (adjust if logo size/pos changes) */
+    bottom: 20px;   /* Leave some space at the very bottom */
+    left: 0;
+    width: 100%;    /* Take full width of the navbar */
+
+    /* Use Flexbox to arrange the icons vertically */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center icons horizontally within the bar */
+
+    /* Spacing & Overflow */
+    padding: 10px 0 20px 0; /* Padding inside the container */
+    overflow-y: auto;       /* Allow scrolling if too many icons for the height */
+}
+
+/* === Styling for Individual Navigation Links (Icons) === */
+.navigation_bar .nav-link {
+    /* These are flex items now, position is handled by the container */
+    display: block;         /* Treat the link as a block */
+    text-decoration: none; /* Remove underlines */
+    flex-shrink: 0;        /* Prevent icons from shrinking if space is tight */
+
+    /* Define size for the clickable area */
     width: 45px;
     height: 45px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-decoration: none;
+
+    /* Spacing below each icon */
+    margin-bottom: 20px;
+
+    /* Reset any potential leftover positioning styles */
+    position: relative;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    transform: none;
 }
 
-.navigation_bar a.nav-link.add-link {
-    top: 15%;
+/* Remove margin from the last icon to use bottom padding of container */
+.navigation_bar .nav-link:last-child {
+    margin-bottom: 0;
+}
+
+/* Push Settings/Profile group to the bottom for Users */
+/* The 'auto' margin takes up all available space above this element */
+.navigation_bar a#nav-settings-link {
+    margin-top: auto;
+}
+
+/* === Specific Styling for the 'Add Recipe' (+) Button === */
+.navigation_bar a#nav-add-link.add-link {
+    /* Appearance */
     background-color: #D9D9D9;
-    border-radius: 50%;
+    border-radius: 50%; /* Make it circular */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;   /* Clip the image if needed */
+
+    /* Center the '+' image inside */
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    /* Smooth transitions on hover */
     transition: background-color 0.2s ease, transform 0.2s ease;
-    overflow: hidden;
 }
 
-.navigation_bar a.nav-link.add-link:hover {
-    background-color: #c0c0c0;
-    transform: scale(1.05) translateX(-50%);
+.navigation_bar a#nav-add-link.add-link:hover {
+    background-color: #c0c0c0; /* Slightly darker on hover */
+    transform: scale(1.05);   /* Slightly bigger on hover */
 }
 
-.navigation_bar a.nav-link.add-link img.plus {
+/* The '+' image itself */
+.navigation_bar a#nav-add-link.add-link img.plus {
     width: 60%;
     height: 60%;
-    object-fit: contain;
+    object-fit: contain; /* Ensure the image fits without distortion */
     display: block;
 }
 
+/* === Styling for the Standard Icon Containers (Grey Circles) === */
 .navigation_bar div.nav-icon {
+    /* Take full size of the parent link */
     width: 100%;
     height: 100%;
-    background-color: #D9D9D9;
-    border-radius: 50%;
+
+    /* Appearance */
+    background-color: #D9D9D9; /* Circle background */
+    border-radius: 50%;       /* Make it a circle */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;         /* Indicate it's clickable */
+    overflow: hidden;        /* Hide image overflow */
+
+    /* Center the icon image inside */
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+
+    /* Smooth transitions on hover */
     transition: background-color 0.2s ease, transform 0.2s ease;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .navigation_bar div.nav-icon:hover {
-    background-color: #c0c0c0;
+    background-color: #c0c0c0; /* Darker circle on hover */
+    transform: scale(1.05);   /* Slightly bigger on hover */
 }
 
+/* The icon image within the grey circle */
 .navigation_bar div.nav-icon img {
     width: 55%;
     height: 55%;
+    object-fit: contain; /* Ensure icon fits well */
     display: block;
-    object-fit: contain;
 }
 
-.nav-link:has(.white_circle1) { top: 30%; }
-.nav-link:has(.white_circle2) { top: 40%; }
-.nav-link:has(.white_circle3) { top: 50%; }
-.nav-link:has(.white_circle4) { top: 60%; }
-.nav-link:has(.white_circle5) { bottom: 15%; }
-.nav-link:has(.white_circle6) { bottom: 5%; }
 
+/* === Responsive Styles for Mobile (Bottom Bar) === */
 @media (max-width: 768px) {
+
+    /* Style the navbar as a bottom bar on smaller screens */
     .navigation_bar {
-        width: 100%;
-        height: 60px;
-        bottom: 0;
-        top: auto;
+        width: 100%;     /* Full width */
+        height: 60px;     /* Fixed height */
+        bottom: 0;        /* Stick to bottom */
+        top: auto;        /* Remove top positioning */
         left: 0;
+        position: fixed; /* Keep fixed at bottom */
+        min-width: unset; /* Remove desktop min-width */
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Shadow on top */
+
+        /* Arrange items horizontally */
         display: flex;
+        flex-direction: row;
         justify-content: space-around;
         align-items: center;
-        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-        min-width: unset;
-        position: fixed;
+        padding: 0 5px;   /* Some horizontal padding */
     }
 
+    /* Hide the top logo on mobile */
     .navigation_bar .logo_img {
         display: none;
     }
 
-    .navigation_bar a.nav-link.add-link {
-        display: none;
+    /* Hide the separate '+' add link on mobile */
+    /* (It might be better integrated differently if needed on mobile) */
+    .navigation_bar a#nav-add-link.add-link {
+        display: none !important; /* Ensure it's hidden */
     }
 
-    .navigation_bar .nav-link {
-        position: relative;
-        left: auto;
-        top: auto;
-        bottom: auto;
-        transform: none;
-        width: auto;
-        height: 100%;
-        flex: 1;
+    /* Adjust the icon links container for horizontal layout */
+    .navbar-icon-links {
+        position: static; /* Not absolutely positioned anymore */
         display: flex;
+        flex-direction: row; /* Horizontal layout */
+        align-items: center;
+        justify-content: space-around; /* Space out icons */
+        gap: 5px;           /* Small gap between icons */
+        padding: 0;         /* Reset padding */
+        width: 100%;        /* Take full width */
+        height: 100%;       /* Take full height */
+        overflow: hidden;     /* Hide overflow */
+    }
+
+    /* Adjust individual links for horizontal layout */
+    .navigation_bar .nav-link {
+        position: relative; /* Back to relative */
+        width: auto;        /* Let flexbox decide width */
+        height: 100%;       /* Full height of the bar */
+        flex: 1;            /* Distribute space evenly */
+        display: flex;      /* Center content (the icon div) */
         justify-content: center;
         align-items: center;
+        margin: 0;          /* Reset vertical margins */
     }
 
+    /* Reset the push-to-bottom for mobile layout */
+    .navigation_bar a#nav-settings-link {
+        margin-top: 0;
+    }
+
+    /* Make icon containers transparent on mobile */
     .navigation_bar div.nav-icon {
-        width: 40px;
+        width: 40px; /* Slightly smaller circles */
         height: 40px;
-        background-color: transparent;
-        box-shadow: none;
+        background-color: transparent; /* No grey circle */
+        box-shadow: none;               /* No shadow */
     }
 
     .navigation_bar div.nav-icon:hover {
-        background-color: rgba(0, 0, 0, 0.05);
-        transform: none;
+        background-color: rgba(0, 0, 0, 0.05); /* Subtle hover effect */
+        transform: none; /* No scaling needed */
     }
 
+    /* Adjust icon image size for mobile */
     .navigation_bar div.nav-icon img {
         width: 24px;
         height: 24px;
     }
 
+    /* Add padding to the bottom of the body so content doesn't hide */
+    /* behind the fixed bottom navbar */
     body {
-        padding-bottom: 75px;
+        padding-bottom: 75px; /* Navbar height + buffer */
     }
 }
 
+
+/* === Active Page Indicator === */
+/* Style for the icon of the currently active page */
 .navigation_bar div.nav-icon.active-nav-icon {
-    background-color: #e88e4d;
+    background-color: #e88e4d; /* Highlight color */
 }
+
+/* Make the icon image white when its container is active */
+.navigation_bar div.nav-icon.active-nav-icon img {
+    filter: brightness(0) invert(1);
+}
+
+
+/* === Utility Class === */
+/* General purpose class to hide elements (used by JS) */
 .hidden {
     display: none !important;
 }

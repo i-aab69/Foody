@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Foody - Recipe Search</title> 
+  <title>Foody - Recipe Search</title>
   <link rel="stylesheet" href="navbar.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
@@ -11,102 +11,67 @@
 </head>
 <body>
     <div class="navigation_bar">
-        <a href="home_page1.html"> <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini">
+        <a href="home_page1.html">
+            <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini">
         </a>
-        <a href="adding_page.html" class="nav-link add-link">
-            <img src="source/Add.png" alt="Add Recipe" class="plus">
-        </a>
-        <a href="home.html" class="nav-link"> <div class="white_circle1 nav-icon">
-                <img src="source/Vector.png" alt="Home">
-            </div>
-        </a>
-        <a href="search.html" class="nav-link" data-target-action="search">
-            <div class="white_circle2 nav-icon">
-                <img src="source/png.png" alt="Search">
-            </div>
-        </a>
-         <a href="list.html" class="nav-link"> <div class="white_circle3 nav-icon">
-                <img src="source/book.png" alt="Recipes">
-            </div>
-        </a>
-         <a href="favorate.html" class="nav-link"> <div class="white_circle4 nav-icon">
-                <img src="source/heart.png" alt="Favorites">
-            </div>
-        </a>
-        <a href="settings_page.html" class="nav-link" >
-             <div class="white_circle5 nav-icon">
-                 <img src="source/setting.png" alt="Settings">
-             </div>
-        </a>
-         <a href="profile_page.html" class="nav-link">
-             <div class="white_circle6 nav-icon">
-                 <img src="source/profile.png" alt="Profile">
-             </div>
-         </a>
+        <div class="navbar-icon-links">
+            <a href="adding_page.html" id="nav-add-link" class="nav-link add-link">
+                <img src="source/Add.png" alt="Add Recipe" class="plus">
+            </a>
+            <a href="home.html" id="nav-home-link" class="nav-link">
+                <div class="white_circle1 nav-icon"> <img src="source/Vector.png" alt="Home"> </div>
+            </a>
+            <a href="search.html" id="nav-search-link" class="nav-link" data-target-action="search">
+                <div class="white_circle2 nav-icon"> <img src="source/png.png" alt="Search"> </div>
+            </a>
+            <a href="list.html" id="nav-list-link" class="nav-link">
+                <div class="white_circle3 nav-icon"> <img src="source/book.png" alt="Recipes"> </div>
+            </a>
+            <a href="favorate.html" id="nav-fav-link" class="nav-link">
+                <div class="white_circle4 nav-icon"> <img src="source/heart.png" alt="Favorites"> </div>
+            </a>
+            <a href="settings_page.html" id="nav-settings-link" class="nav-link">
+                <div class="white_circle5 nav-icon"> <img src="source/setting.png" alt="Settings"> </div>
+            </a>
+            <a href="profile_page.html" id="nav-profile-link" class="nav-link">
+                <div class="white_circle6 nav-icon"> <img src="source/profile.png" alt="Profile"> </div>
+            </a>
+        </div>
     </div>
-
     <div class="content" style="margin-left: 9%;">
         <h1 class="text-3xl font-bold mb-4">Search a Recipe</h1>
 
         <div class="mb-4">
-        <span class="pill pill-orange">added items:</span>
-        <span class="pill pill-white">egg</span>
-        <span class="pill pill-white">butter</span>
-        <span class="pill pill-white">tomato</span>
-        <span class="pill pill-white">onion</span>
-        <span class="pill pill-white">paprika</span>
-        <span class="pill pill-white">parsley</span>
-        <span class="pill pill-white">garlic powder</span>
-        <span class="pill pill-white">penne pasta</span>
-        </div>
+            <span class="pill pill-orange">added items:</span>
+            <span class="pill pill-white">egg</span>
+            <span class="pill pill-white">butter</span>
+            </div>
 
         <div class="input-group">
-        <input type="text" placeholder="search for an ingredient..." />
-        <input type="text" placeholder="search for a recipe..." />
+            <input type="text" placeholder="search for an ingredient..." />
+            <input type="text" placeholder="search for a recipe..." />
         </div>
 
         <div class="categories">
-        <button class="category-button">Dairy & Eggs <i class="fas fa-chevron-down"></i></button>
-        <button class="category-button">Vegetables & Greens <i class="fas fa-chevron-down"></i></button>
-        <button class="category-button">Herbs & Spice <i class="fas fa-chevron-down"></i></button>
-        <button class="category-button">Baking <i class="fas fa-chevron-down"></i></button>
-        <button class="category-button">Oils & Fats <i class="fas fa-chevron-down"></i></button>
-        <button class="category-button">Condiments <i class="fas fa-chevron-down"></i></button>
-        <button class="category-button">Seafood <i class="fas fa-chevron-down"></i></button>
-        <button class="category-button">Grains <i class="fas fa-chevron-down"></i></button>
-        </div>
+            <button class="category-button">Dairy & Eggs <i class="fas fa-chevron-down"></i></button>
+            </div>
 
         <div class="recipes">
-        <h2 class="text-2xl font-bold mb-4">You can make: 3 recipes</h2>
-
-        <div class="recipe-card" data-recipe-id="shakshuka01"> <img src="source/shakshuka.png" alt="Shakshuka" />
-            <div class="recipe-info">
-            <h3>Shakshuka</h3>
-            <p>You have all 7 ingredients</p>
-            </div>
-            <button class="favorite-btn">♡</button> </div>
-
-        <div class="recipe-card" data-recipe-id="omelette01"> <img src="source/omelette.png" alt="Omelette" />
-            <div class="recipe-info">
-            <h3>Omelette</h3>
-            <p>You have all 3 ingredients</p>
-            </div>
-             <button class="favorite-btn">♡</button> </div>
-
-        <div class="recipe-card" data-recipe-id="redpasta01"> <img src="source/red_pasta.png" alt="Red sauce pasta" />
-            <div class="recipe-info">
-            <h3>Red sauce pasta</h3>
-            <p>You have all 7 ingredients</p>
-            </div>
-             <button class="favorite-btn">♡</button> </div>
+            <h2 class="text-2xl font-bold mb-4">You can make: 3 recipes</h2>
+            <div class="recipe-card" data-recipe-id="shakshuka01"><img src="source/shakshuka.png" alt="Shakshuka" /><div class="recipe-info"><h3>Shakshuka</h3><p>You have all 7 ingredients</p></div><button class="favorite-btn">♡</button></div>
+            <div class="recipe-card" data-recipe-id="omelette01"><img src="source/omelette.png" alt="Omelette" /><div class="recipe-info"><h3>Omelette</h3><p>You have all 3 ingredients</p></div><button class="favorite-btn">♡</button></div>
+            <div class="recipe-card" data-recipe-id="redpasta01"><img src="source/red_pasta.png" alt="Red sauce pasta" /><div class="recipe-info"><h3>Red sauce pasta</h3><p>You have all 7 ingredients</p></div><button class="favorite-btn">♡</button></div>
         </div>
     </div>
-    <div id="modal-overlay" class="modal-overlay hidden"></div>
-     <div id="add-recipe-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2>Add New Recipe</h2> <p>(Form elements would go here...)</p> <label for="recipe-name">Recipe Name:</label> <input type="text" id="recipe-name" name="recipe-name"><br><br> <button>Submit Recipe</button> </div>
-     <div id="recipe-details-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2 id="modal-recipe-title">Recipe Title</h2> <p>(Full recipe details...)</p> <p>Recipe ID: <span id="modal-recipe-id"></span></p> </div>
-     <div id="settings-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2>Settings</h2> <p>(Settings options...)</p> </div>
-     <div id="profile-modal" class="modal hidden"> <button class="modal-close-button">&times;</button> <h2>User Profile</h2> <p>(User profile details...)</p> </div>
 
+    <div id="modal-overlay" class="modal-overlay hidden"></div>
+    <div id="add-recipe-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>Add New Recipe</h2><p>(Form elements...)</p></div>
+    <div id="recipe-details-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2 id="modal-recipe-title">Recipe Title</h2><p>(Details...)</p></div>
+    <div id="settings-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>Settings</h2><p>(Options...)</p></div>
+    <div id="profile-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>User Profile</h2><p>(Details...)</p></div>
+
+    <script src="storageManager.js"></script>
+    <script src="auth.js"></script>
      <script src="navbar.js"></script>
 </body>
 </html>

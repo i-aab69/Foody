@@ -1,5 +1,12 @@
-// Wait for the HTML document to be fully loaded before running scripts
+// Foody-main/home.js (Updated to use storageManager.js)
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if storageManager functions are available
+     if (typeof addFavorite !== 'function' || typeof removeFavorite !== 'function' || typeof isFavorite !== 'function') {
+        console.error("storageManager.js functions not loaded before home.js!");
+        alert("Error: Essential functions missing. Please contact support.");
+        return; // Stop execution
+    }
 
     console.log("Foody Website Script Loaded! (home.js)");
 
@@ -8,101 +15,90 @@ document.addEventListener('DOMContentLoaded', () => {
     const recipeCardContainer = document.getElementById('recipe-cards-container');
     const loadMoreBtn = document.getElementById('load-more-btn');
     const filterMessageElement = document.getElementById('filter-message');
-
-    // Find all recipe cards within the container (if container exists)
     const allRecipeCards = recipeCardContainer ? recipeCardContainer.querySelectorAll('.recipe-card') : [];
 
     // --- Core Feature Functions ---
 
-    /**
-     * Filters recipes displayed on the page based on the selected category.
-     * @param {string} categoryName - The name of the category to filter by.
-     */
     function filterRecipesByCategory(categoryName) {
         console.log(`Filtering by category: ${categoryName}`);
         let visibleCount = 0;
-
-        // Update active state visual for category titles
         categoryElements.forEach(el => {
             el.classList.toggle('active-category', el.dataset.categoryName === categoryName);
         });
-
-        // Show/hide recipe cards based on category
         allRecipeCards.forEach(card => {
-            const cardCategory = card.dataset.category;
-            const shouldBeVisible = (categoryName === 'All' || !cardCategory || cardCategory === categoryName);
-            // Make sure card exists before trying to access style
-            if (card) {
+            if (card) { // Ensure card exists
+                const cardCategory = card.dataset.category;
+                const shouldBeVisible = (categoryName === 'All' || !cardCategory || cardCategory === categoryName);
                 card.style.display = shouldBeVisible ? '' : 'none';
                 if (shouldBeVisible) visibleCount++;
             }
         });
-
-        // Show/hide recipe rows based on whether they contain visible cards
-        // Note: Assumes recipe cards are wrapped in '.recipe-row' divs
         if (recipeCardContainer) {
             recipeCardContainer.querySelectorAll('.recipe-row').forEach(row => {
                 const hasVisibleCard = Array.from(row.querySelectorAll('.recipe-card')).some(card => card.style.display !== 'none');
                 row.style.display = hasVisibleCard ? '' : 'none';
             });
         }
-
-        // Display a message if no recipes match the filter
         if (filterMessageElement) {
+            filterMessageElement.style.display = (visibleCount === 0 && categoryName !== 'All') ? 'block' : 'none';
             if (visibleCount === 0 && categoryName !== 'All') {
-                filterMessageElement.textContent = `No recipes found for "${categoryName}".`;
-                filterMessageElement.style.display = 'block';
-            } else {
-                filterMessageElement.style.display = 'none';
+                 filterMessageElement.textContent = `No recipes found for "${categoryName}".`;
             }
         }
     }
 
     /**
-     * Toggles the favorite status of a recipe using localStorage.
+     * Toggles the favorite status using storageManager and updates UI.
      * @param {string} recipeId - The unique identifier for the recipe.
-     * @param {HTMLElement} heartIcon - The heart icon element being clicked.
+     * @param {HTMLElement} favButton - The favorite button element being clicked.
      */
-    function toggleFavorite(recipeId, heartIcon) {
-        console.log(`Toggling favorite status for recipe: ${recipeId}`);
-        // Get current favorites from localStorage, or initialize an empty array
-        let favorites = JSON.parse(localStorage.getItem('foodyFavorites') || '[]');
-        const index = favorites.indexOf(recipeId);
+    function toggleFavoriteUI(recipeId, favButton) {
+        console.log(`Toggling favorite UI for recipe: ${recipeId}`);
+        const iconElement = favButton.querySelector('i');
+        if (!iconElement) return;
 
-        if (index > -1) { // If already favorited, remove it
-            favorites.splice(index, 1);
-            heartIcon.classList.remove('is-favorite');
-            heartIcon.textContent = '♡'; // Update icon to empty heart
-            console.log(`${recipeId} removed from favorites.`);
-        } else { // If not favorited, add it
-            favorites.push(recipeId);
-            heartIcon.classList.add('is-favorite');
-            heartIcon.textContent = '♥'; // Update icon to filled heart
-            console.log(`${recipeId} added to favorites.`);
+        // --- Use storageManager to check/add/remove ---
+        if (isFavorite(recipeId)) { // Check current state
+            removeFavorite(recipeId); // Remove using storageManager
+            // Update UI for non-favorite
+            favButton.classList.remove('is-favorite');
+            iconElement.classList.remove('fas');
+            iconElement.classList.add('far');
+            favButton.setAttribute('aria-pressed', 'false');
+            favButton.setAttribute('aria-label', 'Add to favorites');
+        } else {
+            addFavorite(recipeId); // Add using storageManager
+            // Update UI for favorite
+            favButton.classList.add('is-favorite'); // Add class for animation/styling
+            iconElement.classList.remove('far');
+            iconElement.classList.add('fas');
+            favButton.setAttribute('aria-pressed', 'true');
+            favButton.setAttribute('aria-label', 'Remove from favorites');
         }
-        // Save the updated favorites array back to localStorage
-        localStorage.setItem('foodyFavorites', JSON.stringify(favorites));
     }
 
-    /** Updates the visual state of all favorite icons on page load/update. */
-    function updateFavoriteIcons() {
-        let favorites = JSON.parse(localStorage.getItem('foodyFavorites') || '[]');
+    /** Updates the visual state of all favorite icons on page load using storageManager. */
+    function updateFavoriteIconsUI() {
         document.querySelectorAll('.favorite-button').forEach(button => {
             const card = button.closest('.recipe-card');
-            if (card && card.dataset.recipeId) {
+            const iconElement = button.querySelector('i');
+            if (card && card.dataset.recipeId && iconElement) {
                 const recipeId = card.dataset.recipeId;
-                const isFav = favorites.includes(recipeId);
-                button.classList.toggle('is-favorite', isFav);
-                button.textContent = isFav ? '♥' : '♡'; // Set correct heart icon
+                // --- Use storageManager to check ---
+                const favState = isFavorite(recipeId);
+
+                button.classList.toggle('is-favorite', favState);
+                iconElement.classList.toggle('fas', favState);
+                iconElement.classList.toggle('far', !favState);
+                button.setAttribute('aria-pressed', favState ? 'true' : 'false');
+                button.setAttribute('aria-label', favState ? 'Remove from favorites' : 'Add to favorites');
             }
         });
     }
 
-    /** Loads more recipes onto the page. Simulates action. */
     function loadMoreRecipes() {
         console.log("Simulating Load more recipes...");
         alert("Simulating: Load more recipes.\n(Actual implementation requires a backend server)");
-        // Disable button after simulated load
         if (loadMoreBtn) {
             loadMoreBtn.textContent = "No More Recipes";
             loadMoreBtn.disabled = true;
@@ -111,29 +107,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
-    // Category Filters
     categoryElements.forEach(category => {
         category.addEventListener('click', () => {
             const categoryName = category.dataset.categoryName;
-            if (categoryName) {
-                filterRecipesByCategory(categoryName);
-            }
+            if (categoryName) filterRecipesByCategory(categoryName);
         });
     });
 
-    // Recipe Cards (using event delegation on the container)
     if (recipeCardContainer) {
         recipeCardContainer.addEventListener('click', (event) => {
             const card = event.target.closest('.recipe-card');
             const favButton = event.target.closest('.favorite-button');
 
-            if (favButton && card && card.dataset.recipeId) { // Favorite button clicked
-                event.stopPropagation(); // Prevent card click from firing too
-                toggleFavorite(card.dataset.recipeId, favButton);
-            } else if (card && card.dataset.recipeId) { // Card area clicked (but not favorite button)
+            if (favButton && card && card.dataset.recipeId) {
+                event.stopPropagation();
+                // --- Use new toggle function ---
+                toggleFavoriteUI(card.dataset.recipeId, favButton);
+            } else if (card && card.dataset.recipeId) {
                 const recipeId = card.dataset.recipeId;
                 console.log(`Navigating to details for recipe: ${recipeId}`);
-                // Navigate to the description page with ID as a query parameter
                 window.location.href = `Discription_page.html?id=${recipeId}`;
             } else if (card && !card.dataset.recipeId) {
                 console.warn("Card clicked, but 'data-recipe-id' is missing.");
@@ -141,14 +133,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Load More Button
     if (loadMoreBtn) {
         loadMoreBtn.addEventListener('click', loadMoreRecipes);
     }
 
     // --- Initial Setup ---
-    updateFavoriteIcons(); // Update favorite icons based on localStorage on load
-    // Set the 'All' category as active by default on load
+    updateFavoriteIconsUI(); // Use new update function
     document.querySelector('.category[data-category-name="All"]')?.classList.add('active-category');
 
 }); // End of DOMContentLoaded

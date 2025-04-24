@@ -1,8 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    if (typeof getFavorites !== 'function' || typeof removeFavorite !== 'function') {
+        console.error("storageManager.js functions not loaded before favorites.js!");
+        alert("Error: Essential functions missing. Please contact support.");
+        return;
+    }
+
     const favoritesContainer = document.getElementById('favorites-container');
     const noFavoritesMessage = document.getElementById('no-favorites-message');
 
-    const recipeData = {
+    const recipeDisplayData = {
         "cookie01": { title: "Chewy Chocolate Chip Cookies", image: "source/chocolate-chip-cookies.png" },
         "cake01": { title: "Tasty Chocolate Cake", image: "source/chocolate-cake.png" },
         "rolls01": { title: "Easy Cinnamon Rolls From Scratch", image: "source/cinnamon-rolls.png" },
@@ -17,22 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
         "redpasta01": { title: "Red Sauce Pasta", image: "source/red_pasta.png" },
     };
 
-    function loadFavorites() {
-        if (!favoritesContainer || !noFavoritesMessage) {
-            console.error("Favorites container or message element not found!");
-            return;
-        }
+    function loadFavoritesUI() {
+        if (!favoritesContainer || !noFavoritesMessage) return;
 
-        const favoriteIds = JSON.parse(localStorage.getItem('foodyFavorites') || '[]');
+        const favoriteIds = getFavorites();
+
         favoritesContainer.innerHTML = '';
         noFavoritesMessage.style.display = 'none';
 
         if (favoriteIds.length === 0) {
             noFavoritesMessage.style.display = 'block';
-            favoritesContainer.appendChild(noFavoritesMessage);
+            if (!favoritesContainer.contains(noFavoritesMessage)) {
+                favoritesContainer.appendChild(noFavoritesMessage);
+            }
         } else {
             favoriteIds.forEach(id => {
-                const recipe = recipeData[id];
+                const recipe = recipeDisplayData[id];
                 if (recipe) {
                     const card = document.createElement('div');
                     card.classList.add('recipe-card');
@@ -51,8 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     titleH3.textContent = recipe.title;
                     const favButton = document.createElement('button');
                     favButton.classList.add('favorite-button', 'is-favorite');
-                    favButton.textContent = '♥';
+                    const icon = document.createElement('i');
+                    icon.classList.add('fas', 'fa-heart');
+                    favButton.appendChild(icon);
                     favButton.dataset.recipeId = id;
+                    favButton.setAttribute('aria-label', 'Remove from favorites');
+                    favButton.setAttribute('aria-pressed', 'true');
 
                     infoDiv.appendChild(titleH3);
                     infoDiv.appendChild(favButton);
@@ -62,49 +72,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     favoritesContainer.appendChild(card);
                 } else {
-                    console.warn(`Recipe data not found for ID: ${id}`);
+                    console.warn(`Display data not found for favorited ID: ${id}. Removing orphan.`);
+                    removeFavorite(id);
                 }
             });
         }
     }
 
-    function removeFavorite(idToRemove) {
-        let favoriteIds = JSON.parse(localStorage.getItem('foodyFavorites') || '[]');
-        const index = favoriteIds.indexOf(idToRemove);
-
-        if (index > -1) {
-            favoriteIds.splice(index, 1);
-            localStorage.setItem('foodyFavorites', JSON.stringify(favoriteIds));
-            return true;
-        }
-        return false;
-    }
-
     if (favoritesContainer) {
         favoritesContainer.addEventListener('click', (event) => {
             const favButton = event.target.closest('.favorite-button');
+            const card = event.target.closest('.recipe-card');
+
             if (favButton && favButton.dataset.recipeId) {
+                event.stopPropagation();
                 const idToRemove = favButton.dataset.recipeId;
-                if (removeFavorite(idToRemove)) {
-                    const cardToRemove = favButton.closest('.recipe-card');
-                    if (cardToRemove) {
-                        cardToRemove.remove();
-                    }
-                    const remainingCards = favoritesContainer.querySelectorAll('.recipe-card');
-                    if (remainingCards.length === 0 && noFavoritesMessage) {
-                        noFavoritesMessage.style.display = 'block';
+                removeFavorite(idToRemove);
+
+                const cardToRemove = favButton.closest('.recipe-card');
+                if (cardToRemove) cardToRemove.remove();
+
+                const remainingCards = favoritesContainer.querySelectorAll('.recipe-card');
+                if (remainingCards.length === 0 && noFavoritesMessage) {
+                    noFavoritesMessage.style.display = 'block';
+                    if (!favoritesContainer.contains(noFavoritesMessage)) {
                         favoritesContainer.appendChild(noFavoritesMessage);
                     }
                 }
-            } else if (event.target.closest('.recipe-card')) {
-                const card = event.target.closest('.recipe-card');
+            } else if (card && card.dataset.recipeId) {
                 const recipeId = card.dataset.recipeId;
-                if (recipeId) {
-                    console.log(`Clicked card for recipe: ${recipeId}`);
-                }
+                console.log(`Navigating to details for recipe: ${recipeId}`);
+                window.location.href = `Discription_page.html?id=${recipeId}`;
             }
         });
     }
 
-    loadFavorites();
+    loadFavoritesUI();
 });

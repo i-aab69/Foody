@@ -3,77 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foody - Recipe Description</title>
-    <link rel="stylesheet" href="navbar.css" />
+    <title>Foody - Recipe Description</title> <link rel="stylesheet" href="navbar.css" />
     <link rel="stylesheet" href="Discription_page.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="navigation_bar">
-        <a href="home_page1.html"> <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini"></a>
-        <a href="adding_page.html" class="nav-link add-link"><img src="source/Add.png" alt="Add Recipe" class="plus"></a>
-        <a href="home.html" class="nav-link"><div class="white_circle1 nav-icon"><img src="source/Vector.png" alt="Home"></div></a>
-        <a href="search.html" class="nav-link" data-target-action="search"><div class="white_circle2 nav-icon"><img src="source/png.png" alt="Search"></div></a>
-        <a href="list.html" class="nav-link"><div class="white_circle3 nav-icon"><img src="source/book.png" alt="Recipes"></div></a>
-        <a href="favorate.html" class="nav-link"><div class="white_circle4 nav-icon"><img src="source/heart.png" alt="Favorites"></div></a>
-        <a href="settings_page.html" class="nav-link"><div class="white_circle5 nav-icon"><img src="source/setting.png" alt="Settings"></div></a>
-        <a href="profile_page.html" class="nav-link"><div class="white_circle6 nav-icon"><img src="source/profile.png" alt="Profile"></div></a>
+        <a href="home_page1.html">
+            <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini">
+        </a>
+        <div class="navbar-icon-links">
+            <a href="adding_page.html" id="nav-add-link" class="nav-link add-link">
+                <img src="source/Add.png" alt="Add Recipe" class="plus">
+            </a>
+            <a href="home.html" id="nav-home-link" class="nav-link">
+                <div class="white_circle1 nav-icon"> <img src="source/Vector.png" alt="Home"> </div>
+            </a>
+            <a href="search.html" id="nav-search-link" class="nav-link" data-target-action="search">
+                <div class="white_circle2 nav-icon"> <img src="source/png.png" alt="Search"> </div>
+            </a>
+            <a href="list.html" id="nav-list-link" class="nav-link">
+                <div class="white_circle3 nav-icon"> <img src="source/book.png" alt="Recipes"> </div>
+            </a>
+            <a href="favorate.html" id="nav-fav-link" class="nav-link">
+                <div class="white_circle4 nav-icon"> <img src="source/heart.png" alt="Favorites"> </div>
+            </a>
+            <a href="settings_page.html" id="nav-settings-link" class="nav-link">
+                <div class="white_circle5 nav-icon"> <img src="source/setting.png" alt="Settings"> </div>
+            </a>
+            <a href="profile_page.html" id="nav-profile-link" class="nav-link">
+                <div class="white_circle6 nav-icon"> <img src="source/profile.png" alt="Profile"> </div>
+            </a>
+        </div>
     </div>
-
     <div class="main-content">
-        <h1 class="page-title">Recipe Description</h1>
-
         <div id="recipe-details-content">
             <div id="loading-message" style="text-align: center; padding: 20px; font-style: italic;">Loading recipe details...</div>
             <div id="error-message" style="text-align: center; padding: 20px; color: red; display: none;">Recipe not found.</div>
 
-            <div id="recipe-loaded-area" style="display: none;"> <h2 class="recipe-title" id="recipe-title-placeholder">Recipe Title</h2>
-
-                <div class="recipe-meta">
-                    <div class="meta-item">
-                        <i class="fas fa-clock"></i> <span id="recipe-time-placeholder">Time</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-users"></i> <span id="recipe-servings-placeholder">Servings</span>
-                    </div>
+            <div id="recipe-loaded-area" style="display: none;">
+                <h1 class="recipe-title" id="recipe-title-placeholder">Recipe Title</h1> <div class="recipe-meta">
+                    <div class="meta-item"><i class="fas fa-clock"></i> <span id="recipe-time-placeholder">Time</span></div>
+                    <div class="meta-item"><i class="fas fa-users"></i> <span id="recipe-servings-placeholder">Servings</span></div>
                     <div class="action-buttons">
-                        <button class="action-button like-button favorite-button" id="favorite-button-placeholder">
+                         <button class="action-button like-button favorite-button" id="favorite-button-placeholder" aria-label="Add to favorites" aria-pressed="false">
                              <i class="far fa-heart"></i> </button>
-                        <button class="action-button share-button">
-                            <i class="fas fa-share-alt"></i> </button>
+                        <button class="action-button share-button"><i class="fas fa-share-alt"></i></button>
                     </div>
                 </div>
 
                 <div class="recipe-details">
-                    <div class="recipe-image-container">
-                        <img src="source/placeholder.png" alt="Recipe Image" class="recipe-image" id="recipe-image-placeholder">
-                    </div>
+                    <div class="recipe-image-container"><img src="source/placeholder.png" alt="Recipe Image" class="recipe-image" id="recipe-image-placeholder"></div>
                     <div class="recipe-text">
-                        <div class="recipe-section">
-                            <h3 class="section-title">Description</h3>
-                            <p class="description-text" id="recipe-description-placeholder">
-                                Recipe description goes here.
-                            </p>
-                        </div>
-                        <div class="recipe-section">
-                            <h3 class="section-title">Ingredients</h3>
-                            <ul class="ingredients-list" id="ingredients-list-placeholder">
-                                </ul>
-                        </div>
+                        <div class="recipe-section"><h3 class="section-title">Description</h3><p class="description-text" id="recipe-description-placeholder">Recipe description goes here.</p></div>
+                        <div class="recipe-section"><h3 class="section-title">Ingredients</h3><ul class="ingredients-list" id="ingredients-list-placeholder"></ul></div>
                     </div>
                 </div>
 
                 <div class="recipe-section instructions-section">
                     <h3 class="section-title">Instructions</h3>
-                    <ol class="instructions-list" id="instructions-list-placeholder">
-                       </ol>
+                    <ol class="instructions-list" id="instructions-list-placeholder"></ol>
                     <p class="enjoy-text">Enjoy your meal!</p>
                 </div>
             </div>
-        </div> </div>
+        </div>
+    </div>
 
     <div id="modal-overlay" class="modal-overlay hidden"></div>
-    <script src="navbar.js"></script>
-    <script src="description_loader.js"></script> </body>
+    <script src="storageManager.js"></script>
+    <script src="auth.js"></script>
+    <script src="description_loader.js"></script> <script src="navbar.js"></script>
+</body>
 </html>
