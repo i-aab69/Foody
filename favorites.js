@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+
     if (typeof getFavorites !== 'function' || typeof removeFavorite !== 'function') {
-        console.error("storageManager.js functions not loaded before favorites.js!");
-        alert("Error: Essential functions missing. Please contact support.");
+        console.error("storageManager.js stuff is missing for favorites!");
+        alert("Error loading favorites functions. Try refreshing?");
         return;
     }
 
@@ -23,8 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
         "redpasta01": { title: "Red Sauce Pasta", image: "source/red_pasta.png" },
     };
 
-    function loadFavoritesUI() {
-        if (!favoritesContainer || !noFavoritesMessage) return;
+    function displayFavorites() {
+        if (!favoritesContainer || !noFavoritesMessage) {
+            console.error("Can't find the favorites container or message box!");
+            return;
+        }
 
         const favoriteIds = getFavorites();
 
@@ -38,27 +42,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             favoriteIds.forEach(id => {
-                const recipe = recipeDisplayData[id];
-                if (recipe) {
+                const recipeInfo = recipeDisplayData[id];
+
+                if (recipeInfo) {
                     const card = document.createElement('div');
-                    card.classList.add('recipe-card');
+                    card.className = 'recipe-card';
                     card.dataset.recipeId = id;
 
                     const imgDiv = document.createElement('div');
-                    imgDiv.classList.add('recipe-img');
+                    imgDiv.className = 'recipe-img';
                     const img = document.createElement('img');
-                    img.src = recipe.image || 'source/placeholder.png';
-                    img.alt = recipe.title;
+                    img.src = recipeInfo.image || 'source/placeholder.png';
+                    img.alt = recipeInfo.title;
                     imgDiv.appendChild(img);
 
                     const infoDiv = document.createElement('div');
-                    infoDiv.classList.add('recipe-info');
+                    infoDiv.className = 'recipe-info';
                     const titleH3 = document.createElement('h3');
-                    titleH3.textContent = recipe.title;
+                    titleH3.textContent = recipeInfo.title;
+
                     const favButton = document.createElement('button');
-                    favButton.classList.add('favorite-button', 'is-favorite');
+                    favButton.className = 'favorite-button is-favorite';
                     const icon = document.createElement('i');
-                    icon.classList.add('fas', 'fa-heart');
+                    icon.className = 'fas fa-heart';
                     favButton.appendChild(icon);
                     favButton.dataset.recipeId = id;
                     favButton.setAttribute('aria-label', 'Remove from favorites');
@@ -71,8 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.appendChild(infoDiv);
 
                     favoritesContainer.appendChild(card);
+
                 } else {
-                    console.warn(`Display data not found for favorited ID: ${id}. Removing orphan.`);
+                    console.warn(`Couldn't find display info for favorited ID: ${id}. Removing it.`);
                     removeFavorite(id);
                 }
             });
@@ -81,16 +88,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (favoritesContainer) {
         favoritesContainer.addEventListener('click', (event) => {
-            const favButton = event.target.closest('.favorite-button');
-            const card = event.target.closest('.recipe-card');
+            const clickedFavButton = event.target.closest('.favorite-button');
+            const clickedCard = event.target.closest('.recipe-card');
 
-            if (favButton && favButton.dataset.recipeId) {
+            if (clickedFavButton && clickedFavButton.dataset.recipeId) {
                 event.stopPropagation();
-                const idToRemove = favButton.dataset.recipeId;
+                const idToRemove = clickedFavButton.dataset.recipeId;
+
                 removeFavorite(idToRemove);
 
-                const cardToRemove = favButton.closest('.recipe-card');
-                if (cardToRemove) cardToRemove.remove();
+                const cardToRemove = clickedFavButton.closest('.recipe-card');
+                if (cardToRemove) {
+                    cardToRemove.remove();
+                }
 
                 const remainingCards = favoritesContainer.querySelectorAll('.recipe-card');
                 if (remainingCards.length === 0 && noFavoritesMessage) {
@@ -99,13 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         favoritesContainer.appendChild(noFavoritesMessage);
                     }
                 }
-            } else if (card && card.dataset.recipeId) {
-                const recipeId = card.dataset.recipeId;
-                console.log(`Navigating to details for recipe: ${recipeId}`);
+            }
+            else if (clickedCard && clickedCard.dataset.recipeId) {
+                const recipeId = clickedCard.dataset.recipeId;
+                console.log(`Going to description page for: ${recipeId}`);
                 window.location.href = `Discription_page.html?id=${recipeId}`;
             }
         });
     }
 
-    loadFavoritesUI();
+    displayFavorites();
+
 });

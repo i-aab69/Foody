@@ -1,37 +1,75 @@
-// Foody-main/storageManager.js
-
-// --- Constants ---
 const ROLE_KEY = 'userRole';
 const FAVORITES_KEY = 'foodyFavorites';
-const PROFILE_KEY = 'userProfileData'; // Key for profile data
+const PROFILE_KEY = 'userProfileData';
 
-// --- User Role Management ---
-/** Saves the user's role ('user' or 'admin'). */
-function saveUserRole(role) { if (role === 'user' || role === 'admin') { localStorage.setItem(ROLE_KEY, role); console.log(`StorageManager: Saved userRole = ${role}`); } else { console.error(`StorageManager: Invalid role "${role}". Role not saved.`); } }
-/** Retrieves the user's role ('user' or 'admin' or null). */
-function getUserRole() { return localStorage.getItem(ROLE_KEY); }
-/** Clears the user's role. */
-function clearUserRole() { localStorage.removeItem(ROLE_KEY); console.log("StorageManager: Cleared userRole."); }
+function saveUserRole(role) {
+    if (role === 'user' || role === 'admin') {
+        localStorage.setItem(ROLE_KEY, role);
+        console.log(`StorageManager: Saved userRole = ${role}`);
+    } else {
+        console.error(`StorageManager: Invalid role "${role}". Role not saved.`);
+    }
+}
 
-// --- Favorites Management ---
-/** Retrieves the array of favorite recipe IDs. */
-function getFavorites() { try { const f = localStorage.getItem(FAVORITES_KEY); return f ? JSON.parse(f) : []; } catch (e) { console.error("SM: Err parsing favs", e); return []; } }
-/** Saves the array of favorite recipe IDs. */
-function saveFavorites(arr) { if (!Array.isArray(arr)) { console.error("SM: Invalid type for saveFavorites"); return; } try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(arr)); } catch (e) { console.error("SM: Err saving favs", e); } }
-/** Adds a recipe ID to favorites. */
-function addFavorite(id) { if (!id) return; let f = getFavorites(); if (!f.includes(id)) { f.push(id); saveFavorites(f); console.log(`SM: Added fav ${id}`); } }
-/** Removes a recipe ID from favorites. */
-function removeFavorite(id) { if (!id) return; let f = getFavorites(); const l = f.length; f = f.filter(i => i !== id); if (f.length < l) { saveFavorites(f); console.log(`SM: Removed fav ${id}`); } }
-/** Checks if a recipe ID is a favorite. */
-function isFavorite(id) { if (!id) return false; return getFavorites().includes(id); }
+function getUserRole() {
+    return localStorage.getItem(ROLE_KEY);
+}
+
+function clearUserRole() {
+    localStorage.removeItem(ROLE_KEY);
+    console.log("StorageManager: Cleared userRole.");
+}
 
 
-// --- User Profile Management ---
+function getFavorites() {
+    try {
+        const favsJson = localStorage.getItem(FAVORITES_KEY);
+        return favsJson ? JSON.parse(favsJson) : [];
+    } catch (e) {
+        console.error("StorageManager: Couldn't parse favorites.", e);
+        return [];
+    }
+}
 
-/**
- * Retrieves the user profile data object { username, email, phone, about, picture }
- * @returns {object} Profile data object with defaults if not found.
- */
+function saveFavorites(favsArray) {
+    if (!Array.isArray(favsArray)) {
+        console.error("StorageManager: Didn't get an array to save favorites.");
+        return;
+    }
+    try {
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favsArray));
+    } catch (e) {
+        console.error("StorageManager: Couldn't save favorites.", e);
+    }
+}
+
+function addFavorite(id) {
+    if (!id) return;
+    let currentFavs = getFavorites();
+    if (!currentFavs.includes(id)) {
+        currentFavs.push(id);
+        saveFavorites(currentFavs);
+        console.log(`StorageManager: Added favorite ${id}`);
+    }
+}
+
+function removeFavorite(id) {
+    if (!id) return;
+    let currentFavs = getFavorites();
+    const originalLength = currentFavs.length;
+    let updatedFavs = currentFavs.filter(favId => favId !== id);
+    if (updatedFavs.length < originalLength) {
+        saveFavorites(updatedFavs);
+        console.log(`StorageManager: Removed favorite ${id}`);
+    }
+}
+
+function isFavorite(id) {
+    if (!id) return false;
+    return getFavorites().includes(id);
+}
+
+
 function getUserProfile() {
     const defaultProfile = { username: "Guest", email: "", phone: "", about: "", picture: null };
     try {
@@ -39,18 +77,14 @@ function getUserProfile() {
         const savedProfile = profileJson ? JSON.parse(profileJson) : {};
         return { ...defaultProfile, ...savedProfile };
     } catch (error) {
-        console.error("StorageManager: Error parsing profile data.", error);
+        console.error("StorageManager: Couldn't parse profile data.", error);
         return defaultProfile;
     }
 }
 
-/**
- * Saves the user profile data object.
- * @param {object} profileData - Profile data object { username?, email?, phone?, about?, picture? }. Undefined fields are ignored.
- */
 function saveUserProfile(profileData) {
     if (typeof profileData !== 'object' || profileData === null) {
-        console.error("StorageManager: Invalid data passed to saveUserProfile.");
+        console.error("StorageManager: Didn't get an object to save profile.");
         return;
     }
     try {
@@ -65,19 +99,16 @@ function saveUserProfile(profileData) {
 
         const profileJson = JSON.stringify(dataToSave);
         localStorage.setItem(PROFILE_KEY, profileJson);
-        console.log("StorageManager: Saved user profile data.", dataToSave);
+        console.log("StorageManager: Saved profile data.", dataToSave);
     } catch (error) {
         if (error.name === 'QuotaExceededError') {
-            alert("Could not save profile: Storage limit exceeded. Try a smaller image.");
+            alert("Couldn't save profile: Storage limit full. Maybe try a smaller picture?");
         }
-        console.error("StorageManager: Error saving profile data.", error);
+        console.error("StorageManager: Couldn't save profile data.", error);
     }
 }
 
-/**
- * Clears the user's profile data from localStorage.
- */
 function clearUserProfile() {
     localStorage.removeItem(PROFILE_KEY);
-    console.log("StorageManager: Cleared user profile data.");
+    console.log("StorageManager: Cleared profile data.");
 }

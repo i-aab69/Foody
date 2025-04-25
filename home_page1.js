@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("home_page1.js loaded!");
+
+    console.log("Okay, home_page1.js is loaded!");
 
     const heroSection = document.querySelector('.hero-section');
     const ctaButton = document.querySelector('.cta-button');
@@ -10,11 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ctaButton.getAttribute('href') === '#') {
                 event.preventDefault();
             }
-            console.log('Hero CTA button clicked!');
+            console.log('Hero button got clicked!');
         });
     }
 
     if (welcomeSection) {
-        console.log("Welcome section found. Ready for interactions.");
+        console.log("Found the welcome section!");
     }
+
 });

@@ -1,42 +1,161 @@
+/* Foody-main/contact_us.css (New Modern Styles) */
+
 body {
+    background-color: #f4f7f6; /* Lighter, neutral background */
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    color: #333;
+    line-height: 1.6;
+}
 
-    background: #D9D9D9;
+/* Main content wrapper - leaves space for navbar */
+.contact-main-content {
+    margin-left: 9%; /* Adjust if navbar width changes */
+    padding: 50px 20px; /* Generous padding */
+    display: flex; /* Helps center the card */
+    justify-content: center;
+    align-items: flex-start; /* Align card to top */
+    min-height: calc(100vh - 100px); /* Ensure content area takes height */
+}
 
+/* The main container for contact info */
+.contact-card {
+    background-color: #ffffff; /* White card */
+    padding: 40px 50px;
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); /* Soft shadow */
+    max-width: 700px; /* Limit width */
+    width: 100%; /* Responsive width */
+    text-align: center; /* Center text within card */
+    box-sizing: border-box;
+}
+
+.contact-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.contact-logo {
+    height: 50px; /* Adjust logo size */
+    margin-bottom: 10px;
 }
 
 h1 {
-
-    font-size: 400%;
+    font-size: 2.4em;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 600;
 }
 
-.p1 {
-    position: absolute;
-    font-size: 300%;
-    top: 10%;
+.intro-text {
+    font-size: 1.05em;
+    color: #555;
+    margin-bottom: 40px;
+    max-width: 550px; /* Limit line length */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.p2 {
-    position: absolute;
-    font-size: 270%;
-    top: 36%;
+/* Section for Phone/Email */
+.contact-info {
+    margin-bottom: 40px;
+    text-align: left; /* Align contact details left */
+    display: inline-block; /* Allow centering via parent text-align */
+}
+
+.contact-info h2 {
+    font-size: 1.4em;
+    font-weight: 500;
+    margin-bottom: 15px;
+    text-align: center; /* Center sub-heading */
+    color: #F0A56D; /* Use theme color */
+}
+
+.contact-info p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    display: flex; /* Align icon and text */
+    align-items: center;
+    justify-content: flex-start; /* Align left within the paragraph */
+}
+
+.contact-icon {
+    color: #F0A56D; /* Theme color for icons */
+    margin-right: 12px; /* Space after icon */
+    width: 20px; /* Fixed width for alignment */
+    text-align: center;
+}
+
+.contact-info a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.contact-info a:hover {
+    color: #F0A56D;
+    text-decoration: underline;
+}
+
+/* Section for Social Media Links */
+.social-links {
+    margin-bottom: 30px;
+}
+
+.social-links h2 {
+    font-size: 1.4em;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #F0A56D;
+}
+
+.social-icons-container {
     display: flex;
     justify-content: center;
-}
-section {
-    position: absolute;
-    color: #FF6B35;
+    gap: 25px; /* Space between icons */
 }
 
-.p3 {
-
-    position: absolute;
-    font-size: 300%;
-    top: 66%;
-}
-.p4 {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    top: 82%;
+.social-icons-container a {
+    color: #555; /* Icon color */
+    font-size: 1.8em; /* Icon size */
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
+.social-icons-container a:hover {
+    color: #F0A56D; /* Theme color on hover */
+    transform: scale(1.1); /* Slightly enlarge */
+}
+
+/* Footer text inside the card */
+.contact-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    font-size: 0.9em;
+    color: #888;
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) {
+    .contact-main-content {
+        margin-left: 0; /* Remove margin for mobile nav */
+        padding: 30px 15px 80px 15px; /* Adjust padding, add bottom for nav */
+    }
+    .contact-card {
+        padding: 30px;
+    }
+    h1 { font-size: 2em; }
+    .intro-text { font-size: 1em; }
+    .contact-info h2, .social-links h2 { font-size: 1.3em; }
+    .contact-info p { font-size: 1em; }
+    .social-icons-container a { font-size: 1.6em; }
+}
+
+@media (max-width: 767px) {
+    .contact-main-content { padding-bottom: 80px; } /* Ensure bottom padding */
+}
+
+/* Utility */
+.hidden { display: none !important; }

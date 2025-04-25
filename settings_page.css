@@ -310,3 +310,17 @@ input:checked + .slider:before {
         margin-top: 10px;
     }
 }
+.recipe-card.missing-ingredients {
+    border: 2px solid #ffc107; 
+    opacity: 0.9;
+}
+
+.missing-info {
+    font-size: 0.85em;
+    color: #dc3545; 
+    margin-top: 8px;
+    font-weight: 500;
+}
+.missing-count {
+    font-weight: 700;
+}

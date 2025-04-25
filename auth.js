@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    if (typeof getUserRole !== 'function') { console.error("SM not loaded before auth.js!"); return; }
-    const userRole = getUserRole();
+
+    if (typeof getUserRole !== 'function') {
+        console.error("storageManager.js is missing! Can't check role.");
+        return;
+    }
+
+    const role = getUserRole();
 
     const addLink = document.getElementById('nav-add-link');
     const listLink = document.getElementById('nav-list-link');
@@ -9,12 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileLink = document.getElementById('nav-profile-link');
     const homeLink = document.getElementById('nav-home-link');
 
-    console.log(`Auth: Current user role = ${userRole}`);
+    console.log(`Auth script running. Role = ${role}`);
 
-    if (userRole === 'user') {
-        console.log("Auth: Setting up User Navbar view");
+    if (role === 'user') {
+        console.log("Setting up User view...");
+
         if (addLink) addLink.style.display = 'none';
         if (listLink) listLink.style.display = 'none';
+
         if (homeLink) homeLink.style.display = '';
         if (favLink) favLink.style.display = '';
         if (settingsLink) settingsLink.style.display = '';
@@ -22,19 +29,25 @@ document.addEventListener('DOMContentLoaded', () => {
             profileLink.style.display = '';
             profileLink.href = 'profile_page.html';
         }
-    } else if (userRole === 'admin') {
-        console.log("Auth: Setting up Admin Navbar view");
+
+    } else if (role === 'admin') {
+        console.log("Setting up Admin view...");
+
         if (homeLink) homeLink.style.display = 'none';
         if (favLink) favLink.style.display = 'none';
         if (settingsLink) settingsLink.style.display = 'none';
+
         if (profileLink) {
             profileLink.style.display = '';
             profileLink.href = 'profile_page.html';
         }
+
         if (addLink) addLink.style.display = '';
         if (listLink) listLink.style.display = '';
+
     } else {
-        console.log("Auth: No user role found. Hiding role-specific navbar links.");
+        console.log("No role found. Hiding stuff.");
+
         if (addLink) addLink.style.display = 'none';
         if (listLink) listLink.style.display = 'none';
         if (profileLink) profileLink.style.display = 'none';
