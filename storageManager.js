@@ -1,4 +1,4 @@
-const ROLE_KEY = 'userRole';
+﻿const ROLE_KEY = 'userRole';
 const FAVORITES_KEY = 'foodyFavorites';
 const PROFILE_KEY = 'userProfileData';
 

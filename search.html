@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Foody - Recipe Search</title>
-  <link rel="stylesheet" href="navbar.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="search.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foody - Recipe Search</title>
+    <link rel="stylesheet" href="navbar.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="search.css" />
 </head>
 <body>
+    <!-- Navigation bar (unchanged) -->
     <div class="navigation_bar">
         <a href="home_page1.html">
             <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini">
@@ -38,32 +39,53 @@
             </a>
         </div>
     </div>
-    <div class="content" style="margin-left: 9%;">
-        <h1 class="text-3xl font-bold mb-4">Search a Recipe</h1>
 
-        <div class="mb-4">
-            <span class="pill pill-orange">added items:</span>
-            <span class="pill pill-white">egg</span>
-            <span class="pill pill-white">butter</span>
+    <!-- Main content with search and results -->
+    <div class="search-container" style="margin-left:9%;">
+        <!-- Left section: Search -->
+        <div class="search-section">
+            <h1>Find Your Recipe</h1>
+
+            <div class="search-box">
+                <button id="advanced-search-toggle" class="advanced-search-btn">
+                    <i class="fas fa-sliders-h"></i>
+                </button>
+                <input type="text" id="recipe-search" placeholder="Search for a recipe..." />
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
 
-        <div class="input-group">
-            <input type="text" placeholder="search for an ingredient..." />
-            <input type="text" placeholder="search for a recipe..." />
+            <div id="advanced-search" class="hidden">
+                <h2>Search by Ingredients</h2>
+
+                <div class="ingredients-input">
+                    <input type="text" id="ingredient-search" placeholder="Add an ingredient..." />
+                    <button class="add-ingredient-btn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <div class="ingredient-tags">
+                    <span class="pill pill-orange">Your ingredients:</span>
+                    <span class="pill pill-white">egg <i class="fas fa-times remove-tag"></i></span>
+                    <span class="pill pill-white">butter <i class="fas fa-times remove-tag"></i></span>
+                </div>
+
+            </div>
         </div>
 
-        <div class="categories">
-            <button class="category-button">Dairy & Eggs <i class="fas fa-chevron-down"></i></button>
-            </div>
+        <!-- Right section: Results -->
+        <div class="results-section">
+            <h2>You can make: <span id="recipe-count">0</span> recipes</h2>
 
-        <div class="recipes">
-            <h2 class="text-2xl font-bold mb-4">You can make: 3 recipes</h2>
-            <div class="recipe-card" data-recipe-id="shakshuka01"><img src="source/shakshuka.png" alt="Shakshuka" /><div class="recipe-info"><h3>Shakshuka</h3><p>You have all 7 ingredients</p></div><button class="favorite-btn">♡</button></div>
-            <div class="recipe-card" data-recipe-id="omelette01"><img src="source/omelette.png" alt="Omelette" /><div class="recipe-info"><h3>Omelette</h3><p>You have all 3 ingredients</p></div><button class="favorite-btn">♡</button></div>
-            <div class="recipe-card" data-recipe-id="redpasta01"><img src="source/red_pasta.png" alt="Red sauce pasta" /><div class="recipe-info"><h3>Red sauce pasta</h3><p>You have all 7 ingredients</p></div><button class="favorite-btn">♡</button></div>
+            <div id="recipes-container" class="recipes">
+                <!-- Recipe cards will be populated by JavaScript -->
+            </div>
         </div>
     </div>
 
+    <!-- Modals (unchanged) -->
     <div id="modal-overlay" class="modal-overlay hidden"></div>
     <div id="add-recipe-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>Add New Recipe</h2><p>(Form elements...)</p></div>
     <div id="recipe-details-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2 id="modal-recipe-title">Recipe Title</h2><p>(Details...)</p></div>
@@ -72,7 +94,7 @@
 
     <script src="storageManager.js"></script>
     <script src="auth.js"></script>
-     <script src="navbar.js"></script>
-     <script src="search.js"></script>
+    <script src="navbar.js"></script>
+    <script src="search.js"></script>
 </body>
 </html>
