@@ -80,7 +80,7 @@
                  <h2>Tags / Categories</h2>
                  <div id="tags-list">
                     <div class="tag-item">
-                        <input type="text" name="tag[]" placeholder="e.g., Dessert, Quick, Vegan">
+                        <input id="tag_name" type="text" name="tag[]" placeholder="e.g., Dessert, Quick, Vegan">
                         <button type="button" class="remove-tag-btn"><i class="fas fa-times"></i></button>
                     </div>
                      </div>
@@ -96,7 +96,7 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="submit-button save-btn">Save Recipe</button>
+                <button id="Save" type="submit" class="submit-button save-btn">Save Recipe</button>
                 <button type="button" class="submit-button add-another-btn">Add Another (Clear Form)</button>
                  <button type="reset" class="submit-button cancel-btn">Cancel</button>
             </div>
@@ -112,5 +112,6 @@
     <script src="storageManager.js"></script>
     <script src="auth.js"></script>
     <script src="adding_page.js"></script> <script src="navbar.js"></script>
+    <script src="data_store.js"></script>
 </body>
 </html>
