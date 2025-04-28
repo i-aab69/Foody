@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Redirect to the appropriate page based on the role
                 if (selectedRole === 'admin') {
-                    window.location.href = 'list.html'; // Admin goes to list page
+                    window.location.href = 'my_recipe.html'; // Admin goes to list page
                 } else {
                     window.location.href = 'home.html'; // User goes to home page
                 }
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Redirect to the appropriate page
                 if (selectedRole === 'admin') {
-                    window.location.href = 'list.html'; // Admin goes to list page
+                    window.location.href = 'my_recipe.html'; // Admin goes to list page
                 } else {
                     window.location.href = 'home.html'; // User goes to home page
                 }
