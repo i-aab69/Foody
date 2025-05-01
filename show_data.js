@@ -1,44 +1,44 @@
-
 let id = localStorage.getItem('id');
 
 if(id === null){
     id = 1;
-    localStorage.setItem('id',id)
-
-}else{
+    localStorage.setItem('id', id);
+} else {
     id = Number(id);
 }
 
-let all_s_recipe = []
 
-for (let index = 0; index < localStorage.length; index++) {
-    
-    let key = localStorage.key(index)
-    if (key.includes('recipe')) {
-        console.log(key)
-        let val = localStorage.getItem(key)
-        console.log(val)
-        all_s_recipe.push(val)
+function getAllRecipes() {
+    let all_s_recipe = [];
+
+    for (let index = 0; index < localStorage.length; index++) {
+        let key = localStorage.key(index);
+        if (key.includes('recipe')) {
+            let val = localStorage.getItem(key);
+            all_s_recipe.push(val);
+        }
     }
-     
+
+    let all_o_recipe = [];
+    for (let index = 0; index < all_s_recipe.length; index++) {
+        all_o_recipe.push(JSON.parse(all_s_recipe[index]));
+    }
     
+    all_o_recipe.sort((a, b) => a.id.localeCompare(b.id));
+    localStorage.setItem('all_res', JSON.stringify(all_o_recipe));
+    
+    return all_o_recipe;
 }
 
-let all_o_recipe = []
-for (let index = 0; index < all_s_recipe.length; index++) {
-    all_o_recipe.push(JSON.parse(all_s_recipe[index]))
-    
-}
-all_o_recipe.sort((a,b) => a.id.localeCompare(b.id))
-
-console.log(all_o_recipe);
-
-localStorage.setItem('all_res',JSON.stringify(all_o_recipe))
 
 document.addEventListener('DOMContentLoaded', () => {
+    getAllRecipes(); 
     
     const tableBody = document.getElementById('recipe-table-body');
     const recipes = JSON.parse(localStorage.getItem('all_res')) || [];
+
+    
+    tableBody.innerHTML = '';
 
     recipes.forEach(recipe => {
         const row = document.createElement('tr');
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         row.innerHTML = `
             <td>${recipe.id}</td>
             <td>${recipe.name}</td>
-            <td><span class="tag ${recipe.tag.toLowerCase().replace(" ", "-")}">${recipe.tag}</span></td>
+            <td><span class="tag ${recipe.tag.toLowerCase().replace(/\s+/g, "-")}">${recipe.tag}</span></td>
             <td>${recipe.ings} Ingredients</td>
             <td>
                 <button class="action-btn view-btn" data-id="${recipe.id}">View</button>
@@ -59,41 +59,56 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+
 document.addEventListener('click', (e) => {
+
     if (e.target.classList.contains('view-btn')) {
         const id = e.target.dataset.id;
-        window.location.href = `view.html?id=${id}`;
+        window.location.href = `Discription_page.html?id=${id}`;
     }
 
+    
     if (e.target.classList.contains('edit-btn')) {
         const id = e.target.dataset.id;
         window.location.href = `adding_page.html?id=${id}`;
     }
 
+    
     if (e.target.classList.contains('delete-btn')) {
-        const idToDelete = parseInt(e.target.dataset.id);
-        let recipes = JSON.parse(localStorage.getItem('all_res')) || [];
+        if (confirm('Are you sure you want to delete this recipe?')) {
+            const idToDelete = e.target.dataset.id;
+            let recipes = JSON.parse(localStorage.getItem('all_res')) || [];
 
-        recipes = recipes.filter(recipe => parseInt(recipe.id) !== idToDelete);
+            
+            recipes = recipes.filter(recipe => recipe.id !== idToDelete);
 
-        recipes.forEach((recipe, index) => {
-            recipe.id = (index + 1).toString();
-        });
+            
+            recipes.forEach((recipe, index) => {
+                recipe.id = (index + 1).toString();
+            });
 
-        Object.keys(localStorage).forEach(key => {
-            if (key.startsWith('recipe')) {
-                localStorage.removeItem(key);
-            }
-        });
+           
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('recipe')) {
+                    localStorage.removeItem(key);
+                }
+            });
 
-        recipes.forEach((recipe, index) => {
-            localStorage.setItem(`recipe${index + 1}`, JSON.stringify(recipe));
-        });
+          
+            recipes.forEach((recipe, index) => {
+                localStorage.setItem(`recipe${index + 1}`, JSON.stringify(recipe));
+            });
 
-        localStorage.setItem('all_res', JSON.stringify(recipes));
 
-        localStorage.setItem('id', recipes.length + 1);
+            localStorage.setItem('all_res', JSON.stringify(recipes));
 
-        e.target.closest('tr').remove();
+        
+            localStorage.setItem('id', recipes.length + 1);
+
+            e.target.closest('tr').remove();
+            
+           
+            window.location.reload();
+        }
     }
 });
