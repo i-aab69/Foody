@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         row.innerHTML = `
             <td>${recipe.id}</td>
             <td>${recipe.name}</td>
-            <td><span class="tag ${recipe.tag.toLowerCase().replace(/\s+/g, "-")}">${recipe.tag}</span></td>
+            <td>${recipe.tag}</td>
             <td>${recipe.ings} Ingredients</td>
             <td>
                 <button class="action-btn view-btn" data-id="${recipe.id}">View</button>
