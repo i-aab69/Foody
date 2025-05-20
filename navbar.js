@@ -2,10 +2,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log("navbar.js is ready!");
 
+    const navBar = document.querySelector('.navigation_bar');
+    const homeBtn = navBar.querySelector('.logo_img'); 
     const navLinks = document.querySelectorAll('.navigation_bar .nav-link');
     const modalOverlay = document.getElementById('modal-overlay');
     const allModals = document.querySelectorAll('.modal');
     const allCloseButtons = document.querySelectorAll('.modal-close-button');
+
+    // log out from the account when clicking on the home page icon
+    homeBtn.addEventListener('click', function (event) {
+        localStorage.removeItem('LoggedUser'); 
+    })
+
 
     function openModal(modalId) {
         const modal = document.getElementById(modalId);

@@ -37,26 +37,31 @@
             </a>
         </div>
     </div>
+    <script src="auth.js"></script>
     <div class="content" style="margin-left: 9%;">
         <h1>List of Recipes</h1>
         <h2>Manage Recipes</h2>
         <div class="overflow-x-auto">
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th><th>Recipe Name</th><th>Course Type</th><th>Ingredients</th><th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr><td>1</td><td>Pancake</td><td><span class="badge badge-dessert">Dessert</span></td><td>8 Ingredients</td><td><button class="btn btn-view" data-recipe-id="pancake01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
-            <tr><td>2</td><td>Cinnamon Rolls</td><td><span class="badge badge-dessert">Dessert</span></td><td>9 Ingredients</td><td><button class="btn btn-view" data-recipe-id="rolls01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
-            <tr><td>3</td><td>French Fries</td><td><span class="badge badge-appetizer">Appetizer</span></td><td>2 Ingredients</td><td><button class="btn btn-view" data-recipe-id="fries01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
-            <tr><td>4</td><td>Chocolate Cake</td><td><span class="badge badge-dessert">Dessert</span></td><td>6 Ingredients</td><td><button class="btn btn-view" data-recipe-id="cake01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
-            <tr><td>5</td><td>Pizza</td><td><span class="badge badge-main-course">Main Course</span></td><td>7 Ingredients</td><td><button class="btn btn-view" data-recipe-id="pizza01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
-            <tr><td>6</td><td>Adas Soup</td><td><span class="badge badge-main-course">Main Course</span></td><td>5 Ingredients</td><td><button class="btn btn-view" data-recipe-id="adas01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
-            <tr><td>7</td><td>Shakshuka</td><td><span class="badge badge-main-course">Main Course</span></td><td>7 Ingredients</td><td><button class="btn btn-view" data-recipe-id="shakshuka01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
-            </tbody>
-        </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Recipe Name</th>
+                        <th>Course Type</th>
+                        <th>Ingredients</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Pancake</td><td><span class="badge badge-dessert">Dessert</span></td><td>8 Ingredients</td><td><button class="btn btn-view" data-recipe-id="pancake01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
+                    <tr><td>2</td><td>Cinnamon Rolls</td><td><span class="badge badge-dessert">Dessert</span></td><td>9 Ingredients</td><td><button class="btn btn-view" data-recipe-id="rolls01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
+                    <tr><td>3</td><td>French Fries</td><td><span class="badge badge-appetizer">Appetizer</span></td><td>2 Ingredients</td><td><button class="btn btn-view" data-recipe-id="fries01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
+                    <tr><td>4</td><td>Chocolate Cake</td><td><span class="badge badge-dessert">Dessert</span></td><td>6 Ingredients</td><td><button class="btn btn-view" data-recipe-id="cake01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
+                    <tr><td>5</td><td>Pizza</td><td><span class="badge badge-main-course">Main Course</span></td><td>7 Ingredients</td><td><button class="btn btn-view" data-recipe-id="pizza01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
+                    <tr><td>6</td><td>Adas Soup</td><td><span class="badge badge-main-course">Main Course</span></td><td>5 Ingredients</td><td><button class="btn btn-view" data-recipe-id="adas01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
+                    <tr><td>7</td><td>Shakshuka</td><td><span class="badge badge-main-course">Main Course</span></td><td>7 Ingredients</td><td><button class="btn btn-view" data-recipe-id="shakshuka01">View</button><button class="btn btn-edit">Edit</button><button class="btn btn-delete">Delete</button></td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -67,7 +72,7 @@
     <div id="profile-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>User Profile</h2><p>(User profile details...)</p></div>
 
     <script src="storageManager.js"></script>
-    <script src="auth.js"></script>
+
     <script src="navbar.js"></script>
 </body>
 </html>

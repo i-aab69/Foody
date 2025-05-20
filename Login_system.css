@@ -312,8 +312,8 @@ body ,html {
     display: flex;
     align-items: center;
   }
-  
-  .role {
+
+.role {
     width: 79px;
     height: 40px;
     display: flex;
@@ -325,7 +325,9 @@ body ,html {
     font-weight: 400;
     cursor: pointer;
     transition: all 0.3s ease;
-  }
+    border: none; 
+    box-shadow: none;
+}
   .role.user {
     border-top-left-radius: 40px;
     border-bottom-left-radius: 40px;

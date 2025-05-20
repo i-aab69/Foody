@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
        allRecipeCards.forEach(card => {
            if (card) {
                const cardCategory = card.dataset.category;
-               const shouldShow = (categoryName === 'All' || !cardCategory || cardCategory === categoryName);
+               const shouldShow = (categoryName === 'All' || Object.keys(cardCategory).length === 0 || cardCategory.includes(categoryName));
                card.style.display = shouldShow ? '' : 'none';
                if (shouldShow) {
                    visibleCount++;
@@ -88,14 +88,51 @@ document.addEventListener('DOMContentLoaded', () => {
        });
    }
 
-   function loadMoreRecipes() {
-       console.log("Pretending to load more recipes...");
-       alert("Load More clicked! (This needs a backend to actually work)");
-       if (loadMoreBtn) {
-           loadMoreBtn.textContent = "No More Recipes";
-           loadMoreBtn.disabled = true;
-       }
+
+   function loadRecipes(){
+        const allRecipes = getAllRecipes();
+        let i = 0 ; 
+        allRecipes.forEach(Recipe =>{
+            if(i == 3){
+                i = 0 ; 
+                const recipeRow = document.createElement('div') ; 
+                recipeRow.classList.add('recipe-row') ; 
+            }
+
+            //create a new recipe card
+            const recipeRows = recipeCardContainer.querySelectorAll('.recipe-row') ; 
+            const curntRecipeRow = recipeRows[recipeRows.length - 1] ; 
+            const recipeCard = document.createElement('div') ; 
+            recipeCard.classList.add('recipe-card'); 
+            recipeCard.dataset.recipeId = Recipe.name ; 
+            recipeCard.dataset.category = JSON.stringify(Recipe.Tags) ; 
+            const recipeImg = document.createElement('div') ; 
+            recipeImg.classList.add('recipe-img') ; 
+            const img = document.createElement('img') ; 
+            img.src = `source/${Recipe.Image}.png` ; 
+            img.alt = Recipe.name ; 
+            recipeImg.appendChild(img) ; 
+            const recipeInfo = document.createElement('div') ; 
+            recipeInfo.classList.add('recipe-info') ; 
+            const recipeTitle = document.createElement('h3') ; 
+            recipeTitle.textContent = Recipe.name ; 
+            recipeInfo.appendChild(recipeTitle) ;
+            const favButton = document.createElement('button') ; 
+            favButton.classList.add('favorite-button') ; 
+            favButton.setAttribute('aria-label', 'Add to favorites') ; 
+            favButton.setAttribute('aria-pressed', 'false') ; 
+            const favIcon = document.createElement('i') ; 
+            favIcon.classList.add('far', 'fa-heart') ; 
+            favButton.appendChild(favIcon) ; 
+            recipeInfo.appendChild(favButton) ; 
+            recipeCard.appendChild(recipeImg);
+            recipeCard.appendChild(recipeInfo) ;
+            curntRecipeRow.appendChild(recipeCard) ;
+            i++ ;
+        })
    }
+
+   loadRecipes() ; 
 
    categoryElements.forEach(category => {
        category.addEventListener('click', () => {
@@ -122,10 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
                console.warn("Clicked a card missing its recipe ID.");
            }
        });
-   }
-
-   if (loadMoreBtn) {
-       loadMoreBtn.addEventListener('click', loadMoreRecipes);
    }
 
    updateFavoriteIconsUI();

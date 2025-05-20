@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentProfileData = getUserProfile(); // Load profile data
 
         // Add role-specific class to the main container for CSS targeting
-        if (role === 'user') {
+        if (role === 'User') {
             mainContent.classList.remove('admin-view-active');
             mainContent.classList.add('user-view-active');
             if (userProfileSection) {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
              if (adminDashboardSection) adminDashboardSection.style.display = 'none'; // Hide admin section
 
-        } else if (role === 'admin') {
+        } else if (role === 'Admin') {
             mainContent.classList.remove('user-view-active');
             mainContent.classList.add('admin-view-active');
             if (adminDashboardSection) {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
              if(logoutBtn) logoutBtn.style.display = 'none';
         }
         // Setup common elements like logout (ensure it's visible if logged in)
-        if (role === 'user' || role === 'admin') {
+        if (role === 'User' || role === 'Admin') {
             setupCommonEventListeners();
             if (logoutBtn) logoutBtn.style.display = 'inline-block'; // Show logout
         }
@@ -152,9 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Common Functions ---
 
     function logoutUser() {
-         console.log("Logout initiated.");
-         clearUserRole();
-         clearUserProfile(); // Clear profile data on logout for privacy
+        console.log("Logout initiated.");
+        localStorage.removeItem("LoggedUser"); 
          alert("You have been logged out.");
          window.location.href = 'sing_up.html';
     }

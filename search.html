@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foody - Recipe Search</title>
     <link rel="stylesheet" href="navbar.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">S
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="search.css" />
 </head>
 <body>
-    <!-- Navigation bar (unchanged) -->
     <div class="navigation_bar">
         <a href="home_page1.html">
             <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini">
@@ -25,7 +24,7 @@
             <a href="search.html" id="nav-search-link" class="nav-link" data-target-action="search">
                 <div class="white_circle2 nav-icon"> <img src="source/png.png" alt="Search"> </div>
             </a>
-            <a href="list.html" id="nav-list-link" class="nav-link">
+            <a href="my_recipe.html" id="nav-list-link" class="nav-link">
                 <div class="white_circle3 nav-icon"> <img src="source/book.png" alt="Recipes"> </div>
             </a>
             <a href="favorate.html" id="nav-fav-link" class="nav-link">
@@ -40,9 +39,7 @@
         </div>
     </div>
 
-    <!-- Main content with search and results -->
     <div class="search-container" style="margin-left:9%;">
-        <!-- Left section: Search -->
         <div class="search-section">
             <h1>Find Your Recipe</h1>
 
@@ -75,22 +72,13 @@
             </div>
         </div>
 
-        <!-- Right section: Results -->
         <div class="results-section">
             <h2>You can make: <span id="recipe-count">0</span> recipes</h2>
 
             <div id="recipes-container" class="recipes">
-                <!-- Recipe cards will be populated by JavaScript -->
             </div>
         </div>
     </div>
-
-    <!-- Modals (unchanged) -->
-    <div id="modal-overlay" class="modal-overlay hidden"></div>
-    <div id="add-recipe-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>Add New Recipe</h2><p>(Form elements...)</p></div>
-    <div id="recipe-details-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2 id="modal-recipe-title">Recipe Title</h2><p>(Details...)</p></div>
-    <div id="settings-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>Settings</h2><p>(Options...)</p></div>
-    <div id="profile-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>User Profile</h2><p>(Details...)</p></div>
 
     <script src="storageManager.js"></script>
     <script src="auth.js"></script>

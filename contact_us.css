@@ -1,32 +1,28 @@
-/* Foody-main/contact_us.css (New Modern Styles) */
-
 body {
-    background-color: #f4f7f6; /* Lighter, neutral background */
+    background-color: #f4f7f6; 
     font-family: 'Poppins', sans-serif;
     margin: 0;
     color: #333;
     line-height: 1.6;
 }
 
-/* Main content wrapper - leaves space for navbar */
+
 .contact-main-content {
-    margin-left: 9%; /* Adjust if navbar width changes */
-    padding: 50px 20px; /* Generous padding */
-    display: flex; /* Helps center the card */
+    padding: 50px 20px; 
+    display: flex; 
     justify-content: center;
-    align-items: flex-start; /* Align card to top */
-    min-height: calc(100vh - 100px); /* Ensure content area takes height */
+    align-items: flex-start; 
+    min-height: calc(100vh - 100px); 
 }
 
-/* The main container for contact info */
 .contact-card {
-    background-color: #ffffff; /* White card */
+    background-color: #ffffff; 
     padding: 40px 50px;
-    border-radius: 12px; /* Rounded corners */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); /* Soft shadow */
-    max-width: 700px; /* Limit width */
-    width: 100%; /* Responsive width */
-    text-align: center; /* Center text within card */
+    border-radius: 12px; 
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); 
+    max-width: 700px; 
+    width: 100%; 
+    text-align: center; 
     box-sizing: border-box;
 }
 
@@ -37,7 +33,7 @@ body {
 }
 
 .contact-logo {
-    height: 50px; /* Adjust logo size */
+    height: 50px; 
     margin-bottom: 10px;
 }
 
@@ -52,38 +48,37 @@ h1 {
     font-size: 1.05em;
     color: #555;
     margin-bottom: 40px;
-    max-width: 550px; /* Limit line length */
+    max-width: 550px; 
     margin-left: auto;
     margin-right: auto;
 }
 
-/* Section for Phone/Email */
 .contact-info {
     margin-bottom: 40px;
-    text-align: left; /* Align contact details left */
-    display: inline-block; /* Allow centering via parent text-align */
+    text-align: left; 
+    display: inline-block; 
 }
 
 .contact-info h2 {
     font-size: 1.4em;
     font-weight: 500;
     margin-bottom: 15px;
-    text-align: center; /* Center sub-heading */
-    color: #F0A56D; /* Use theme color */
+    text-align: center; 
+    color: #F0A56D; 
 }
 
 .contact-info p {
     font-size: 1.1em;
     margin-bottom: 10px;
-    display: flex; /* Align icon and text */
+    display: flex; 
     align-items: center;
-    justify-content: flex-start; /* Align left within the paragraph */
+    justify-content: flex-start; 
 }
 
 .contact-icon {
-    color: #F0A56D; /* Theme color for icons */
-    margin-right: 12px; /* Space after icon */
-    width: 20px; /* Fixed width for alignment */
+    color: #F0A56D; 
+    margin-right: 12px; 
+    width: 20px; 
     text-align: center;
 }
 
@@ -98,7 +93,6 @@ h1 {
     text-decoration: underline;
 }
 
-/* Section for Social Media Links */
 .social-links {
     margin-bottom: 30px;
 }
@@ -113,21 +107,20 @@ h1 {
 .social-icons-container {
     display: flex;
     justify-content: center;
-    gap: 25px; /* Space between icons */
+    gap: 25px; 
 }
 
 .social-icons-container a {
-    color: #555; /* Icon color */
-    font-size: 1.8em; /* Icon size */
+    color: #555; 
+    font-size: 1.8em; 
     transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .social-icons-container a:hover {
-    color: #F0A56D; /* Theme color on hover */
-    transform: scale(1.1); /* Slightly enlarge */
+    color: #F0A56D; 
+    transform: scale(1.1); 
 }
 
-/* Footer text inside the card */
 .contact-footer {
     margin-top: 40px;
     padding-top: 20px;
@@ -137,11 +130,10 @@ h1 {
 }
 
 
-/* --- Responsive Adjustments --- */
 @media (max-width: 992px) {
     .contact-main-content {
-        margin-left: 0; /* Remove margin for mobile nav */
-        padding: 30px 15px 80px 15px; /* Adjust padding, add bottom for nav */
+        margin-left: 0; 
+        padding: 30px 15px 80px 15px; 
     }
     .contact-card {
         padding: 30px;
@@ -154,8 +146,7 @@ h1 {
 }
 
 @media (max-width: 767px) {
-    .contact-main-content { padding-bottom: 80px; } /* Ensure bottom padding */
+    .contact-main-content { padding-bottom: 80px; } 
 }
 
-/* Utility */
 .hidden { display: none !important; }

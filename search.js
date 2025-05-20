@@ -1,8 +1,6 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    // Recipe storage key
     const RECIPES_KEY = 'foodyRecipes';
 
-    // Toggle advanced search
     const toggleButton = document.getElementById('advanced-search-toggle');
     const advancedSearch = document.getElementById('advanced-search');
 
@@ -10,7 +8,6 @@
         advancedSearch.classList.toggle('hidden');
     });
 
-    // Handle ingredient addition
     const ingredientInput = document.getElementById('ingredient-search');
     const addButton = document.querySelector('.add-ingredient-btn');
     const ingredientTags = document.querySelector('.ingredient-tags');
@@ -34,7 +31,6 @@
             ingredientTags.appendChild(tag);
             ingredientInput.value = '';
 
-            // Add event listener to remove tag
             const removeIcon = tag.querySelector('.remove-tag');
             removeIcon.addEventListener('click', function () {
                 tag.remove();
@@ -45,7 +41,6 @@
         }
     }
 
-    // Handle remove tag functionality
     document.querySelectorAll('.remove-tag').forEach(icon => {
         icon.addEventListener('click', function () {
             this.parentElement.remove();
@@ -53,7 +48,6 @@
         });
     });
 
-    // Get recipes from local storage
     function getRecipes() {
         try {
             const recipesJson = localStorage.getItem(RECIPES_KEY);
@@ -64,12 +58,10 @@
         }
     }
 
-    // Display recipes
     function displayRecipes(recipes) {
         const recipesContainer = document.getElementById('recipes-container');
         recipesContainer.innerHTML = '';
 
-        // Update count
         document.getElementById('recipe-count').textContent = recipes.length;
 
         if (recipes.length === 0) {
@@ -98,16 +90,13 @@
             recipesContainer.appendChild(card);
         });
 
-        // Add event listeners to new recipe cards
         addRecipeCardEventListeners();
     }
 
-    // Add event listeners to recipe cards
     function addRecipeCardEventListeners() {
-        // Handle favorite functionality
         document.querySelectorAll('.favorite-btn').forEach(btn => {
             btn.addEventListener('click', function (e) {
-                e.stopPropagation(); // Prevent triggering recipe card click
+                e.stopPropagation(); 
 
                 const card = this.closest('.recipe-card');
                 const recipeId = card.getAttribute('data-recipe-id');
@@ -124,7 +113,6 @@
             });
         });
 
-        // Handle recipe card click to go to description page
         document.querySelectorAll('.recipe-card').forEach(card => {
             card.addEventListener('click', function () {
                 const recipeId = this.getAttribute('data-recipe-id');
@@ -133,7 +121,6 @@
         });
     }
 
-    // Handle recipe search
     const recipeSearch = document.getElementById('recipe-search');
     const searchButton = document.querySelector('.search-btn');
 
@@ -163,7 +150,6 @@
         displayRecipes(filteredRecipes);
     }
 
-    // Filter recipes by selected ingredients
     function filterRecipesByIngredients() {
         const ingredientTags = document.querySelectorAll('.ingredient-tags .pill-white');
         const selectedIngredients = Array.from(ingredientTags).map(
@@ -171,7 +157,6 @@
         );
 
         if (selectedIngredients.length === 0) {
-            // If no ingredients selected, show all recipes or respect the search term
             searchRecipes();
             return;
         }
@@ -180,7 +165,6 @@
         const filteredRecipes = recipes.filter(recipe => {
             if (!recipe.ingredients) return false;
 
-            // Check if recipe contains all selected ingredients
             return selectedIngredients.every(ingredient =>
                 recipe.ingredients.some(ri =>
                     ri.toLowerCase().includes(ingredient.toLowerCase())
@@ -191,13 +175,11 @@
         displayRecipes(filteredRecipes);
     }
 
-    // Initialize page - load and display recipes
+
     function initPage() {
         const recipes = getRecipes();
 
-        // If no recipes in local storage, add sample recipes
         if (recipes.length === 0) {
-            // Sample recipes for testing
             const sampleRecipes = [
                 {
                     id: 'shakshuka01',
@@ -225,7 +207,6 @@
                 }
             ];
 
-            // Save sample recipes to local storage
             try {
                 localStorage.setItem(RECIPES_KEY, JSON.stringify(sampleRecipes));
                 displayRecipes(sampleRecipes);
@@ -237,6 +218,5 @@
         }
     }
 
-    // Initialize the page
     initPage();
 });
