@@ -38,7 +38,7 @@ function addFavorite(recipeId) {
 // Remove a recipe from favorites
 function removeFavorite(recipeId) {
     const favorites = getFavorites();
-    const index = favorites.findIndex(fav => fav.recipeId === recipeId.toString());
+    const index = favorites.findIndex(fav => fav.recipeId == recipeId.toString());
     if (index !== -1) {
         favorites.splice(index, 1);
         saveFavorites(favorites);
@@ -49,10 +49,11 @@ function removeFavorite(recipeId) {
 function getAllFavoriteRecipes() {
     const favorites = getFavorites();
     const allRecipes = JSON.parse(localStorage.getItem('all_res')) || [];
-    
-    return allRecipes.filter(recipe => 
-        favorites.includes(recipe.id.toString())
+
+    const filerdRecipes = allRecipes.filter(recipe => 
+        favorites.some(favorite => favorite.recipeId == recipe.name && favorite.UserName == JSON.parse(localStorage.getItem("LoggedUser")).UserName)
     );
+    return filerdRecipes;
 }
 
 function getAllRecipes(){

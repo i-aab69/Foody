@@ -81,8 +81,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 const selectedRole = activeRoleElement ? (activeRoleElement.classList.contains('admin') ? 'admin' : 'user') : 'user';
 
                 saveUserRole(selectedRole);
-                saveUserProfile({ username: enteredUsername });
-
+                saveSignUpProfile({
+                    username: usernameInput.value,
+                    email: emailInput.value,
+                    phone: '', 
+                    about: '', 
+                    picture: 'source/placeholder_profile.png'
+                });
                 console.log(`Login passed. Role: ${selectedRole}, User: ${enteredUsername}. Redirecting...`);
 
                 if (selectedRole === 'admin') {
@@ -127,13 +132,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 const selectedRole = activeRoleElement ? (activeRoleElement.classList.contains('admin') ? 'admin' : 'user') : 'user';
 
                 saveUserRole(selectedRole);
-                saveUserProfile({
-                    username: enteredUsername,
-                    email: enteredEmail,
-                    phone: "",
-                    about: "",
-                    picture: null
-                });
+                saveSignUpProfile({
+                username: usernameInput.value,
+                email: emailInput.value,
+                phone: phoneInput.value || '',
+                about: aboutInput.value || '',
+                picture: 'source/profile.png'
+            });
 
                 console.log(`Signup passed. Role: ${selectedRole}, User: ${enteredUsername}, Email: ${enteredEmail}. Redirecting...`);
 
