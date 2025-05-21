@@ -105,13 +105,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const recipeCard = document.createElement('div') ; 
             recipeCard.classList.add('recipe-card'); 
             recipeCard.dataset.recipeId = Recipe.name ; 
-            recipeCard.dataset.category = JSON.stringify(Recipe.Tags) ; 
+            recipeCard.dataset.category = JSON.stringify(Recipe.Tags) ;
+            
             const recipeImg = document.createElement('div') ; 
             recipeImg.classList.add('recipe-img') ; 
             const img = document.createElement('img') ; 
             img.src = `source/${Recipe.Image}.png` ; 
             img.alt = Recipe.name ; 
             recipeImg.appendChild(img) ; 
+
             const recipeInfo = document.createElement('div') ; 
             recipeInfo.classList.add('recipe-info') ; 
             const recipeTitle = document.createElement('h3') ; 
@@ -122,12 +124,15 @@ document.addEventListener('DOMContentLoaded', () => {
             favButton.setAttribute('aria-label', 'Add to favorites') ; 
             favButton.setAttribute('aria-pressed', 'false') ; 
             const favIcon = document.createElement('i') ; 
-            favIcon.classList.add('far', 'fa-heart') ; 
+            favIcon.classList.add('far', 'fa-heart') ;
+
             favButton.appendChild(favIcon) ; 
             recipeInfo.appendChild(favButton) ; 
+
             recipeCard.appendChild(recipeImg);
             recipeCard.appendChild(recipeInfo) ;
             curntRecipeRow.appendChild(recipeCard) ;
+            
             i++ ;
         })
    }
