@@ -17,7 +17,7 @@ def recipes(request: HttpRequest):
     elif request.method == 'POST':
         try:
             J_data = json.loads(request.body)
-            new_recipe = Recipe(name=J_data.get('name'), img=J_data.get('img'), instructions=J_data.get('ins'))
+            new_recipe = Recipe(name=J_data.get('name'), img=J_data.get('img'), instructions=J_data.get('instructions'))
             new_recipe.save()
 
             tags_data = J_data.get('tags')
@@ -32,7 +32,7 @@ def recipes(request: HttpRequest):
                     ing, _ =  Ingredient.objects.get_or_create(name=ing_name)
                     new_recipe.ingredients.add(ing) 
 
-            return JsonResponse({'message':'recipe created'}, status=200)
+            return JsonResponse( new_recipe.id, status=201, safe=False)
         except json.JSONDecodeError :
             return JsonResponse({'error':'invalid json data'}, status=400)
 

@@ -1,3 +1,4 @@
+import { send_rec } from "./API_Calls.js";
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         loadRecipeData(recipeId);
     }
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const ingredientInputs = document.querySelectorAll('input[name="ingredient[]"]');
@@ -30,26 +31,36 @@ document.addEventListener('DOMContentLoaded', function () {
         let id = recipeId || localStorage.getItem('id');
 
         const recipeData = {
-            id: id,
+
             name: recipeName.value,
             instructions: recipeInstructions.value,
             tag: tagValues,
-            ings: ingredientValues.length,
-            ingredients: ingredientValues
+            ing_len: ingredientValues.length,
+            ings: ingredientValues
         };
 
         if (imagePreview.src !== '#' && imagePreview.style.display !== 'none') {
             recipeData.image = imagePreview.src;
         }
 
-        localStorage.setItem(`recipe${id}`, JSON.stringify(recipeData));
+        const response = await send_rec(recipeData)
+        if(response.status === 201){
+            const response_body = await response.json()
+            console.log(response_body)
+            const id = response_body
+            
+            recipeData.id = id
+            localStorage.setItem(`recipe${id}`, JSON.stringify(recipeData));
 
-        if (!recipeId) {
-            localStorage.setItem('id', parseInt(id) + 1);
+            if (!recipeId) {
+                localStorage.setItem('id', parseInt(id) + 1);
+            }
+            console.log("recipe added seccessfully")
+            updateRecipesList();
+            window.location.href = 'my_recipe.html';
         }
 
-        updateRecipesList();
-        window.location.href = 'my_recipe.html';
+      
     });
 
     document.getElementById('add-ingredient-btn').addEventListener('click', addNewIngredient);
@@ -98,19 +109,19 @@ document.addEventListener('DOMContentLoaded', function () {
     setupRemoveButtons();
 });
 
-// function addNewIngredient() {
-//     const ingredientsList = document.getElementById('ingredients-list');
-//     const newIngredient = document.createElement('div');
-//     newIngredient.className = 'ingredient-item';
-//     newIngredient.innerHTML = `
-//         <input type="text" name="ingredient[]" placeholder="e.g., 1 cup flour">
-//         <button type="button" class="remove-ingredient-btn"><i class="fas fa-times"></i></button>
-//     `;
-//     ingredientsList.appendChild(newIngredient);
-//     newIngredient.querySelector('.remove-ingredient-btn').addEventListener('click', () => {
-//         ingredientsList.removeChild(newIngredient);
-//     });
-// }
+function addNewIngredient() {
+    const ingredientsList = document.getElementById('ingredients-list');
+    const newIngredient = document.createElement('div');
+    newIngredient.className = 'ingredient-item';
+    newIngredient.innerHTML = `
+        <input type="text" name="ingredient[]" placeholder="e.g., 1 cup flour">
+        <button type="button" class="remove-ingredient-btn"><i class="fas fa-times"></i></button>
+    `;
+    ingredientsList.appendChild(newIngredient);
+    newIngredient.querySelector('.remove-ingredient-btn').addEventListener('click', () => {
+        ingredientsList.removeChild(newIngredient);
+    });
+}
 
 function addNewTag() {
     const tagsList = document.getElementById('tags-list');
@@ -210,6 +221,6 @@ function updateRecipesList() {
         all_o_recipe.push(JSON.parse(all_s_recipe[index]));
     }
 
-    all_o_recipe.sort((a, b) => a.id.localeCompare(b.id));
+    // all_o_recipe.sort((a, b) => a.id.localeCompare(b.id));
     localStorage.setItem('all_res', JSON.stringify(all_o_recipe));
 }

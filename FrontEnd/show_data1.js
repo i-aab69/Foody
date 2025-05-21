@@ -11,57 +11,48 @@ if(id === null){
 
 
 async function getAllRecipes() {
-    let all_s_recipe = [];
+    const arr_rec_data = [];
     const respose = await get_rec();
     if(respose.status === 200){
-        const rec_data = respose.json()
-    }
-    for (let index = 0; index < localStorage.length; index++) {
-        let key = localStorage.key(index);
-        if (key.includes('recipe')) {
-            let val = localStorage.getItem(key);
-            all_s_recipe.push(val);
+        const rec_data = await respose.json()
+        for(var i = 0 ; i <  rec_data.length; i++){
+            rec_data[i].fields.id = rec_data[i].pk
+            arr_rec_data.push(rec_data[i].fields)
         }
-    }
-
-    let all_o_recipe = [];
-    for (let index = 0; index < all_s_recipe.length; index++) {
-        all_o_recipe.push(JSON.parse(all_s_recipe[index]));
+        console.log(arr_rec_data)
+        return arr_rec_data
     }
     
-    all_o_recipe.sort((a, b) => a.id.localeCompare(b.id));
-    localStorage.setItem('all_res', JSON.stringify(all_o_recipe));
     
-    return all_o_recipe;
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    getAllRecipes(); 
+document.addEventListener('DOMContentLoaded', async () => {
+    
     
     const tableBody = document.getElementById('recipe-table-body');
-    const recipes = JSON.parse(localStorage.getItem('all_res')) || [];
+    const recipes = await getAllRecipes();
 
     
     tableBody.innerHTML = '';
-
-    recipes.forEach(recipe => {
-        const row = document.createElement('tr');
+    
+    for(var i = 0 ; i < recipes.length ; i++){
+         const row = document.createElement('tr');
     
         row.innerHTML = `
-            <td>${recipe.id}</td>
-            <td>${recipe.name}</td>
-            <td>${recipe.tag}</td>
-            <td>${recipe.ings} Ingredients</td>
+            <td>${i + 1}</td>
+            <td>${recipes[i].name}</td>
+            <td>${recipes[i].tag}</td>
+            <td>${recipes[i].ings} Ingredients</td>
             <td>
-                <button class="action-btn view-btn" data-id="${recipe.id}">View</button>
-                <button class="action-btn edit-btn" data-id="${recipe.id}">Edit</button>
-                <button class="action-btn delete-btn" data-id="${recipe.id}">Delete</button>
+                <button class="action-btn view-btn" data-id="${recipes[i].id}">View</button>
+                <button class="action-btn edit-btn" data-id="${recipes[i].id}">Edit</button>
+                <button class="action-btn delete-btn" data-id="${recipes[i].id}">Delete</button>
             </td>
         `;
     
         tableBody.appendChild(row);
-    });
+    }
 });
 
 
