@@ -1,0 +1,397 @@
+body {
+    background-color: #fef9f3;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    color: #333;
+}
+
+.profile-main-content {
+    margin-left: 9%;
+    padding: 30px 5%;
+    max-width: 1300px;
+    margin-right: auto;
+}
+
+h1 {
+    font-size: 2.2em;
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.user-profile-section,
+.admin-dashboard-section {
+    display: none;
+    margin-bottom: 40px;
+}
+
+.profile-main-content.user-view-active .user-profile-section {
+    display: block;
+}
+
+.profile-main-content.admin-view-active .admin-dashboard-section {
+    display: block;
+}
+
+.user-profile-section .profile-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.user-profile-section .profile-pic-container {
+    flex-basis: 250px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.user-profile-section .profile-pic-circle {
+    width: 200px;
+    height: 200px;
+    border: 3px solid #e0e0e0;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    position: relative;
+}
+
+.user-profile-section .profile-pic-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-profile-section .edit-picture-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.9em;
+    padding: 10px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.user-profile-section .edit-picture-overlay i {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+.user-profile-section .edit-picture-overlay span {
+    display: block;
+}
+
+.user-profile-section .profile-details {
+    flex: 1 1 400px;
+    min-width: 300px;
+    position: relative;
+}
+
+.user-profile-section .detail-item {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-profile-section .detail-item:last-child {
+    margin-bottom: 0;
+}
+
+.user-profile-section .detail-item-bio {
+    margin-bottom: 30px;
+}
+
+.user-profile-section .profile-details label {
+    font-size: 0.95em;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.user-profile-section .data-display {
+    background-color: #eeeeee;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 1em;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    color: #333;
+    word-wrap: break-word;
+}
+
+.user-profile-section .data-display-bio {
+    min-height: 100px;
+    align-items: flex-start;
+    white-space: pre-wrap;
+}
+
+.user-profile-section .edit-input {
+    display: none;
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    min-height: 45px;
+}
+
+.user-profile-section .edit-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.user-profile-section .edit-icon-btn {
+    position: absolute;
+    top: 100px;
+    right: -15px;
+    background: #fff;
+    border: 1px solid #ccc;
+    color: #555;
+    font-size: 1em;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.user-profile-section .edit-icon-btn:hover {
+    color: #000;
+    border-color: #aaa;
+    background-color: #f8f8f8;
+}
+
+.user-profile-section .edit-actions {
+    display: none;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.user-profile-section .profile-action-btn {
+    padding: 8px 20px;
+    font-size: 0.95em;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    margin-right: 10px;
+}
+
+.user-profile-section .profile-action-btn:hover {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.user-profile-section .save-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.user-profile-section .save-btn:hover {
+    background-color: #218838;
+}
+
+.user-profile-section .cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.user-profile-section .cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+.user-profile-section .profile-details.view-mode .edit-input,
+.user-profile-section .profile-details.view-mode .edit-actions {
+    display: none;
+}
+
+.user-profile-section .profile-details.view-mode .data-display {
+    display: flex;
+}
+
+.user-profile-section .profile-details.view-mode .data-display-bio {
+    display: block;
+}
+
+.user-profile-section .profile-details.view-mode .edit-icon-btn {
+    display: flex;
+}
+
+.user-profile-section .profile-details.view-mode ~ .profile-pic-container .edit-picture-overlay {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.user-profile-section .profile-details.edit-mode .data-display,
+.user-profile-section .profile-details.edit-mode .edit-icon-btn {
+    display: none;
+}
+
+.user-profile-section .profile-details.edit-mode .edit-input,
+.user-profile-section .profile-details.edit-mode .edit-actions {
+    display: block;
+}
+
+.user-profile-section .profile-details.edit-mode .edit-actions button {
+    display: inline-block;
+}
+
+.user-profile-section .profile-details.edit-mode ~ .profile-pic-container .edit-picture-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.admin-dashboard-section .stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.admin-dashboard-section .orange_div {
+    border-radius: 10px;
+    background: #F0A56D;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 70px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    color: #5f3f23;
+}
+
+.admin-dashboard-section .orange_div div:first-child {
+    border-radius: 8px;
+    width: 35px; height: 35px;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.admin-dashboard-section .orange_div div img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.admin-dashboard-section .orange_div p {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.admin-dashboard-section .integer {
+    font-size: 1.6em;
+    font-weight: 600;
+    display: block;
+    color: #fff;
+}
+
+.admin-dashboard-section .dis {
+    font-size: 0.85em;
+    font-weight: 400;
+    display: block;
+}
+
+.common-actions {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.logout-button {
+    padding: 10px 25px;
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+    background-color: #c82333;
+}
+
+@media (max-width: 992px) {
+    .profile-main-content {
+        margin-left: 0;
+        padding: 20px;
+        padding-bottom: 80px;
+    }
+
+    .user-profile-section .profile-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user-profile-section .profile-pic-container {
+        margin-bottom: 30px;
+        flex-basis: auto;
+    }
+
+    .user-profile-section .profile-details {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .user-profile-section .edit-icon-btn {
+        top: auto;
+        bottom: -15px;
+        right: 5px;
+    }
+
+    .admin-dashboard-section .stats-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .common-actions {
+        text-align: center;
+    }
+}
+
+@media (max-width: 767px) {
+    .profile-main-content {
+        padding-bottom: 80px;
+    }
+}
+
+.hidden,
+input[type="file"].hidden {
+    display: none !important;
+}

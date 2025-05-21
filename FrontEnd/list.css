@@ -1,0 +1,105 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #FAF3E0;
+  margin: 0;
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  padding: 3% 8% 5% 8%;
+}
+
+.content h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 3rem;
+  margin-top: 0.25rem;
+  margin-left: 1rem;
+}
+
+.content h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  margin-left: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 1rem;
+  margin-left: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+}
+
+th {
+  background-color: #f3f3f3;
+  color: #333;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+td {
+  border-bottom: 1px solid #eaeaea;
+  color: #555;
+  font-size: 0.875rem;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-dessert {
+  background-color: #fde2e2;
+  color: #e63946;
+}
+
+.badge-appetizer {
+  background-color: #fff3b0;
+  color: #f4a261;
+}
+
+.badge-main-course {
+  background-color: #d4f4dd;
+  color: #2a9d8f;
+}
+
+.btn {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-view {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-edit {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}

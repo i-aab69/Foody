@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Foody - Add Recipe</title>
+    <link rel="stylesheet" href="navbar.css" />
+    <link rel="stylesheet" href="adding_page.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> </head>
+<body>
+    <div class="navigation_bar">
+        <a href="home_page1.html">
+            <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini">
+        </a>
+        <div class="navbar-icon-links">
+            <a href="adding_page.html" id="nav-add-link" class="nav-link add-link">
+                <img src="source/Add.png" alt="Add Recipe" class="plus">
+            </a>
+            <a href="home.html" id="nav-home-link" class="nav-link">
+                <div class="white_circle1 nav-icon"> <img src="source/Vector.png" alt="Home"> </div>
+            </a>
+            <a href="search.html" id="nav-search-link" class="nav-link" data-target-action="search">
+                <div class="white_circle2 nav-icon"> <img src="source/png.png" alt="Search"> </div>
+            </a>
+            <a href="my_recipe.html" id="nav-list-link" class="nav-link">
+                <div class="white_circle3 nav-icon"> <img src="source/book.png" alt="Recipes"> </div>
+            </a>
+            <a href="favorate.html" id="nav-fav-link" class="nav-link">
+                <div class="white_circle4 nav-icon"> <img src="source/heart.png" alt="Favorites"> </div>
+            </a>
+            <a href="settings_page.html" id="nav-settings-link" class="nav-link">
+                <div class="white_circle5 nav-icon"> <img src="source/setting.png" alt="Settings"> </div>
+            </a>
+            <a href="profile_page.html" id="nav-profile-link" class="nav-link">
+                <div class="white_circle6 nav-icon"> <img src="source/profile.png" alt="Profile"> </div>
+            </a>
+        </div>
+    </div>
+    <div class="add-recipe-container">
+        <h1>Add New Recipe</h1>
+
+        <form class="add-recipe-form">
+            <div class="form-group">
+                <label for="recipe-name">Recipe Name:</label>
+                <input type="text" id="recipe-name" name="recipeName" placeholder="Enter the name of your recipe" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-section image-upload-section">
+                    <h2>Recipe Photo</h2>
+                    <div class="image-upload-box">
+                        <input type="file" id="recipe-image" name="recipeImage" accept="image/*" class="image-input">
+                        <label for="recipe-image" class="image-label">
+                            <i class="fas fa-camera"></i>
+                            <span>Click to Add Photo</span>
+                            <img id="image-preview" src="#" alt="Image Preview" style="display: none;"/>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section ingredients-section">
+                    <h2>Ingredients</h2>
+                    <div id="ingredients-list">
+                        <div class="ingredient-item">
+                            <input type="text" name="ingredient[]" placeholder="e.g., 1 cup flour">
+                            <button type="button" class="remove-ingredient-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        </div>
+                    <button type="button" id="add-ingredient-btn" class="add-button">
+                        <i class="fas fa-plus"></i> Add Ingredient
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="form-section tags-section">
+                 <h2>Tags / Categories</h2>
+                 <div id="tags-list">
+                    <div class="tag-item">
+                        <input id="tag_name" type="text" name="tag[]" placeholder="e.g., Dessert, Quick, Vegan">
+                        <button type="button" class="remove-tag-btn"><i class="fas fa-times"></i></button>
+                    </div>
+                     </div>
+                 <button type="button" id="add-tag-btn" class="add-button">
+                     <i class="fas fa-plus"></i> Add Tag
+                 </button>
+            </div>
+
+
+            <div class="form-section instructions-section">
+                <h2>Instructions</h2>
+                <textarea id="recipe-instructions" name="recipeInstructions" rows="10" placeholder="Enter the steps to make your recipe..."></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button id="Save" type="submit" class="submit-button save-btn">Save Recipe</button>
+                <button type="button" class="submit-button add-another-btn">Add Another (Clear Form)</button>
+                 <button type="reset" class="submit-button cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay hidden"></div>
+    <div id="add-recipe-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>Add New Recipe</h2><p>(Form elements would go here...)</p><label for="recipe-name-modal">Recipe Name:</label><input type="text" id="recipe-name-modal" name="recipe-name-modal"><br><br><button>Submit Recipe</button></div>
+    <div id="recipe-details-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2 id="modal-recipe-title">Recipe Title</h2><p>(Full recipe details...)</p><p>Recipe ID: <span id="modal-recipe-id"></span></p></div>
+    <div id="settings-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>Settings</h2><p>(Settings options...)</p></div>
+    <div id="profile-modal" class="modal hidden"><button class="modal-close-button">&times;</button><h2>User Profile</h2><p>(User profile details...)</p></div>
+
+    <script src="storageManager.js"></script>
+    <script src="auth.js"></script>
+    <script src="adding_page.js"></script> <script src="navbar.js"></script>
+    <script src="data_store.js"></script>
+</body>
+</html>

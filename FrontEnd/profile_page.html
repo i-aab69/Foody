@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="navbar.css" />
+    <link rel="stylesheet" href="profile_page.css"> <title>Foody - Account</title> </head>
+<body>
+    <div class="navigation_bar">
+        <a href="home_page1.html"> <img class="logo_img" src="source/logo_img.png" alt="Site Logo Mini"> </a>
+        <div class="navbar-icon-links">
+            <a href="adding_page.html" id="nav-add-link" class="nav-link add-link"> <img src="source/Add.png" alt="Add Recipe" class="plus"> </a>
+            <a href="home.html" id="nav-home-link" class="nav-link"> <div class="white_circle1 nav-icon"> <img src="source/Vector.png" alt="Home"> </div> </a>
+            <a href="search.html" id="nav-search-link" class="nav-link" data-target-action="search"> <div class="white_circle2 nav-icon"> <img src="source/png.png" alt="Search"> </div> </a>
+            <a href="my_recipe.html" id="nav-list-link" class="nav-link"> <div class="white_circle3 nav-icon"> <img src="source/book.png" alt="Recipes"> </div> </a>
+            <a href="favorate.html" id="nav-fav-link" class="nav-link"> <div class="white_circle4 nav-icon"> <img src="source/heart.png" alt="Favorites"> </div> </a>
+            <a href="settings_page.html" id="nav-settings-link" class="nav-link"> <div class="white_circle5 nav-icon"> <img src="source/setting.png" alt="Settings"> </div> </a>
+            <a href="profile_page.html" id="nav-profile-link" class="nav-link">
+                <div class="white_circle6 nav-icon"> <img src="source/profile.png" alt="Profile"> </div>
+            </a>
+        </div>
+    </div>
+    <div class="profile-main-content">
+
+        <div class="user-profile-section"> <h1>Account Management</h1>
+            <div class="profile-container">
+                <div class="profile-pic-container">
+                    <div class="profile-pic-circle">
+                        <img id="profile-pic-img" src="source/placeholder_profile.png" alt="Profile Picture">
+                        <input type="file" id="edit-picture-input" accept="image/*" class="hidden">
+                        <div class="edit-picture-overlay"><i class="fas fa-camera"></i><span>Change Picture</span></div>
+                    </div>
+                </div>
+                <div class="profile-details view-mode">
+                    <div class="detail-item">
+                        <label for="profile-username-display">Username:</label>
+                        <div class="data-display" id="profile-username-display">Loading...</div>
+                    </div>
+                    <div class="detail-item">
+                        <label for="profile-email-display">E-mail:</label>
+                        <div class="data-display" id="profile-email-display">Loading...</div>
+                    </div>
+                    <div class="detail-item">
+                        <label for="profile-phone-display">Phone Number:</label>
+                        <div class="data-display" id="profile-phone-display">N/A</div>
+                        <input type="tel" class="edit-input" id="edit-phone" placeholder="Enter phone number">
+                    </div>
+                     <button id="edit-profile-btn" class="edit-icon-btn" aria-label="Edit phone, bio, picture">
+                        <i class="fas fa-pencil-alt"></i>
+                     </button>
+                    <div class="detail-item detail-item-bio">
+                        <label for="profile-bio-display">About Me:</label>
+                        <div class="data-display data-display-bio" id="profile-bio-display">Add a bio...</div>
+                        <textarea class="edit-input edit-textarea" id="edit-bio" placeholder="Tell us about yourself..."></textarea>
+                    </div>
+                     <div class="edit-actions">
+                         <button id="save-profile-btn" class="profile-action-btn save-btn">Save Changes</button>
+                         <button id="cancel-edit-btn" class="profile-action-btn cancel-btn">Cancel</button>
+                     </div>
+                </div>
+            </div>
+        </div> <div class="admin-dashboard-section"> <h1>Admin Dashboard</h1>
+             <div class="admin-info">
+                <h2>Welcome, <span id="admin-username">Admin</span>!</h2>
+                <p>Site statistics overview.</p>
+            </div>
+            <div class="stats-container" id="admin-stats-container">
+                 <div class="orange_div" id="stat-recipes"><div><img src="source/book.png"></div><div><p class="integer">3</p><p class="dis">Total Recipes </p></div></div>
+                 <div class="orange_div" id="stat-ingredients"><div><img src="source/Bookmark.png"></div><div><p class="integer">42</p><p class="dis">Ingredients </p></div></div>
+                 <div class="orange_div" id="stat-users"><div><img src="source/user-multiple-02.png"></div><div><p class="integer">4</p><p class="dis">Registered Users </p></div></div>
+                 <div class="orange_div" id="stat-categories"><div><img src="source/tags.png"></div><div><p class="integer">3</p><p class="dis">Categories </p></div></div>
+             </div>
+        </div> <div class="common-actions">
+            <button id="logout-btn" class="logout-button">Logout</button>
+        </div>
+
+    </div> <div id="modal-overlay" class="modal-overlay hidden"></div>
+    <script src="storageManager.js"></script>
+    <script src="auth.js"></script>
+    <script src="profile_page.js"></script> <script src="navbar.js"></script>
+</body>
+</html>
