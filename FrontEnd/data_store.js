@@ -1,7 +1,29 @@
-import { send_rec } from "./API_Calls.js";
+import { get_rec, send_rec,get_ing } from "./API_Calls.js";
 
+async function getAllRecipes() {
+   
+    const recipes = await get_rec()
+    recipes.forEach((recipe, index) => {recipe.id = index+1})
+    
+    
+    
+    
+    localStorage.setItem('all_res', JSON.stringify(recipes));
+    
+    return recipes;
+}
 
-document.addEventListener('DOMContentLoaded', function () {
+async function getAllIngs() {
+   
+    const ings = await get_ing()
+    
+    
+    localStorage.setItem('all_ings', JSON.stringify(ings));
+    
+    return ings;
+}
+
+document.addEventListener('DOMContentLoaded',async function () {
     const form = document.querySelector('.add-recipe-form');
     const recipeName = document.getElementById('recipe-name');
     const recipeInstructions = document.getElementById('recipe-instructions');
@@ -11,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const recipeId = urlParams.get('id');
 
     if (recipeId) {
-        loadRecipeData(recipeId);
+        await loadRecipeData(recipeId);
     }
 
     form.addEventListener('submit', async function (e) {
@@ -28,40 +50,71 @@ document.addEventListener('DOMContentLoaded', function () {
             .map(input => input.value.trim())
             .filter(v => v !== '');
 
-        let id = recipeId || localStorage.getItem('id');
+        let id = recipeId 
 
-        const recipeData = {
+        
+
+        
+        //the problem possible to be hehe
+        if(document.getElementById('Save').innerHTML === "Save Recipe"){
+            const recipeData = {
 
             name: recipeName.value,
             instructions: recipeInstructions.value,
             tag: tagValues,
             ing_len: ingredientValues.length,
+            //error is we don't want to create a new recipe
             ings: ingredientValues
         };
-
         if (imagePreview.src !== '#' && imagePreview.style.display !== 'none') {
             recipeData.image = imagePreview.src;
         }
+            const response = await send_rec(recipeData)
+            if(response.status === 201){
+                const response_body = await response.json()
+                console.log(response_body)
+                const id = response_body
+                
+                recipeData.id = id
+                localStorage.setItem(`recipe${id}`, JSON.stringify(recipeData));
 
-        const response = await send_rec(recipeData)
-        if(response.status === 201){
-            const response_body = await response.json()
-            console.log(response_body)
-            const id = response_body
-            
-            recipeData.id = id
-            localStorage.setItem(`recipe${id}`, JSON.stringify(recipeData));
-
-            if (!recipeId) {
-                localStorage.setItem('id', parseInt(id) + 1);
+                if (!recipeId) {
+                    localStorage.setItem('id', parseInt(id) + 1);
+                }
+                console.log("recipe added seccessfully")
+                updateRecipesList();
+                window.location.href = 'my_recipe.html';
             }
-            console.log("recipe added seccessfully")
-            updateRecipesList();
-            window.location.href = 'my_recipe.html';
         }
+        
 
       
     });
+
+    if(document.getElementById('Save').innerHTML === "Update Recipe"){
+        const changed_obj = {} 
+        if (recipeName) {
+            recipeName.addEventListener('change',async () => {
+                const recipe = await get_recipe(recipeId)
+                if (recipe.name !== recipeName.value) {
+                    changed_obj["name"] = recipeName.value
+                    console.log(changed_obj)
+                }
+                
+            })
+        }
+        if (recipeInstructions) {
+            recipeInstructions.addEventListener('change',async () => {
+                const recipe = await get_recipe(recipeId)
+                if (recipe.instructions !== recipeInstructions.value) {
+                    changed_obj["instructions"] = recipeInstructions.value
+                    console.log(changed_obj)
+                }
+                
+            })
+        }
+        //
+    }
 
     document.getElementById('add-ingredient-btn').addEventListener('click', addNewIngredient);
     document.getElementById('add-tag-btn').addEventListener('click', addNewTag);
@@ -151,11 +204,18 @@ function setupRemoveButtons() {
     });
 }
 
-function loadRecipeData(recipeId) {
+async function get_recipe(recipeId) {
+    const all_res = await getAllRecipes();
+    const recipeData = all_res.find((recipe) => {return recipe.pk == recipeId})
+    return recipeData
+}
+
+async function loadRecipeData(recipeId) {
     document.querySelector('h1').textContent = 'Edit Recipe';
     document.querySelector('.save-btn').textContent = 'Update Recipe';
-
-    const recipeData = JSON.parse(localStorage.getItem(`recipe${recipeId}`));
+    console.log(recipeId)
+   
+    const recipeData = await get_recipe(recipeId)
 
     if (!recipeData) {
         alert('Recipe not found!');
@@ -170,11 +230,13 @@ function loadRecipeData(recipeId) {
     ingredientsList.innerHTML = '';
 
     if (recipeData.ingredients && Array.isArray(recipeData.ingredients)) {
-        recipeData.ingredients.forEach(ingredient => {
+        const all_ings = await getAllIngs();
+        const ings_names = all_ings.filter((ing) => {return recipeData.ingredients.includes(ing.pk)})
+        ings_names.forEach(ingredient => {
             const newIngredient = document.createElement('div');
             newIngredient.className = 'ingredient-item';
             newIngredient.innerHTML = `
-                <input type="text" name="ingredient[]" value="${ingredient}" placeholder="e.g., 1 cup flour">
+                <input type="text" name="ingredient[]" value="${ingredient.name}" placeholder="e.g., 1 cup flour">
                 <button type="button" class="remove-ingredient-btn"><i class="fas fa-times"></i></button>
             `;
             ingredientsList.appendChild(newIngredient);
@@ -203,6 +265,7 @@ function loadRecipeData(recipeId) {
     }
 
     setupRemoveButtons();
+    
 }
 
 function updateRecipesList() {

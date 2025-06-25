@@ -12,10 +12,8 @@ if(id === null){
 
 async function getAllRecipes() {
     let all_s_recipe = [];
-    const respose = await get_rec();
-    if(respose.status === 200){
-        const rec_data = respose.json()
-    }
+    const recipes = await get_rec();
+    
     for (let index = 0; index < localStorage.length; index++) {
         let key = localStorage.key(index);
         if (key.includes('recipe')) {
@@ -81,7 +79,7 @@ document.addEventListener('click', (e) => {
     
     if (e.target.classList.contains('delete-btn')) {
         if (confirm('Are you sure you want to delete this recipe?')) {
-            const idToDelete = e.target.dataset.id;
+            const idToDelete = e.target.dataset.pk;
             let recipes = JSON.parse(localStorage.getItem('all_res')) || [];
 
             

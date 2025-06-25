@@ -1,9 +1,13 @@
 from django.shortcuts import render
 import json
 from .models import User
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse,HttpRequest
+from django.core.serializers import serialize
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
-def users(request):
+
+@csrf_exempt
+def users(request : HttpRequest):
     if request.method == 'POST':
         data = json.loads(request.body)
         username = data.get('username')
@@ -17,11 +21,10 @@ def users(request):
             is_admin=is_admin
         )
         user.save()
-        favorite_recipes = data.get('favorite_recipes', [])
-        for recipe_id in favorite_recipes:
-            try:
-                recipe = Recipe.objects.get(id=recipe_id)
-                user.favorite_recipes.add(recipe)
-            except Recipe.DoesNotExist:
-                return HttpResponse(status=404)
         return JsonResponse({'message': 'User created successfully'}, status=201)
+    
+    elif request.method == 'GET':
+        users_set = User.objects.all()
+        J_users_set = serialize('json', users_set)
+        response = HttpResponse(J_users_set, content_type='application/json')
+        return response

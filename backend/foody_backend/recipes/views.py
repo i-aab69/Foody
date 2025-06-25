@@ -4,6 +4,7 @@ from .models import Recipe, Tag, Ingredient
 from django.core.serializers import serialize
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models.fields.related import ManyToManyField
 # Create your views here.
 
 @csrf_exempt
@@ -36,6 +37,87 @@ def recipes(request: HttpRequest):
         except json.JSONDecodeError :
             return JsonResponse({'error':'invalid json data'}, status=400)
 
-
+@csrf_exempt
 def recipes_id(request: HttpRequest, id : int):
-    pass
+    Selected_recipe = get_object_or_404(Recipe,id = id)
+    if request.method == 'DELETE':
+        deleted_count,_ = Selected_recipe.delete()
+        
+        if deleted_count :
+            return JsonResponse({'message' : 'recipe deleted'}, status=204)
+        else :
+            return JsonResponse({'error' : 'delete failed'}, status=400)
+        
+    elif request.method == 'GET':
+        recipe_json = serialize('json', [Selected_recipe])
+        response = HttpResponse(recipe_json,content_type='application/json')
+        return response
+    
+    elif request.method == 'PATCH':
+        changed_obj = json.loads(request.body)
+        M2M  = [field.name  for field in Selected_recipe._meta.get_fields() if isinstance(field, ManyToManyField)]
+        m2m_changes = {}
+        for field,value in changed_obj.items():
+            if field in M2M :
+                if field == 'ingredients':
+                    for ing in value:
+                        try:
+                            to_remove = Ingredient.objects.filter(name__iexact = ing.get("old_name")).first()
+                            Selected_recipe.ingredients.remove(to_remove)
+                        except Ingredient.DoesNotExist:
+                            pass
+                        
+                        new_ing,_ = Ingredient.objects.get_or_create(name = ing.get('new_name'))
+                        Selected_recipe.ingredients.add(new_ing)
+
+                        if 'ingredients' not in m2m_changes:
+                            m2m_changes['ingredients'] = []
+                        m2m_changes['ingredients'].append(new_ing.pk)
+
+                elif field == 'tags':
+                    for tag in value:
+                        try:
+                            to_remove = Tag.objects.filter(name__iexact = tag.get("old_name")).first()
+                            Selected_recipe.tags.remove(to_remove)
+                        except Tag.DoesNotExist:
+                            pass
+                        
+                        new_tag,_ = Tag.objects.get_or_create(name = tag.get('new_name'))
+                        Selected_recipe.tags.add(new_tag)
+
+                        if 'tags' not in m2m_changes:
+                            m2m_changes['tags'] = []
+                        m2m_changes['tags'].append(new_tag.pk)
+            
+            else :
+                setattr(Selected_recipe,field,value)
+
+        Selected_recipe.save()
+        if m2m_changes:
+            return JsonResponse(m2m_changes,status = 200)        
+        else:
+            return HttpResponse(status = 204)
+
+        
+            
+                
+
+
+@csrf_exempt
+def ingredients(request : HttpRequest) :
+     
+     if request.method == 'GET':
+        ing_set = Ingredient.objects.all()
+        J_ing_set = serialize('json', ing_set)
+        response = HttpResponse(J_ing_set, content_type='application/json')
+        return response
+     
+@csrf_exempt
+def tags(request : HttpRequest) :
+     
+     if request.method == 'GET':
+        tag_set = Tag.objects.all()
+        J_tag_set = serialize('json', tag_set)
+        response = HttpResponse(J_tag_set, content_type='application/json')
+        return response
+        

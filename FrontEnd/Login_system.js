@@ -1,3 +1,5 @@
+import { get_users,send_user } from './API_Calls.js';
+
 document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('main');
     const goToSignupBtn = document.getElementById('go-to-signup');
@@ -42,9 +44,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const passwordInput = loginForm.querySelector('input.password');
         const loginBtn = loginForm.querySelector('.login-btn-form');
         const roleBtn = document.querySelector('#login-toggle'); 
-        let Role = "User"; 
+        let is_admin = false; 
       
-        loginBtn.addEventListener('click', function (e) {
+        loginBtn.addEventListener('click',async function (e) {
             e.preventDefault();
             let isValid = true;
         
@@ -56,30 +58,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Password is required');
                 isValid = false;
             }
-
+            console.log(roleBtn.querySelector('.user'))
+            console.log(roleBtn.querySelector('.admin'))
             if (roleBtn.querySelector('.user').disabled == false && roleBtn.querySelector('.admin').disabled == true) {
-                Role = "Admin";
+                is_admin = true;
             }
         
             if (isValid) {
                 console.log('Login attempt successful');
                 console.log('Username:', usernameInput.value);
-                let accounts = JSON.parse(localStorage.getItem("Accounts")) || [];
-                console.log(accounts[0]);
-                let user = accounts.find(account => account.UserName == usernameInput.value.trim());
-                console.log(user);
-                if (user === undefined) {
+                // add the get_user function in APICalls.js
+                const users = await get_users();
+                console.log(users);
+                let user_ = users.find(user => user.username == usernameInput.value.trim());
+                console.log(user_);
+                console.log(user_.is_admin)
+                if (user_ === undefined) {
                     alert("there is no such a user");
                 }
-                else if (user.Password != passwordInput.value.trim()) {
+                else if (user_.password != passwordInput.value.trim()) {
                     alert("Password incorect");
                 }
-                else if (user.Role != Role) {
+                
+                else if (user_.is_admin != is_admin) {
                     alert("wrong Role");
                 }
                 else {
-                    localStorage.setItem('LoggedUser', JSON.stringify({ UserName: usernameInput.value.trim(), Role : Role }));
-                    if (Role == "Admin") {
+                    
+                    if (is_admin) {
                         window.location.href = "my_recipe.html";
                     }
                     else {
@@ -87,10 +93,36 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     loginForm.reset();
                 }
+
             }
-        });
+        
+
+                // let accounts = JSON.parse(localStorage.getItem("Accounts")) || [];
+                // console.log(accounts[0]);
+                // let user = accounts.find(account => account.UserName == usernameInput.value.trim());
+                // console.log(user);
+                // if (user === undefined) {
+                //     alert("there is no such a user");
+                // }
+                // else if (user.Password != passwordInput.value.trim()) {
+                //     alert("Password incorect");
+                // }
+                // else if (user.Role != Role) {
+                //     alert("wrong Role");
+                // }
+                // else {
+                //     localStorage.setItem('LoggedUser', JSON.stringify({ UserName: usernameInput.value.trim(), Role : Role }));
+                //     if (Role == "Admin") {
+                //         window.location.href = "my_recipe.html";
+                //     }
+                //     else {
+                //         window.location.href = "home.html";
+                //     }
+                //     loginForm.reset();
+                // }
+            });
     }
-    
+
     function initSignupForm() {
         const signupForm = document.getElementById('signup-form');
         const usernameInput = signupForm.querySelector('input.username');
@@ -99,9 +131,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const roleBtn = document.querySelector('#signup-toggle');
         const emailInput = signupForm.querySelector('input.email');
         const signupBtn = signupForm.querySelector('.signup-btn');
-        let Role = "User"; 
+        let is_admin = false; 
         
-        signupBtn.addEventListener('click', function (e) {
+        signupBtn.addEventListener('click', async function (e) {
             e.preventDefault();
             let isValid = true;
         
@@ -127,19 +159,42 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (roleBtn.querySelector('.user').disabled == false && roleBtn.querySelector('.admin').disabled == true) {
-                 Role = "Admin"; 
+                 is_admin = true; 
             }
             
           
             if (isValid) {
-                console.log('Form submitted successfully');
-                let accounts = JSON.parse(localStorage.getItem("Accounts")) || [];
-                let account = { UserName: usernameInput.value.trim(), Role: Role, Password: passwordInput.value.trim(), Email: emailInput.value.trim() };
-                accounts.push(account);
-                localStorage.setItem("Accounts", JSON.stringify(accounts));
-                signupForm.reset();
-                container.classList.remove('right-panel-active');
+                const user_acount = {
+                    username : usernameInput.value.trim(),
+                    password : passwordInput.value.trim(),
+                    email : emailInput.value.trim(),
+                    role : is_admin
+                }
+                const response = await send_user(user_acount)
+                if (response.status === 201) {
+                    alert("User created successfully");
+                    const users = await get_users();
+                    console.log(users)
+                    localStorage.setItem('all_users', JSON.stringify(users));
+                    signupForm.reset();
+                    container.classList.remove('right-panel-active');
+                    
+
+                }
+                else {
+                    alert("User creation failed");
+
+                }
+
+                // console.log('Form submitted successfully');
+                // let accounts = JSON.parse(localStorage.getItem("Accounts")) || [];
+                // let account = { UserName: usernameInput.value.trim(), Role: Role, Password: passwordInput.value.trim(), Email: emailInput.value.trim() };
+                // accounts.push(account);
+                // localStorage.setItem("Accounts", JSON.stringify(accounts));
+                // signupForm.reset();
+                // container.classList.remove('right-panel-active');
             }
         });
     }
-  });
+});
+

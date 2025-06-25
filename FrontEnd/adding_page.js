@@ -1,4 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+import { get_ing } from "./API_Calls.js";
+
+
+
+document.addEventListener('DOMContentLoaded',async () => {
+   
     const imageInput = document.getElementById('recipe-image');
     const imagePreview = document.getElementById('image-preview');
     const imageLabel = document.querySelector('.image-label');
