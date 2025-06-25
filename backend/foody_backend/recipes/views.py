@@ -54,49 +54,78 @@ def recipes_id(request: HttpRequest, id : int):
         return response
     
     elif request.method == 'PATCH':
-        changed_obj = json.loads(request.body)
-        M2M  = [field.name  for field in Selected_recipe._meta.get_fields() if isinstance(field, ManyToManyField)]
-        m2m_changes = {}
-        for field,value in changed_obj.items():
-            if field in M2M :
-                if field == 'ingredients':
-                    for ing in value:
-                        try:
-                            to_remove = Ingredient.objects.filter(name__iexact = ing.get("old_name")).first()
-                            Selected_recipe.ingredients.remove(to_remove)
-                        except Ingredient.DoesNotExist:
-                            pass
-                        
-                        new_ing,_ = Ingredient.objects.get_or_create(name = ing.get('new_name'))
-                        Selected_recipe.ingredients.add(new_ing)
-
-                        if 'ingredients' not in m2m_changes:
-                            m2m_changes['ingredients'] = []
-                        m2m_changes['ingredients'].append(new_ing.pk)
-
-                elif field == 'tags':
-                    for tag in value:
-                        try:
-                            to_remove = Tag.objects.filter(name__iexact = tag.get("old_name")).first()
-                            Selected_recipe.tags.remove(to_remove)
-                        except Tag.DoesNotExist:
-                            pass
-                        
-                        new_tag,_ = Tag.objects.get_or_create(name = tag.get('new_name'))
-                        Selected_recipe.tags.add(new_tag)
-
-                        if 'tags' not in m2m_changes:
-                            m2m_changes['tags'] = []
-                        m2m_changes['tags'].append(new_tag.pk)
+        try:
+            changed_obj = json.loads(request.body)
+            print(f"PATCH request data: {changed_obj}")  # Debug log
+            M2M  = [field.name  for field in Selected_recipe._meta.get_fields() if isinstance(field, ManyToManyField)]
+            m2m_changes = {}
             
-            else :
-                setattr(Selected_recipe,field,value)
+            for field,value in changed_obj.items():
+                if field in M2M :
+                    if field == 'ingredients':
+                        for ing in value:
+                            old_name = ing.get("old_name")
+                            new_name = ing.get("new_name")
+                            
+                            # Remove old ingredient if specified
+                            if old_name:
+                                try:
+                                    to_remove = Ingredient.objects.filter(name__iexact=old_name).first()
+                                    if to_remove:
+                                        Selected_recipe.ingredients.remove(to_remove)
+                                except (Ingredient.DoesNotExist, AttributeError):
+                                    pass
+                            
+                            # Add new ingredient if specified
+                            if new_name:
+                                try:
+                                    new_ing, _ = Ingredient.objects.get_or_create(name=new_name)
+                                    Selected_recipe.ingredients.add(new_ing)
+                                    
+                                    if 'ingredients' not in m2m_changes:
+                                        m2m_changes['ingredients'] = []
+                                    m2m_changes['ingredients'].append(new_ing.pk)
+                                except Exception as e:
+                                    print(f"Error adding ingredient {new_name}: {e}")
 
-        Selected_recipe.save()
-        if m2m_changes:
-            return JsonResponse(m2m_changes,status = 200)        
-        else:
-            return HttpResponse(status = 204)
+                    elif field == 'tags':
+                        for tag in value:
+                            old_name = tag.get("old_name")
+                            new_name = tag.get("new_name")
+                            
+                            # Remove old tag if specified
+                            if old_name:
+                                try:
+                                    to_remove = Tag.objects.filter(name__iexact=old_name).first()
+                                    if to_remove:
+                                        Selected_recipe.tags.remove(to_remove)
+                                except (Tag.DoesNotExist, AttributeError):
+                                    pass
+                            
+                            # Add new tag if specified
+                            if new_name:
+                                try:
+                                    new_tag, _ = Tag.objects.get_or_create(name=new_name)
+                                    Selected_recipe.tags.add(new_tag)
+                                    
+                                    if 'tags' not in m2m_changes:
+                                        m2m_changes['tags'] = []
+                                    m2m_changes['tags'].append(new_tag.pk)
+                                except Exception as e:
+                                    print(f"Error adding tag {new_name}: {e}")
+                
+                else :
+                    setattr(Selected_recipe,field,value)
+
+            Selected_recipe.save()
+            if m2m_changes:
+                return JsonResponse(m2m_changes,status = 200)        
+            else:
+                return HttpResponse(status = 204)
+                
+        except Exception as e:
+            print(f"PATCH error: {e}")  # Debug log
+            return JsonResponse({'error': str(e)}, status=500)
 
         
             

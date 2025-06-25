@@ -80,6 +80,12 @@ body {
 .recipe-image-container {
     flex: 0 0 320px;
     height: 280px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .recipe-image {
@@ -87,6 +93,9 @@ body {
     height: 100%;
     object-fit: cover;
     border-radius: 8px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .recipe-text {
@@ -129,6 +138,30 @@ body {
     left: 0;
     color: #e8772e;
     font-weight: bold;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-pill {
+    background-color: #e8772e;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: default;
+    display: inline-block;
+}
+
+.no-tags-message {
+    color: #666;
+    font-style: italic;
+    font-size: 14px;
 }
 
 .instructions-list {

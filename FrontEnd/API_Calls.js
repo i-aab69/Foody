@@ -26,17 +26,22 @@ export async function get_rec() {
     
     try{
         const response = await fetch(recipe_endpoint)
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const all_recipes = await response.json();
         const recipes = [];
         for (let index = 0; index < all_recipes.length; index++) {
             all_recipes[index]["fields"].pk = all_recipes[index]["pk"]
             recipes.push(all_recipes[index]["fields"])
-            
         }
         
         return recipes;
     }catch(error){
-        console.log("we didn't get any recipes")
+        console.error("Error fetching recipes:", error);
+        return []; // Return empty array instead of undefined
     }
 }
 
@@ -55,7 +60,8 @@ export async function get_ing() {
         
         return ings;
     }catch(error){
-        console.log("we didn't get any recipes")
+        console.error("Error fetching ingredients:", error);
+        return []; // Return empty array instead of undefined
     }
 }
 
@@ -73,7 +79,8 @@ export async function get_users() {
         console.log(users)
         return users;
     }catch(error){
-        console.log("we didn't get any users")
+        console.error("Error fetching users:", error);
+        return []; // Return empty array instead of undefined
     }
 }
 
