@@ -72,26 +72,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log(users);
                 let user_ = users.find(user => user.username == usernameInput.value.trim());
                 console.log(user_);
-                console.log(user_.is_admin)
+                
                 if (user_ === undefined) {
                     alert("there is no such a user");
                 }
                 else if (user_.password != passwordInput.value.trim()) {
                     alert("Password incorect");
                 }
-                
-                else if (user_.is_admin != is_admin) {
-                    alert("wrong Role");
-                }
                 else {
+                    // Check if user.is_admin exists, default to false if undefined
+                    const userIsAdmin = user_.is_admin || false;
+                    console.log('User is_admin:', userIsAdmin);
+                    console.log('Expected is_admin:', is_admin);
                     
-                    if (is_admin) {
-                        window.location.href = "my_recipe.html";
+                    if (userIsAdmin != is_admin) {
+                        alert("wrong Role");
                     }
                     else {
-                        window.location.href = "home.html";
+                        if (is_admin) {
+                            window.location.href = "my_recipe.html";
+                        }
+                        else {
+                            window.location.href = "home.html";
+                        }
+                        loginForm.reset();
                     }
-                    loginForm.reset();
                 }
 
             }
@@ -168,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     username : usernameInput.value.trim(),
                     password : passwordInput.value.trim(),
                     email : emailInput.value.trim(),
-                    role : is_admin
+                    is_admin : is_admin
                 }
                 const response = await send_user(user_acount)
                 if (response.status === 201) {
