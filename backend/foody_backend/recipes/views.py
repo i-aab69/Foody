@@ -5,6 +5,7 @@ from django.core.serializers import serialize
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models.fields.related import ManyToManyField
+from django.db.models import Q
 # Create your views here.
 
 @csrf_exempt
@@ -38,13 +39,56 @@ def recipes(request: HttpRequest):
             return JsonResponse({'error':'invalid json data'}, status=400)
 
 @csrf_exempt
+def search_recipes(request: HttpRequest):
+    if request.method == 'GET':
+        query = request.GET.get('q', '').strip()
+        ingredients = request.GET.get('ingredients', '').strip()
+        
+        recipes_queryset = Recipe.objects.all()
+        
+        # Filter by recipe name if query provided
+        if query:
+            recipes_queryset = recipes_queryset.filter(name__icontains=query)
+        
+        # Filter by ingredients if provided
+        if ingredients:
+            ingredient_list = [ing.strip() for ing in ingredients.split(',') if ing.strip()]
+            for ingredient in ingredient_list:
+                recipes_queryset = recipes_queryset.filter(
+                    ingredients__name__icontains=ingredient
+                )
+        
+        # Serialize and return results
+        recipes_data = []
+        for recipe in recipes_queryset.distinct():
+            recipe_dict = {
+                'pk': recipe.pk,
+                'name': recipe.name,
+                'desc': recipe.desc,
+                'img': recipe.img,
+                'instructions': recipe.instructions,
+                'ingredients': [ing.name for ing in recipe.ingredients.all()],
+                'tags': [tag.name for tag in recipe.tags.all()]
+            }
+            recipes_data.append(recipe_dict)
+        
+        return JsonResponse({
+            'recipes': recipes_data,
+            'count': len(recipes_data),
+            'query': query,
+            'ingredients': ingredients
+        })
+    
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
 def recipes_id(request: HttpRequest, id : int):
     Selected_recipe = get_object_or_404(Recipe,id = id)
     if request.method == 'DELETE':
         deleted_count,_ = Selected_recipe.delete()
         
         if deleted_count :
-            return JsonResponse({'message' : 'recipe deleted'}, status=204)
+            return JsonResponse({'message' : 'recipe deleted', 'recipe_id': id}, status=200)
         else :
             return JsonResponse({'error' : 'delete failed'}, status=400)
         

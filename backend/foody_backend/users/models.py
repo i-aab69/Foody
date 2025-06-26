@@ -10,3 +10,11 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
+class Favorite(models.Model):
+    user_name = models.CharField(max_length=255)
+    recipe_id = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user_name', 'recipe_id')

@@ -1,3 +1,5 @@
+import { FavoritesUI } from './ajax.js';
+
 document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof addFavorite !== 'function' || typeof removeFavorite !== 'function' || typeof isFavorite !== 'function') {
@@ -49,25 +51,55 @@ document.addEventListener('DOMContentLoaded', () => {
        }
    }
 
-   function toggleFavoriteUI(recipeId, favButton) {
+   // Enhanced favorite toggle with AJAX
+   async function toggleFavoriteUI(recipeId, favButton) {
        console.log(`Toggling fav status for: ${recipeId}`);
        const iconElement = favButton.querySelector('i');
        if (!iconElement) return;
 
-       if (isFavorite(recipeId)) {
-           removeFavorite(recipeId);
-           favButton.classList.remove('is-favorite');
-           iconElement.classList.remove('fas');
-           iconElement.classList.add('far');
-           favButton.setAttribute('aria-pressed', 'false');
-           favButton.setAttribute('aria-label', 'Add to favorites');
-       } else {
-           addFavorite(recipeId);
-           favButton.classList.add('is-favorite');
-           iconElement.classList.remove('far');
-           iconElement.classList.add('fas');
-           favButton.setAttribute('aria-pressed', 'true');
-           favButton.setAttribute('aria-label', 'Remove from favorites');
+       // Store original state for rollback on error
+       const originalClasses = Array.from(iconElement.classList);
+       const wasPressed = favButton.getAttribute('aria-pressed') === 'true';
+
+       // Show loading state
+       iconElement.className = 'fas fa-spinner fa-spin';
+       favButton.disabled = true;
+
+       try {
+           // Use AJAX favorites functionality
+           const isCurrentlyFavorite = isFavorite(recipeId);
+           
+           if (isCurrentlyFavorite) {
+               await FavoritesUI.toggle(recipeId, favButton);
+               removeFavorite(recipeId); // Update localStorage for compatibility
+               favButton.classList.remove('is-favorite');
+               iconElement.classList.remove('fas');
+               iconElement.classList.add('far');
+               favButton.setAttribute('aria-pressed', 'false');
+               favButton.setAttribute('aria-label', 'Add to favorites');
+           } else {
+               await FavoritesUI.toggle(recipeId, favButton);
+               addFavorite(recipeId); // Update localStorage for compatibility
+               favButton.classList.add('is-favorite');
+               iconElement.classList.remove('far');
+               iconElement.classList.add('fas');
+               favButton.setAttribute('aria-pressed', 'true');
+               favButton.setAttribute('aria-label', 'Remove from favorites');
+           }
+
+           // Update favorites count display
+           FavoritesUI.updateFavoritesCount();
+
+       } catch (error) {
+           console.error('Error toggling favorite:', error);
+           
+           // Rollback to original state
+           iconElement.className = originalClasses.join(' ');
+           favButton.setAttribute('aria-pressed', wasPressed ? 'true' : 'false');
+           
+           alert('Error updating favorites. Please try again.');
+       } finally {
+           favButton.disabled = false;
        }
    }
 
@@ -97,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 i = 0 ; 
                 const recipeRow = document.createElement('div') ; 
                 recipeRow.classList.add('recipe-row') ; 
+                recipeCardContainer.appendChild(recipeRow);
             }
 
             //create a new recipe card
@@ -149,13 +182,13 @@ document.addEventListener('DOMContentLoaded', () => {
    });
 
    if (recipeCardContainer) {
-       recipeCardContainer.addEventListener('click', (event) => {
+       recipeCardContainer.addEventListener('click', async (event) => {
            const card = event.target.closest('.recipe-card');
            const favButton = event.target.closest('.favorite-button');
 
            if (favButton && card && card.dataset.recipeId) {
                event.stopPropagation();
-               toggleFavoriteUI(card.dataset.recipeId, favButton);
+               await toggleFavoriteUI(card.dataset.recipeId, favButton);
            } else if (card && card.dataset.recipeId) {
                const recipeId = card.dataset.recipeId;
                console.log(`Going to details page for: ${recipeId}`);
@@ -167,6 +200,10 @@ document.addEventListener('DOMContentLoaded', () => {
    }
 
    updateFavoriteIconsUI();
+   
+   // Update favorites count on page load
+   FavoritesUI.updateFavoritesCount();
+   
    document.querySelector('.category[data-category-name="All"]')?.classList.add('active-category');
 
 });
