@@ -145,15 +145,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Get a specific recipe from localStorage
     function getRecipeById(id) {
-        // Get all recipes and find by database primary key (pk)
+        // Get all recipes and find by database primary key (pk), recipe ID, or name
         const allRecipes = JSON.parse(localStorage.getItem('all_res')) || [];
-        return allRecipes.find(recipe => recipe.id === parseInt(id) || recipe.pk === parseInt(id));
+        
+        // First try to find by numeric ID or pk
+        let recipe = allRecipes.find(recipe => 
+            recipe.id === parseInt(id) || 
+            recipe.pk === parseInt(id)
+        );
+        
+        // If not found and id is not numeric, try to find by name
+        if (!recipe && isNaN(parseInt(id))) {
+            recipe = allRecipes.find(recipe => 
+                recipe.name === id || 
+                recipe.title === id
+            );
+        }
+        
+        return recipe;
     }
 
     // Fetch a specific recipe from the API (for fresh data)
     async function fetchRecipeFromAPI(id) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/recipes/${id}`);
+            // First, try to get the recipe from localStorage to find the correct pk
+            const localRecipe = getRecipeById(id);
+            let apiId = id;
+            
+            // If we found a local recipe and the original ID was not numeric, use the pk
+            if (localRecipe && isNaN(parseInt(id))) {
+                apiId = localRecipe.pk || localRecipe.id;
+                console.log(`Using recipe pk ${apiId} for API call instead of name "${id}"`);
+            }
+            
+            const response = await fetch(`http://127.0.0.1:8000/recipes/${apiId}`);
             if (!response.ok) {
                 throw new Error(`Recipe not found: ${response.status}`);
             }
@@ -417,7 +442,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let recipe = forceRefresh ? null : getRecipeById(recipeId);
         
         if (recipe && !forceRefresh) {
-            displayRecipeDetails(recipe, recipeId);
+            // Use the recipe's pk for consistent identification
+            const displayId = recipe.pk || recipe.id || recipeId;
+            displayRecipeDetails(recipe, displayId);
         } else {
             // If not found in localStorage or forcing refresh, try fetching from API
             const reason = forceRefresh ? 'forcing refresh' : 'not found in localStorage';
@@ -425,7 +452,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             fetchRecipeFromAPI(recipeId).then(apiRecipe => {
                 if (apiRecipe) {
-                    displayRecipeDetails(apiRecipe, recipeId);
+                    // Use the recipe's pk for consistent identification
+                    const displayId = apiRecipe.pk || apiRecipe.id || recipeId;
+                    displayRecipeDetails(apiRecipe, displayId);
                 } else {
                     if (loadingMessage) loadingMessage.style.display = 'none';
                     if (errorMessage) {

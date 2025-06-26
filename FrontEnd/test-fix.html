@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Loading Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { 
+            margin: 20px 0; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        button { 
+            padding: 10px 15px; 
+            margin: 5px; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 3px; 
+            cursor: pointer; 
+        }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Recipe Loading Fix Test</h1>
+    
+    <div class="test-section info">
+        <h2>Test Instructions</h2>
+        <p>This page tests the fix for the recipe loading issue where "recipe90" was causing a 404 error.</p>
+        <ol>
+            <li>Click "Load Fresh Data" to get latest recipes from backend</li>
+            <li>Click "Test Recipe Lookup" to test finding recipes by name and ID</li>
+            <li>Click "Test API Call" to test the fixed API calling logic</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🔄 Step 1: Load Fresh Data</h2>
+        <button onclick="loadFreshData()">Load Fresh Data from Backend</button>
+        <div id="data-status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 Step 2: Test Recipe Lookup</h2>
+        <button onclick="testRecipeLookup()">Test Recipe Lookup by Name & ID</button>
+        <div id="lookup-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🌐 Step 3: Test Fixed API Call</h2>
+        <button onclick="testApiCall()">Test API Call with Recipe90</button>
+        <div id="api-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 Step 4: Test Description Page Navigation</h2>
+        <button onclick="navigateToRecipe90()">Navigate to Recipe90 Description</button>
+        <p><small>This should work without 404 errors now!</small></p>
+    </div>
+
+    <script type="module">
+        import { get_rec } from './API_Calls.js';
+
+        // Load fresh data from backend
+        window.loadFreshData = async function() {
+            const statusDiv = document.getElementById('data-status');
+            statusDiv.innerHTML = '<p>Loading...</p>';
+            
+            try {
+                const recipes = await get_rec();
+                
+                // Add id field for frontend compatibility
+                recipes.forEach((recipe, index) => {
+                    recipe.id = recipe.pk || (index + 1);
+                });
+                
+                localStorage.setItem('all_res', JSON.stringify(recipes));
+                
+                statusDiv.innerHTML = `
+                    <div class="success">
+                        <h4>✅ Success!</h4>
+                        <p>Loaded ${recipes.length} recipes from backend</p>
+                        <pre>${JSON.stringify(recipes.slice(0, 2), null, 2)}</pre>
+                        <p><small>Showing first 2 recipes...</small></p>
+                    </div>
+                `;
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ Error!</h4>
+                        <p>Failed to load recipes: ${error.message}</p>
+                    </div>
+                `;
+            }
+        };
+
+        // Test recipe lookup functionality
+        window.testRecipeLookup = function() {
+            const resultsDiv = document.getElementById('lookup-results');
+            
+            // Simulate the fixed getRecipeById function
+            function getRecipeById(id) {
+                const allRecipes = JSON.parse(localStorage.getItem('all_res')) || [];
+                
+                // First try to find by numeric ID or pk
+                let recipe = allRecipes.find(recipe => 
+                    recipe.id === parseInt(id) || 
+                    recipe.pk === parseInt(id)
+                );
+                
+                // If not found and id is not numeric, try to find by name
+                if (!recipe && isNaN(parseInt(id))) {
+                    recipe = allRecipes.find(recipe => 
+                        recipe.name === id || 
+                        recipe.title === id
+                    );
+                }
+                
+                return recipe;
+            }
+
+            // Test cases
+            const tests = [
+                { id: '37', description: 'Find by numeric ID (37)' },
+                { id: 'recipe90', description: 'Find by name (recipe90)' },
+                { id: '999', description: 'Test non-existent ID (999)' },
+                { id: 'nonexistent', description: 'Test non-existent name' }
+            ];
+
+            let results = '<h4>🔍 Recipe Lookup Test Results:</h4>';
+            
+            tests.forEach(test => {
+                const recipe = getRecipeById(test.id);
+                const status = recipe ? '✅' : '❌';
+                const details = recipe ? 
+                    `Found: ${recipe.name} (pk: ${recipe.pk})` : 
+                    'Not found';
+                
+                results += `<p><strong>${status} ${test.description}:</strong> ${details}</p>`;
+            });
+
+            resultsDiv.innerHTML = `<div class="info">${results}</div>`;
+        };
+
+        // Test the fixed API call
+        window.testApiCall = async function() {
+            const resultsDiv = document.getElementById('api-results');
+            resultsDiv.innerHTML = '<p>Testing API call...</p>';
+
+            // Simulate the fixed fetchRecipeFromAPI function
+            async function fetchRecipeFromAPI(id) {
+                try {
+                    // Get recipe by ID/name from localStorage first
+                    const allRecipes = JSON.parse(localStorage.getItem('all_res')) || [];
+                    let localRecipe = allRecipes.find(recipe => 
+                        recipe.id === parseInt(id) || 
+                        recipe.pk === parseInt(id)
+                    );
+                    
+                    if (!localRecipe && isNaN(parseInt(id))) {
+                        localRecipe = allRecipes.find(recipe => 
+                            recipe.name === id || 
+                            recipe.title === id
+                        );
+                    }
+
+                    let apiId = id;
+                    if (localRecipe && isNaN(parseInt(id))) {
+                        apiId = localRecipe.pk || localRecipe.id;
+                    }
+
+                    const response = await fetch(`http://127.0.0.1:8000/recipes/${apiId}`);
+                    if (!response.ok) {
+                        throw new Error(`Recipe not found: ${response.status}`);
+                    }
+                    
+                    const recipeData = await response.json();
+                    return recipeData;
+                } catch (error) {
+                    throw error;
+                }
+            }
+
+            try {
+                const result = await fetchRecipeFromAPI('recipe90');
+                resultsDiv.innerHTML = `
+                    <div class="success">
+                        <h4>✅ API Call Success!</h4>
+                        <p>Successfully fetched recipe90 using the fixed logic</p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ API Call Failed!</h4>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        };
+
+        // Test navigation to recipe description page
+        window.navigateToRecipe90 = function() {
+            // This should now work with the fixed description_loader.js
+            window.open('Discription_page.html?id=recipe90', '_blank');
+        };
+
+        // Auto-load data on page load
+        window.addEventListener('load', () => {
+            loadFreshData();
+        });
+    </script>
+</body>
+</html> 

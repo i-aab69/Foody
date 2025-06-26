@@ -137,7 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const curntRecipeRow = recipeRows[recipeRows.length - 1] ; 
             const recipeCard = document.createElement('div') ; 
             recipeCard.classList.add('recipe-card'); 
-            recipeCard.dataset.recipeId = Recipe.name ; 
+            // Use primary key for consistent navigation
+            recipeCard.dataset.recipeId = Recipe.pk || Recipe.id || Recipe.name ; 
             recipeCard.dataset.category = JSON.stringify(Recipe.Tags) ;
             
             const recipeImg = document.createElement('div') ; 
