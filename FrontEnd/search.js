@@ -1,5 +1,7 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    const RECIPES_KEY = 'foodyRecipes';
+﻿import { get_rec } from './API_Calls.js';
+
+document.addEventListener('DOMContentLoaded', function () {
+    const RECIPES_KEY = 'all_res';
 
     const toggleButton = document.getElementById('advanced-search-toggle');
     const advancedSearch = document.getElementById('advanced-search');
@@ -72,17 +74,24 @@
         recipes.forEach(recipe => {
             const card = document.createElement('div');
             card.className = 'recipe-card';
-            card.setAttribute('data-recipe-id', recipe.id);
+            // Handle both backend format (recipe.pk or recipe.id) and sample format (recipe.id)
+            const recipeId = recipe.pk || recipe.id;
+            card.setAttribute('data-recipe-id', recipeId);
 
-            const isFav = isFavorite(recipe.id);
+            const isFav = isFavorite(recipeId);
             const favIcon = isFav ? '♥' : '♡';
             const favColor = isFav ? '#e74c3c' : '#777';
 
+            // Handle both backend format (recipe.name, recipe.img) and sample format (recipe.title, recipe.image)
+            const recipeName = recipe.name || recipe.title || 'Untitled Recipe';
+            const recipeImage = recipe.img || recipe.image || 'source/default-recipe.png';
+            const description = recipe.desc || recipe.description || 'Click for details';
+
             card.innerHTML = `
-                <img src="${recipe.image || 'source/default-recipe.png'}" alt="${recipe.title}" />
+                <img src="${recipeImage}" alt="${recipeName}" />
                 <div class="recipe-info">
-                    <h3>${recipe.title}</h3>
-                    <p>${recipe.ingredientCount ? `You have all ${recipe.ingredientCount} ingredients` : 'Click for details'}</p>
+                    <h3>${recipeName}</h3>
+                    <p>${recipe.ingredientCount ? `You have all ${recipe.ingredientCount} ingredients` : description}</p>
                 </div>
                 <button class="favorite-btn" style="color: ${favColor}">${favIcon}</button>
             `;
@@ -123,9 +132,21 @@
 
     const recipeSearch = document.getElementById('recipe-search');
     const searchButton = document.querySelector('.search-btn');
+    const refreshButton = document.getElementById('refresh-btn');
 
     searchButton.addEventListener('click', function () {
         searchRecipes();
+    });
+
+    refreshButton.addEventListener('click', async function () {
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        const refreshedRecipes = await refreshRecipesFromBackend();
+        if (refreshedRecipes.length > 0) {
+            displayRecipes(refreshedRecipes);
+            // Clear search to show all recipes
+            recipeSearch.value = '';
+        }
+        this.innerHTML = '<i class="fas fa-sync-alt"></i>';
     });
 
     recipeSearch.addEventListener('keypress', function (e) {
@@ -143,9 +164,11 @@
             return;
         }
 
-        const filteredRecipes = recipes.filter(recipe =>
-            recipe.title.toLowerCase().includes(searchTerm)
-        );
+        const filteredRecipes = recipes.filter(recipe => {
+            // Handle both backend format (recipe.name) and sample format (recipe.title)
+            const recipeName = recipe.name || recipe.title || '';
+            return recipeName.toLowerCase().includes(searchTerm);
+        });
 
         displayRecipes(filteredRecipes);
     }
@@ -153,7 +176,7 @@
     function filterRecipesByIngredients() {
         const ingredientTags = document.querySelectorAll('.ingredient-tags .pill-white');
         const selectedIngredients = Array.from(ingredientTags).map(
-            tag => tag.textContent.trim().replace(' ✕', '')
+            tag => tag.textContent.trim().replace(' ✕', '').replace('×', '')
         );
 
         if (selectedIngredients.length === 0) {
@@ -163,12 +186,22 @@
 
         const recipes = getRecipes();
         const filteredRecipes = recipes.filter(recipe => {
-            if (!recipe.ingredients) return false;
+            // Handle both backend format and sample format
+            let ingredients = recipe.ingredients || [];
+            
+            // If ingredients is not an array, it might be a string or need processing
+            if (!Array.isArray(ingredients)) {
+                ingredients = [];
+            }
+
+            if (ingredients.length === 0) return false;
 
             return selectedIngredients.every(ingredient =>
-                recipe.ingredients.some(ri =>
-                    ri.toLowerCase().includes(ingredient.toLowerCase())
-                )
+                ingredients.some(ri => {
+                    // Handle both string ingredients and object ingredients
+                    const ingredientName = (typeof ri === 'string') ? ri : (ri.name || '');
+                    return ingredientName.toLowerCase().includes(ingredient.toLowerCase());
+                })
             );
         });
 
@@ -176,34 +209,65 @@
     }
 
 
-    function initPage() {
-        const recipes = getRecipes();
+    async function refreshRecipesFromBackend() {
+        try {
+            console.log('Refreshing recipes from backend...');
+            const backendRecipes = await get_rec();
+            if (backendRecipes && backendRecipes.length > 0) {
+                // Add id field for frontend compatibility
+                backendRecipes.forEach((recipe, index) => {
+                    recipe.id = recipe.pk || (index + 1);
+                });
+                localStorage.setItem(RECIPES_KEY, JSON.stringify(backendRecipes));
+                console.log(`Refreshed ${backendRecipes.length} recipes from backend`);
+                return backendRecipes;
+            }
+        } catch (error) {
+            console.log('Could not refresh from backend:', error);
+        }
+        return [];
+    }
+
+    async function initPage() {
+        // Always try to refresh from backend first
+        let recipes = await refreshRecipesFromBackend();
+        
+        // If backend refresh failed, use cached data
+        if (recipes.length === 0) {
+            recipes = getRecipes();
+        }
 
         if (recipes.length === 0) {
             const sampleRecipes = [
                 {
-                    id: 'shakshuka01',
-                    title: 'Shakshuka',
-                    image: 'source/shakshuka.png',
+                    pk: 1,
+                    id: 1,
+                    name: 'Shakshuka',
+                    img: 'source/shakshuka.png',
                     ingredients: ['egg', 'tomato', 'pepper', 'onion', 'garlic', 'cumin', 'paprika'],
                     ingredientCount: 7,
-                    description: 'A delicious Middle Eastern breakfast dish with eggs poached in a spicy tomato sauce.'
+                    desc: 'A delicious Middle Eastern breakfast dish with eggs poached in a spicy tomato sauce.',
+                    instructions: 'Heat oil in a pan, add onions and garlic...'
                 },
                 {
-                    id: 'omelette01',
-                    title: 'Omelette',
-                    image: 'source/omelette.png',
+                    pk: 2,
+                    id: 2,
+                    name: 'Omelette',
+                    img: 'source/omelette.png',
                     ingredients: ['egg', 'butter', 'salt'],
                     ingredientCount: 3,
-                    description: 'A classic French omelette made with eggs and butter.'
+                    desc: 'A classic French omelette made with eggs and butter.',
+                    instructions: 'Beat eggs, heat butter in pan...'
                 },
                 {
-                    id: 'redpasta01',
-                    title: 'Red sauce pasta',
-                    image: 'source/red_pasta.png',
+                    pk: 3,
+                    id: 3,
+                    name: 'Red sauce pasta',
+                    img: 'source/red_pasta.png',
                     ingredients: ['pasta', 'tomato', 'onion', 'garlic', 'basil', 'olive oil', 'parmesan'],
                     ingredientCount: 7,
-                    description: 'A simple and delicious pasta with homemade tomato sauce.'
+                    desc: 'A simple and delicious pasta with homemade tomato sauce.',
+                    instructions: 'Boil pasta, make sauce with tomatoes...'
                 }
             ];
 
