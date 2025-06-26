@@ -1,5 +1,3 @@
-import { FavoritesUI } from './ajax.js';
-
 document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof addFavorite !== 'function' || typeof removeFavorite !== 'function' || typeof isFavorite !== 'function') {
@@ -51,55 +49,25 @@ document.addEventListener('DOMContentLoaded', () => {
        }
    }
 
-   // Enhanced favorite toggle with AJAX
-   async function toggleFavoriteUI(recipeId, favButton) {
+   function toggleFavoriteUI(recipeId, favButton) {
        console.log(`Toggling fav status for: ${recipeId}`);
        const iconElement = favButton.querySelector('i');
        if (!iconElement) return;
 
-       // Store original state for rollback on error
-       const originalClasses = Array.from(iconElement.classList);
-       const wasPressed = favButton.getAttribute('aria-pressed') === 'true';
-
-       // Show loading state
-       iconElement.className = 'fas fa-spinner fa-spin';
-       favButton.disabled = true;
-
-       try {
-           // Use AJAX favorites functionality
-           const isCurrentlyFavorite = isFavorite(recipeId);
-           
-           if (isCurrentlyFavorite) {
-               await FavoritesUI.toggle(recipeId, favButton);
-               removeFavorite(recipeId); // Update localStorage for compatibility
-               favButton.classList.remove('is-favorite');
-               iconElement.classList.remove('fas');
-               iconElement.classList.add('far');
-               favButton.setAttribute('aria-pressed', 'false');
-               favButton.setAttribute('aria-label', 'Add to favorites');
-           } else {
-               await FavoritesUI.toggle(recipeId, favButton);
-               addFavorite(recipeId); // Update localStorage for compatibility
-               favButton.classList.add('is-favorite');
-               iconElement.classList.remove('far');
-               iconElement.classList.add('fas');
-               favButton.setAttribute('aria-pressed', 'true');
-               favButton.setAttribute('aria-label', 'Remove from favorites');
-           }
-
-           // Update favorites count display
-           FavoritesUI.updateFavoritesCount();
-
-       } catch (error) {
-           console.error('Error toggling favorite:', error);
-           
-           // Rollback to original state
-           iconElement.className = originalClasses.join(' ');
-           favButton.setAttribute('aria-pressed', wasPressed ? 'true' : 'false');
-           
-           alert('Error updating favorites. Please try again.');
-       } finally {
-           favButton.disabled = false;
+       if (isFavorite(recipeId)) {
+           removeFavorite(recipeId);
+           favButton.classList.remove('is-favorite');
+           iconElement.classList.remove('fas');
+           iconElement.classList.add('far');
+           favButton.setAttribute('aria-pressed', 'false');
+           favButton.setAttribute('aria-label', 'Add to favorites');
+       } else {
+           addFavorite(recipeId);
+           favButton.classList.add('is-favorite');
+           iconElement.classList.remove('far');
+           iconElement.classList.add('fas');
+           favButton.setAttribute('aria-pressed', 'true');
+           favButton.setAttribute('aria-label', 'Remove from favorites');
        }
    }
 
@@ -125,11 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const allRecipes = getAllRecipes();
         let i = 0 ; 
         allRecipes.forEach(Recipe =>{
+            
             if(i == 3){
                 i = 0 ; 
                 const recipeRow = document.createElement('div') ; 
                 recipeRow.classList.add('recipe-row') ; 
-                recipeCardContainer.appendChild(recipeRow);
             }
 
             //create a new recipe card
@@ -137,15 +105,47 @@ document.addEventListener('DOMContentLoaded', () => {
             const curntRecipeRow = recipeRows[recipeRows.length - 1] ; 
             const recipeCard = document.createElement('div') ; 
             recipeCard.classList.add('recipe-card'); 
-            // Use primary key for consistent navigation
             recipeCard.dataset.recipeId = Recipe.pk || Recipe.id || Recipe.name ; 
             recipeCard.dataset.category = JSON.stringify(Recipe.Tags) ;
             
             const recipeImg = document.createElement('div') ; 
             recipeImg.classList.add('recipe-img') ; 
             const img = document.createElement('img') ; 
-            img.src = `source/${Recipe.Image}.png` ; 
+            
+            // Handle different image formats for dynamic recipes
+            if (Recipe.img) {
+                // Recipe has image data
+                if (Recipe.img.startsWith('data:image/')) {
+                    // Base64 encoded image
+                    img.src = Recipe.img;
+                } else if (Recipe.img.startsWith('source/')) {
+                    // Already has correct path (from database)
+                    img.src = Recipe.img;
+                } else if (Recipe.img.includes('.png') || Recipe.img.includes('.jpg') || Recipe.img.includes('.jpeg')) {
+                    // Has file extension, construct path
+                    img.src = `source/${Recipe.img}`;
+                } else {
+                    // Try to construct path from image name
+                    img.src = `source/${Recipe.img}.png`;
+                }
+            } else if (Recipe.Image) {
+                // Fallback to Image field (for static recipes)
+                img.src = `source/${Recipe.Image}.png`;
+            } else {
+                // No image available - use placeholder
+                img.src = 'source/gray_image.png';
+            }
+            
             img.alt = Recipe.name ; 
+            
+            // Add error handling for images that fail to load
+            img.onerror = function() {
+                console.log(`Image failed to load for recipe: ${Recipe.name}, using placeholder`);
+                this.src = 'source/gray_image.png';
+                // Prevent infinite loop if gray_image.png also fails
+                this.onerror = null;
+            };
+            
             recipeImg.appendChild(img) ; 
 
             const recipeInfo = document.createElement('div') ; 
@@ -163,8 +163,125 @@ document.addEventListener('DOMContentLoaded', () => {
             favButton.appendChild(favIcon) ; 
             recipeInfo.appendChild(favButton) ; 
 
+            // Add recipe details toggle button
+            const detailsToggle = document.createElement('div');
+            detailsToggle.classList.add('recipe-details-toggle');
+            const toggleBtn = document.createElement('button');
+            toggleBtn.classList.add('details-toggle-btn');
+            toggleBtn.setAttribute('aria-label', 'Show recipe details');
+            toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> View Details';
+            detailsToggle.appendChild(toggleBtn);
+
+            // Add recipe details content
+            const detailsContent = document.createElement('div');
+            detailsContent.classList.add('recipe-details-content');
+            detailsContent.style.display = 'none';
+
+            // Recipe meta information
+            const recipeMeta = document.createElement('div');
+            recipeMeta.classList.add('recipe-meta');
+            recipeMeta.innerHTML = `
+                <span class="cooking-time"><i class="fas fa-clock"></i> ${Recipe.time || '30 mins'}</span>
+                <span class="servings"><i class="fas fa-users"></i> ${Recipe.servings || '4 servings'}</span>
+            `;
+
+            // Ingredients preview
+            const ingredientsPreview = document.createElement('div');
+            ingredientsPreview.classList.add('ingredients-preview');
+            const ingredientsTitle = document.createElement('h4');
+            ingredientsTitle.innerHTML = '<i class="fas fa-list"></i> Key Ingredients:';
+            ingredientsPreview.appendChild(ingredientsTitle);
+
+            const ingredientsList = document.createElement('ul');
+            if (Recipe.ingredients && Array.isArray(Recipe.ingredients)) {
+                Recipe.ingredients.forEach(ingredient => {
+                    const li = document.createElement('li');
+                    li.textContent = ingredient;
+                    ingredientsList.appendChild(li);
+                });
+            } else if (Recipe.ings && Array.isArray(Recipe.ings)) {
+                Recipe.ings.forEach(ingredient => {
+                    const li = document.createElement('li');
+                    li.textContent = ingredient;
+                    ingredientsList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'Ingredients not available';
+                ingredientsList.appendChild(li);
+            }
+            ingredientsPreview.appendChild(ingredientsList);
+
+            // Instructions preview
+            const instructionsPreview = document.createElement('div');
+            instructionsPreview.classList.add('instructions-preview');
+            const instructionsTitle = document.createElement('h4');
+            instructionsTitle.innerHTML = '<i class="fas fa-utensils"></i> Quick Instructions:';
+            instructionsPreview.appendChild(instructionsTitle);
+
+            const instructionsList = document.createElement('ol');
+            if (Recipe.instructions) {
+                let instructions = [];
+                if (typeof Recipe.instructions === 'string') {
+                    if (Recipe.instructions.includes('\n')) {
+                        instructions = Recipe.instructions.split('\n')
+                            .map(step => step.trim())
+                            .filter(step => step.length > 0)
+                            .slice(0, 5); // Show only first 5 steps
+                    } else if (Recipe.instructions.includes('.')) {
+                        instructions = Recipe.instructions.split('.')
+                            .map(step => step.trim())
+                            .filter(step => step.length > 0)
+                            .slice(0, 5);
+                    } else {
+                        instructions = [Recipe.instructions];
+                    }
+                } else if (Array.isArray(Recipe.instructions)) {
+                    instructions = Recipe.instructions.slice(0, 5);
+                }
+
+                instructions.forEach(step => {
+                    const li = document.createElement('li');
+                    li.textContent = step;
+                    instructionsList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'Instructions not available';
+                instructionsList.appendChild(li);
+            }
+            instructionsPreview.appendChild(instructionsList);
+
+            // View full recipe button
+            const viewFullRecipe = document.createElement('div');
+            viewFullRecipe.classList.add('view-full-recipe');
+            const viewFullBtn = document.createElement('a');
+            viewFullBtn.href = `Discription_page.html?id=${Recipe.pk || Recipe.id}`;
+            viewFullBtn.classList.add('view-full-btn');
+            viewFullBtn.textContent = 'View Full Recipe';
+            viewFullRecipe.appendChild(viewFullBtn);
+
+            // Assemble details content
+            detailsContent.appendChild(recipeMeta);
+            detailsContent.appendChild(ingredientsPreview);
+            detailsContent.appendChild(instructionsPreview);
+            detailsContent.appendChild(viewFullRecipe);
+
+            // Add toggle functionality
+            toggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isExpanded = detailsContent.style.display !== 'none';
+                detailsContent.style.display = isExpanded ? 'none' : 'block';
+                toggleBtn.classList.toggle('expanded', !isExpanded);
+                toggleBtn.innerHTML = isExpanded ? 
+                    '<i class="fas fa-chevron-down"></i> View Details' : 
+                    '<i class="fas fa-chevron-up"></i> Hide Details';
+            });
+
             recipeCard.appendChild(recipeImg);
-            recipeCard.appendChild(recipeInfo) ;
+            recipeCard.appendChild(recipeInfo);
+            recipeCard.appendChild(detailsToggle);
+            recipeCard.appendChild(detailsContent);
             curntRecipeRow.appendChild(recipeCard) ;
             
             i++ ;
@@ -183,13 +300,23 @@ document.addEventListener('DOMContentLoaded', () => {
    });
 
    if (recipeCardContainer) {
-       recipeCardContainer.addEventListener('click', async (event) => {
+       recipeCardContainer.addEventListener('click', (event) => {
            const card = event.target.closest('.recipe-card');
            const favButton = event.target.closest('.favorite-button');
+           const detailsToggleBtn = event.target.closest('.details-toggle-btn');
 
            if (favButton && card && card.dataset.recipeId) {
                event.stopPropagation();
-               await toggleFavoriteUI(card.dataset.recipeId, favButton);
+               toggleFavoriteUI(card.dataset.recipeId, favButton);
+           } else if (detailsToggleBtn) {
+               event.stopPropagation();
+               const detailsContent = card.querySelector('.recipe-details-content');
+               const isExpanded = detailsContent.style.display !== 'none';
+               detailsContent.style.display = isExpanded ? 'none' : 'block';
+               detailsToggleBtn.classList.toggle('expanded', !isExpanded);
+               detailsToggleBtn.innerHTML = isExpanded ? 
+                   '<i class="fas fa-chevron-down"></i> View Details' : 
+                   '<i class="fas fa-chevron-up"></i> Hide Details';
            } else if (card && card.dataset.recipeId) {
                const recipeId = card.dataset.recipeId;
                console.log(`Going to details page for: ${recipeId}`);
@@ -201,10 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
    }
 
    updateFavoriteIconsUI();
-   
-   // Update favorites count on page load
-   FavoritesUI.updateFavoritesCount();
-   
    document.querySelector('.category[data-category-name="All"]')?.classList.add('active-category');
 
 });

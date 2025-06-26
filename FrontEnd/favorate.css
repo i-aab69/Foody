@@ -4,8 +4,8 @@
 }
 
 body {
-    background-color: #FDF9EE;
-    padding: 0;
+    background-color: #E8C9A7;
+    color: #333;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -13,10 +13,47 @@ body {
 }
 
 .main-page-content {
-    margin-left: 9%;
     padding: 40px;
+    margin-left: 9%;
+    min-width: 0;
     flex-grow: 1;
-    width: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    padding: 25px 40px;
+    border-radius: 20px;
+    margin-bottom: 45px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-container {
+    flex-shrink: 0;
+}
+
+.logo-container .logo-img {
+    height: 60px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo-container:hover .logo-img {
+    transform: scale(1.05);
+}
+
+.tagline {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5em;
+    color: #554236;
+    font-weight: 500;
+    line-height: 1.4;
+    max-width: 50%;
+    text-align: right;
 }
 
 .page-title {
@@ -24,22 +61,33 @@ body {
     margin-top: 0;
     margin-bottom: 40px;
     text-align: center;
-    color: #3d2c2c;
+    color: #554236;
     font-weight: 700;
-    border-bottom: 2px solid #e8c9a7;
+    border-bottom: 2px solid #F0A56D;
     padding-bottom: 15px;
 }
 
 .recipes-grid {
     display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+#recipe-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.recipe-row {
+    display: flex;
+    justify-content: space-around;
     flex-wrap: wrap;
-    gap: 25px;
-    justify-content: flex-start;
-    padding: 0;
+    gap: 20px;
 }
 
 .recipe-card {
-    width: calc(33.333% - 20px);
+    width: 30%;
     min-width: 250px;
     border-radius: 15px;
     overflow: hidden;
@@ -78,7 +126,6 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    min-height: 80px;
 }
 
 .recipe-info h3 {
@@ -86,28 +133,57 @@ body {
     font-style: italic;
     font-weight: 500;
     color: #333;
-    margin-top: 0;
     margin-bottom: 10px;
 }
 
 .favorite-button {
-    font-size: 1.6em;
     border: none;
     background: none;
     cursor: pointer;
-    color: #aaa;
     padding: 5px;
     line-height: 1;
-    transition: color 0.2s ease, transform 0.2s ease;
-    margin-top: auto;
+    transition: transform 0.2s ease;
+}
+
+.favorite-button i {
+    font-size: 1.8em;
+    color: #e74c3c;
+    transition: color 0.2s ease;
 }
 
 .favorite-button:hover {
     transform: scale(1.1);
 }
 
-.favorite-button.is-favorite {
+.favorite-button:hover i {
+    color: #c0392b;
+}
+
+.favorite-button.is-favorite i {
     color: #e74c3c;
+    animation: pulse 0.6s ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.favorite-button.is-favorite {
+    transform: scale(1.1);
+}
+
+#no-favorites-message {
+    text-align: center;
+    font-style: italic;
+    color: #555;
+    font-size: 1.1em;
+    padding: 20px;
+    background-color: #fdf2e6;
+    border-radius: 10px;
+    border: 1px dashed #F0A56D;
+    margin: 20px 0;
 }
 
 .page-footer {
@@ -150,20 +226,71 @@ body {
         padding: 20px;
         padding-bottom: 80px;
     }
+    
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px 20px;
+        margin-bottom: 30px;
+    }
+
+    .tagline {
+        font-size: 1.2em;
+        max-width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .logo-container .logo-img {
+        height: 50px;
+    }
+    
     .page-title {
         font-size: 2em;
     }
-    .recipes-grid {
-        gap: 15px;
+    
+    .recipe-row {
+        flex-direction: column;
+        align-items: center;
     }
+    
     .recipe-card {
         width: 100%;
         max-width: 350px;
-        margin-left: auto;
-        margin-right: auto;
     }
+    
     .page-footer {
         margin-left: 0;
         padding-bottom: 75px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-page-content {
+        padding: 15px;
+    }
+    
+    header {
+        padding: 10px 15px;
+    }
+
+    .logo-container .logo-img {
+        height: 40px;
+    }
+
+    .tagline {
+        font-size: 1.1em;
+    }
+    
+    .page-title {
+        font-size: 1.8em;
+    }
+    
+    .recipe-card {
+        min-width: 280px;
+    }
+    
+    .recipe-info h3 {
+        font-size: 16px;
     }
 }

@@ -1,5 +1,4 @@
 ﻿import { get_rec } from './API_Calls.js';
-import { SearchAPI, SearchUI, FavoritesUI } from './ajax.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     const RECIPES_KEY = 'all_res';
@@ -104,25 +103,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function addRecipeCardEventListeners() {
-        // Use AJAX for favorites
         document.querySelectorAll('.favorite-btn').forEach(btn => {
-            btn.addEventListener('click', async function (e) {
+            btn.addEventListener('click', function (e) {
                 e.stopPropagation(); 
 
                 const card = this.closest('.recipe-card');
                 const recipeId = card.getAttribute('data-recipe-id');
 
-                // Use AJAX favorites functionality
-                await FavoritesUI.toggle(recipeId, this);
+                if (this.textContent === '♡') {
+                    addFavorite(recipeId);
+                    this.textContent = '♥';
+                    this.style.color = '#e74c3c';
+                } else {
+                    removeFavorite(recipeId);
+                    this.textContent = '♡';
+                    this.style.color = '#777';
+                }
             });
         });
 
         document.querySelectorAll('.recipe-card').forEach(card => {
-            card.addEventListener('click', function (e) {
-                if (!e.target.classList.contains('favorite-btn')) {
-                    const recipeId = this.getAttribute('data-recipe-id');
-                    window.location.href = `Discription_page.html?id=${recipeId}`;
-                }
+            card.addEventListener('click', function () {
+                const recipeId = this.getAttribute('data-recipe-id');
+                window.location.href = `Discription_page.html?id=${recipeId}`;
             });
         });
     }
@@ -131,122 +134,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchButton = document.querySelector('.search-btn');
     const refreshButton = document.getElementById('refresh-btn');
 
-    // Enhanced search with AJAX
     searchButton.addEventListener('click', function () {
-        performAjaxSearch();
+        searchRecipes();
     });
-
-    recipeSearch.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            performAjaxSearch();
-        }
-    });
-
-    // Live search functionality
-    recipeSearch.addEventListener('input', function (e) {
-        const query = e.target.value.trim();
-        
-        if (query.length >= 2) {
-            SearchAPI.liveSearch(query, (results) => {
-                if (results.success) {
-                    displayAjaxResults(results.recipes);
-                    document.getElementById('recipe-count').textContent = results.count;
-                } else {
-                    console.error('Search error:', results.error);
-                    // Fallback to local search
-                    searchRecipes();
-                }
-            });
-        } else if (query.length === 0) {
-            // Show all recipes when search is cleared
-            refreshRecipesFromBackend().then(recipes => {
-                if (recipes.length > 0) {
-                    displayRecipes(recipes);
-                } else {
-                    displayRecipes(getRecipes());
-                }
-            });
-        }
-    });
-
-    async function performAjaxSearch() {
-        const query = recipeSearch.value.trim();
-        const ingredientTags = document.querySelectorAll('.ingredient-tags .pill-white');
-        const ingredients = Array.from(ingredientTags)
-            .map(tag => tag.textContent.trim().replace(' ✕', '').replace('×', ''))
-            .join(',');
-
-        try {
-            const results = await SearchAPI.searchRecipes(query, ingredients);
-            if (results.success) {
-                displayAjaxResults(results.recipes);
-                document.getElementById('recipe-count').textContent = results.count;
-            } else {
-                throw new Error(results.error);
-            }
-        } catch (error) {
-            console.error('AJAX search failed, using fallback:', error);
-            // Fallback to original search
-            if (ingredients) {
-                filterRecipesByIngredients();
-            } else {
-                searchRecipes();
-            }
-        }
-    }
-
-    function displayAjaxResults(recipes) {
-        const recipesContainer = document.getElementById('recipes-container');
-        recipesContainer.innerHTML = '';
-
-        if (recipes.length === 0) {
-            recipesContainer.innerHTML = '<p>No recipes found. Try different search terms.</p>';
-            return;
-        }
-
-        recipes.forEach(recipe => {
-            const recipeCard = createAjaxRecipeCard(recipe);
-            recipesContainer.appendChild(recipeCard);
-        });
-
-        // Initialize AJAX favorite buttons
-        initializeAjaxFavoriteButtons(recipesContainer);
-    }
-
-    function createAjaxRecipeCard(recipe) {
-        const card = document.createElement('div');
-        card.className = 'recipe-card';
-        card.setAttribute('data-recipe-id', recipe.pk);
-
-        card.innerHTML = `
-            <img src="${recipe.img || 'source/default-recipe.png'}" alt="${recipe.name}" />
-            <div class="recipe-info">
-                <h3>${recipe.name}</h3>
-                <p>${recipe.desc || 'Click for details'}</p>
-                ${recipe.ingredients ? `<small>Ingredients: ${recipe.ingredients.join(', ')}</small>` : ''}
-            </div>
-            <button class="favorite-btn" style="color: #777">♡</button>
-        `;
-
-        // Add click handler for recipe details
-        card.addEventListener('click', (e) => {
-            if (!e.target.classList.contains('favorite-btn')) {
-                window.location.href = `Discription_page.html?id=${recipe.pk}`;
-            }
-        });
-
-        return card;
-    }
-
-    function initializeAjaxFavoriteButtons(container) {
-        container.querySelectorAll('.favorite-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                const recipeId = e.target.closest('.recipe-card').getAttribute('data-recipe-id');
-                await FavoritesUI.toggle(recipeId, e.target);
-            });
-        });
-    }
 
     refreshButton.addEventListener('click', async function () {
         this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -259,7 +149,12 @@ document.addEventListener('DOMContentLoaded', function () {
         this.innerHTML = '<i class="fas fa-sync-alt"></i>';
     });
 
-    // Fallback search functions (kept for compatibility)
+    recipeSearch.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            searchRecipes();
+        }
+    });
+
     function searchRecipes() {
         const searchTerm = recipeSearch.value.toLowerCase().trim();
         const recipes = getRecipes();
@@ -289,33 +184,30 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Try AJAX search first
-        performAjaxSearch().catch(() => {
-            // Fallback to local filtering
-            const recipes = getRecipes();
-            const filteredRecipes = recipes.filter(recipe => {
-                // Handle both backend format and sample format
-                let ingredients = recipe.ingredients || [];
-                
-                // If ingredients is not an array, it might be a string or need processing
-                if (!Array.isArray(ingredients)) {
-                    ingredients = [];
-                }
+        const recipes = getRecipes();
+        const filteredRecipes = recipes.filter(recipe => {
+            // Handle both backend format and sample format
+            let ingredients = recipe.ingredients || [];
+            
+            // If ingredients is not an array, it might be a string or need processing
+            if (!Array.isArray(ingredients)) {
+                ingredients = [];
+            }
 
-                if (ingredients.length === 0) return false;
+            if (ingredients.length === 0) return false;
 
-                return selectedIngredients.every(ingredient =>
-                    ingredients.some(ri => {
-                        // Handle both string ingredients and object ingredients
-                        const ingredientName = (typeof ri === 'string') ? ri : (ri.name || '');
-                        return ingredientName.toLowerCase().includes(ingredient.toLowerCase());
-                    })
-                );
-            });
-
-            displayRecipes(filteredRecipes);
+            return selectedIngredients.every(ingredient =>
+                ingredients.some(ri => {
+                    // Handle both string ingredients and object ingredients
+                    const ingredientName = (typeof ri === 'string') ? ri : (ri.name || '');
+                    return ingredientName.toLowerCase().includes(ingredient.toLowerCase());
+                })
+            );
         });
+
+        displayRecipes(filteredRecipes);
     }
+
 
     async function refreshRecipesFromBackend() {
         try {
@@ -388,9 +280,6 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             displayRecipes(recipes);
         }
-
-        // Update favorites count
-        FavoritesUI.updateFavoritesCount();
     }
 
     initPage();
