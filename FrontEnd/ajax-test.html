@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX Test - Foody</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b35;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .test-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 AJAX Functionality Test</h1>
+    <p>This page tests the AJAX modules with minimal dependencies to identify any issues.</p>
+
+    <div class="test-section">
+        <h3>📁 File Loading Test</h3>
+        <div id="file-status">
+            <div id="config-status" class="status warning">Testing configuration file...</div>
+            <div id="modules-status" class="status warning">Testing AJAX modules...</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔗 Backend Connection Test</h3>
+        <button class="test-btn" onclick="testBackendConnection()">Test Backend</button>
+        <div id="backend-status" class="status warning">Click button to test backend connection</div>
+        <div id="backend-details"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔍 Search API Test</h3>
+        <button class="test-btn" onclick="testSearchAPI()">Test Search</button>
+        <div id="search-status" class="status warning">Click button to test search functionality</div>
+        <div id="search-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>❤️ Favorites API Test</h3>
+        <button class="test-btn" onclick="testFavoritesAPI()">Test Favorites</button>
+        <div id="favorites-status" class="status warning">Click button to test favorites functionality</div>
+        <div id="favorites-details"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>🐛 Debug Information</h3>
+        <button class="test-btn" onclick="showDebugInfo()">Show Debug Info</button>
+        <div id="debug-info"></div>
+    </div>
+
+    <!-- Load only the essential files -->
+    <script>
+        // Test basic JavaScript functionality
+        console.log('🧪 AJAX Test page loaded');
+        
+        // Function to update status
+        function updateStatus(elementId, message, type = 'warning') {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.className = `status ${type}`;
+            }
+        }
+
+        // Test file loading
+        function testFileLoading() {
+            // Test if configuration exists
+            if (window.FoodyConfig) {
+                updateStatus('config-status', '✅ Configuration loaded successfully', 'success');
+            } else {
+                updateStatus('config-status', '❌ Configuration file not loaded', 'error');
+            }
+
+            // Test if modules exist
+            const modules = [
+                { name: 'ajaxFavoritesManager', loaded: !!window.ajaxFavoritesManager },
+                { name: 'ajaxSearchManager', loaded: !!window.ajaxSearchManager },
+                { name: 'ajaxPaginationManager', loaded: !!window.ajaxPaginationManager },
+                { name: 'ajaxMainCoordinator', loaded: !!window.ajaxMainCoordinator }
+            ];
+
+            const loadedCount = modules.filter(m => m.loaded).length;
+            const totalCount = modules.length;
+
+            if (loadedCount === totalCount) {
+                updateStatus('modules-status', `✅ All ${totalCount} AJAX modules loaded`, 'success');
+            } else {
+                updateStatus('modules-status', 
+                    `⚠️ Only ${loadedCount}/${totalCount} modules loaded. Missing: ${modules.filter(m => !m.loaded).map(m => m.name).join(', ')}`, 
+                    'warning');
+            }
+        }
+
+        // Test backend connection
+        async function testBackendConnection() {
+            updateStatus('backend-status', '🔄 Testing backend connection...', 'warning');
+            
+            const backendUrl = window.FoodyConfig?.BACKEND_URL || 'http://127.0.0.1:8000';
+            
+            try {
+                const response = await fetch(`${backendUrl}/recipes/`, {
+                    method: 'HEAD'
+                });
+                
+                if (response.ok) {
+                    updateStatus('backend-status', '✅ Backend connection successful', 'success');
+                    document.getElementById('backend-details').innerHTML = `
+                        <p><strong>Backend URL:</strong> ${backendUrl}</p>
+                        <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                    `;
+                } else {
+                    updateStatus('backend-status', `❌ Backend responded with ${response.status}`, 'error');
+                }
+            } catch (error) {
+                updateStatus('backend-status', `❌ Cannot connect to backend: ${error.message}`, 'error');
+                document.getElementById('backend-details').innerHTML = `
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Possible causes:</strong></p>
+                    <ul>
+                        <li>Django server is not running</li>
+                        <li>Backend URL is incorrect: ${backendUrl}</li>
+                        <li>CORS issues</li>
+                        <li>Network connectivity problems</li>
+                    </ul>
+                    <p><strong>Solution:</strong> Make sure Django server is running with: <code>python manage.py runserver</code></p>
+                `;
+            }
+        }
+
+        // Test search API
+        async function testSearchAPI() {
+            updateStatus('search-status', '🔄 Testing search API...', 'warning');
+            
+            const backendUrl = window.FoodyConfig?.BACKEND_URL || 'http://127.0.0.1:8000';
+            
+            try {
+                const response = await fetch(`${backendUrl}/recipes/search/?q=test`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    updateStatus('search-status', '✅ Search API working', 'success');
+                    document.getElementById('search-results').innerHTML = `
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    updateStatus('search-status', `❌ Search API error: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                updateStatus('search-status', `❌ Search API failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Test favorites API
+        async function testFavoritesAPI() {
+            updateStatus('favorites-status', '🔄 Testing favorites API...', 'warning');
+            
+            const backendUrl = window.FoodyConfig?.BACKEND_URL || 'http://127.0.0.1:8000';
+            const testUser = 'test_user_' + Date.now();
+            
+            try {
+                // Test GET favorites
+                const getResponse = await fetch(`${backendUrl}/favorites/?user_name=${testUser}`);
+                const getData = await getResponse.json();
+                
+                if (getResponse.ok) {
+                    updateStatus('favorites-status', '✅ Favorites API working', 'success');
+                    document.getElementById('favorites-details').innerHTML = `
+                        <p><strong>GET Favorites Response:</strong></p>
+                        <pre>${JSON.stringify(getData, null, 2)}</pre>
+                    `;
+                } else {
+                    updateStatus('favorites-status', `❌ Favorites API error: ${getResponse.status}`, 'error');
+                }
+            } catch (error) {
+                updateStatus('favorites-status', `❌ Favorites API failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Show debug information
+        function showDebugInfo() {
+            const info = {
+                userAgent: navigator.userAgent,
+                currentURL: window.location.href,
+                loadedScripts: Array.from(document.scripts).map(script => script.src || script.textContent.substring(0, 50) + '...'),
+                windowObjects: {
+                    FoodyConfig: !!window.FoodyConfig,
+                    ajaxFavoritesManager: !!window.ajaxFavoritesManager,
+                    ajaxSearchManager: !!window.ajaxSearchManager,
+                    ajaxPaginationManager: !!window.ajaxPaginationManager,
+                    ajaxMainCoordinator: !!window.ajaxMainCoordinator
+                },
+                localStorage: {
+                    current_user: localStorage.getItem('current_user'),
+                    foody_favorites: localStorage.getItem('foody_favorites')
+                }
+            };
+
+            document.getElementById('debug-info').innerHTML = `
+                <pre>${JSON.stringify(info, null, 2)}</pre>
+            `;
+        }
+    </script>
+
+    <!-- Load configuration -->
+    <script src="foody-config.js" onerror="updateStatus('config-status', '❌ Failed to load foody-config.js', 'error')"></script>
+
+    <!-- Load AJAX modules -->
+    <script src="ajax-favorites.js" onerror="console.error('Failed to load ajax-favorites.js')"></script>
+    <script src="ajax-search.js" onerror="console.error('Failed to load ajax-search.js')"></script>
+    <script src="ajax-pagination.js" onerror="console.error('Failed to load ajax-pagination.js')"></script>
+    <script src="ajax-main.js" onerror="console.error('Failed to load ajax-main.js')"></script>
+
+    <script>
+        // Test everything when page loads
+        setTimeout(() => {
+            testFileLoading();
+        }, 500);
+    </script>
+</body>
+</html> 

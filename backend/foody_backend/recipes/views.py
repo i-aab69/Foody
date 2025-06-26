@@ -43,6 +43,12 @@ def search_recipes(request: HttpRequest):
     if request.method == 'GET':
         query = request.GET.get('q', '').strip()
         ingredients = request.GET.get('ingredients', '').strip()
+        tags = request.GET.get('tags', '').strip()
+        
+        # Pagination parameters
+        page = int(request.GET.get('page', 1))
+        limit = int(request.GET.get('limit', 20))
+        offset = (page - 1) * limit
         
         recipes_queryset = Recipe.objects.all()
         
@@ -58,9 +64,22 @@ def search_recipes(request: HttpRequest):
                     ingredients__name__icontains=ingredient
                 )
         
+        # Filter by tags if provided
+        if tags:
+            tag_list = [tag.strip() for tag in tags.split(',') if tag.strip()]
+            for tag in tag_list:
+                recipes_queryset = recipes_queryset.filter(
+                    tags__name__icontains=tag
+                )
+        
+        # Get distinct recipes and apply pagination
+        recipes_queryset = recipes_queryset.distinct()
+        total_count = recipes_queryset.count()
+        paginated_recipes = recipes_queryset[offset:offset + limit]
+        
         # Serialize and return results
         recipes_data = []
-        for recipe in recipes_queryset.distinct():
+        for recipe in paginated_recipes:
             recipe_dict = {
                 'pk': recipe.pk,
                 'name': recipe.name,
@@ -75,8 +94,13 @@ def search_recipes(request: HttpRequest):
         return JsonResponse({
             'recipes': recipes_data,
             'count': len(recipes_data),
+            'total_count': total_count,
+            'page': page,
+            'limit': limit,
+            'has_more': offset + limit < total_count,
             'query': query,
-            'ingredients': ingredients
+            'ingredients': ingredients,
+            'tags': tags
         })
     
     return JsonResponse({'error': 'Method not allowed'}, status=405)
