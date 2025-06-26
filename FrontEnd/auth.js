@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 const loggedUser = JSON.parse(localStorage.getItem("LoggedUser"));
 const role = loggedUser.Role; 
+console.log(loggedUser)
 
 
 const addLink = document.getElementById('nav-add-link');
@@ -14,7 +15,7 @@ const homeLink = document.getElementById('nav-home-link');
 
 console.log(`Auth script running. Role = ${role}`);
 
-if (role === 'User') {
+if (role === false) {
     console.log("Setting up User view...");
 
     if (addLink) addLink.style.display = 'none';
@@ -28,7 +29,7 @@ if (role === 'User') {
         profileLink.href = 'profile_page.html';
     }
 
-} else if (role === 'Admin') {
+} else if (role === true) {
     console.log("Setting up Admin view...");
 
     if (homeLink) homeLink.style.display = 'none';

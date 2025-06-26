@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const usernameInput = loginForm.querySelector('input.username');
         const passwordInput = loginForm.querySelector('input.password');
         const loginBtn = loginForm.querySelector('.login-btn-form');
-        const roleBtn = document.querySelector('#login-toggle'); 
+        const roleBtn = document.querySelector(".role-toggle"); 
+        console.log(roleBtn)
         let is_admin = false; 
       
         loginBtn.addEventListener('click',async function (e) {
@@ -67,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (isValid) {
                 console.log('Login attempt successful');
                 console.log('Username:', usernameInput.value);
-                // add the get_user function in APICalls.js
+
                 const users = await get_users();
                 console.log(users);
                 let user_ = users.find(user => user.username == usernameInput.value.trim());
@@ -80,11 +81,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert("Password incorect");
                 }
                 else {
-                    // Check if user.is_admin exists, default to false if undefined
+
                     const userIsAdmin = user_.is_admin || false;
                     console.log('User is_admin:', userIsAdmin);
                     console.log('Expected is_admin:', is_admin);
                     
+                    localStorage.setItem('LoggedUser', JSON.stringify({ UserName: usernameInput.value.trim(), Role : is_admin }));
                     if (userIsAdmin != is_admin) {
                         alert("wrong Role");
                     }
@@ -116,7 +118,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 //     alert("wrong Role");
                 // }
                 // else {
-                //     localStorage.setItem('LoggedUser', JSON.stringify({ UserName: usernameInput.value.trim(), Role : Role }));
                 //     if (Role == "Admin") {
                 //         window.location.href = "my_recipe.html";
                 //     }
