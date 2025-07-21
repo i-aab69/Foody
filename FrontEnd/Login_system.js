@@ -171,10 +171,10 @@ document.addEventListener('DOMContentLoaded', function () {
           
             if (isValid) {
                 const user_acount = {
-                    username : usernameInput.value.trim(),
+                    UserName : usernameInput.value.trim(),
                     password : passwordInput.value.trim(),
                     email : emailInput.value.trim(),
-                    is_admin : is_admin
+                    Role : is_admin
                 }
                 const response = await send_user(user_acount)
                 if (response.status === 201) {

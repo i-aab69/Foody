@@ -1,5 +1,5 @@
 
-const user_endpoint = "http://127.0.0.1:8000/users/"
+const user_endpoint = "http://127.0.0.1:8000/users/users/"
 const recipe_endpoint = "http://127.0.0.1:8000/recipes/"
 const ing_endpoint = "http://127.0.0.1:8000/ings/"
 
