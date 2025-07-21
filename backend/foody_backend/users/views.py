@@ -17,7 +17,7 @@ def users(request : HttpRequest):
     elif request.method == 'POST':
         try:
             J_data = json.loads(request.body)
-            new_user = User(username=J_data.get('UserName'), password=J_data.get('password'), is_admin=J_data.get('Role'))
+            new_user = User(username=J_data.get('UserName'), email=J_data.get('email'), password=J_data.get('password'),  is_admin=J_data.get('Role'))
             new_user.save()
             return JsonResponse({'id': new_user.pk}, status=201)
         except json.JSONDecodeError:
